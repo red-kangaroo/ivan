@@ -2432,6 +2432,9 @@ flesh
   Config MIND_WORM_FLESH;
   {
     NameStem = "mind worm flesh";
+    Effect = EFFECT_ESP;
+    EffectStrength = 120;
+    PriceModifier = 150;
     AttachedGod = SCABIES;
     BodyFlags = Base&~IS_WARM_BLOODED;
   }

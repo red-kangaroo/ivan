@@ -863,6 +863,7 @@
 #define MONSTER_TEAM 1
 #define ATTNAM_TEAM 2
 #define SUMO_TEAM 3
+#define GUILD_TEAM 5
 #define IVAN_TEAM 6
 #define NEW_ATTNAM_TEAM 7
 #define COLONIST_TEAM 8
@@ -888,6 +889,8 @@
 #define UNDER_WATER_TUNNEL 4
 #define EMPTY_AREA 5
 #define XINROCH_TOMB 6
+#define MONDEDR 7
+#define DARK_FOREST 8
 #define UNDER_WATER_TUNNEL_EXIT 128
 
 #define ALL_DUNGEONS  32767

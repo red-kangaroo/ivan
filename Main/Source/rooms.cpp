@@ -65,6 +65,10 @@ truth shop::PickupItem(character* Customer, item* ForSale, int Amount)
       else
         Price = 0;
     }
+    else if(GetMaster()->GetConfig() == PALE_BLOOD || GetMaster()->GetConfig() == WERE_WOLF)
+    {
+      Price *= 1.3;
+    }
   }
 
   if(!Customer->IsPlayer())
@@ -498,6 +502,11 @@ truth library::PickupItem(character* Customer, item* ForSale, int Amount)
 
   long Price = ForSale->GetTruePrice() * Amount
                * 100 / (100 + Customer->GetAttribute(CHARISMA));
+
+  if(GetMaster()->GetConfig() == MONDEDR)
+  {
+    Price *= 1.5;
+  }
 
   if(!Customer->IsPlayer())
   {

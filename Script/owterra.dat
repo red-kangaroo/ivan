@@ -88,26 +88,27 @@ underwatertunnelexit
   NativeGTerrainType = JUNGLE;
 }
 
-locationAA
+mondedr
 {
-  BitmapPos = 0, 64;
-  NameStem = "empty area";
-  UsesLongArticle = true;
-  AttachedDungeon = EMPTY_AREA;
-  AttachedArea = 0;
-  CanBeGenerated = false;
-  NativeGTerrainType = JUNGLE;
+  BitmapPos = 16, 64;
+  NameStem = "hidden town";
+  AttachedDungeon = MONDEDR;
+  CanBeGenerated = true;
+  NativeGTerrainType = LEAFY_FOREST;
+  RevealEnvironmentInitially = true;
+  HideLocationInitially = true;
+  CanBeOnAnyTerrain = true;
 }
 
-locationAB
+darkforest
 {
-  BitmapPos = 0, 64;
-  NameStem = "empty area";
-  UsesLongArticle = true;
-  AttachedDungeon = EMPTY_AREA;
-  AttachedArea = 0;
-  CanBeGenerated = false;
-  NativeGTerrainType = JUNGLE;
+  BitmapPos = 64, 64;
+  NameStem = "shadowy, menacing forest";
+  AttachedDungeon = DARK_FOREST;
+  CanBeGenerated = true;
+  NativeGTerrainType = EVERGREEN_FOREST;
+  RevealEnvironmentInitially = true;
+  HideLocationInitially = true;
 }
 
 locationAC
