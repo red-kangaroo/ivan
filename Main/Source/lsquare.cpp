@@ -1698,6 +1698,14 @@ truth lsquare::CheckKick(ccharacter* Kicker) const
   return true;
 }
 
+truth lsquare::CheckBite(ccharacter* Biter) const
+{
+  if(Character && Biter->CheckIfTooScaredToHit(Character))
+    return false;
+
+  return true;
+}
+
 void lsquare::GetHitByExplosion(const explosion* Explosion)
 {
   if(Explosion->ID == LastExplosionID)

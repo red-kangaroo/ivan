@@ -42,6 +42,7 @@ class commandsystem
   static command* GetCommand(int I) { return Command[I]; }
  private:
   static truth Apply(character*);
+  static truth Bite(character*);
   static truth Close(character*);
   static truth Eat(character*);
   static truth Drink(character*);

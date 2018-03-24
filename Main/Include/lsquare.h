@@ -187,6 +187,7 @@ class lsquare : public square
   int GetDungeonIndex() const { return static_cast<level*>(AreaUnder)->GetDungeon()->GetIndex(); }
   dungeon* GetDungeon() const { return static_cast<level*>(AreaUnder)->GetDungeon(); }
   truth CheckKick(ccharacter*) const;
+  truth CheckBite(ccharacter*) const;
   void GetHitByExplosion(const explosion*);
   int GetSpoiledItems() const;
   void SortAllItems(const sortdata&);

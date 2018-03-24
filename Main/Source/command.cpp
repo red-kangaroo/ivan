@@ -62,7 +62,8 @@ command* commandsystem::Command[] =
 
   /* Sort according to description */
 
-  new command(&Apply, "apply", 'a', 'a', 'a', false),
+  new command(&Apply, "apply / use item", 'a', 'a', 'a', false),
+  new command(&Bite, "bite", 'b', 'b', 'b', false),
   new command(&Talk, "chat", 'C', 'C', 'C', false),
   new command(&Close, "close", 'c', 'c', 'c', false),
   new command(&Dip, "dip", '!', '!', '!', false),
@@ -71,20 +72,20 @@ command* commandsystem::Command[] =
   new command(&Eat, "eat", 'e', 'e', 'e', true),
   new command(&WhatToEngrave, "engrave", 'G', 'G', 'G', false),
   new command(&EquipmentScreen, "equipment menu", 'E', 'E', 'E', true),
-  new command(&Go, "go", 'g', 'g', 'g', false),
-  new command(&GoDown, "go down/enter area", '>', '>', '>', true),
+  new command(&Go, "go until interrupted", 'g', 'g', 'g', false),
+  new command(&GoDown, "go down / enter area", '>', '>', '>', true),
   new command(&GoUp, "go up", '<', '<', '<', true),
   new command(&IssueCommand, "issue command(s) to team member(s)", 'I', 'I', 'I', false),
   new command(&Kick, "kick", 'k', 'K', 'K', false),
   new command(&Look, "look", 'l', 'L', 'L', true),
-  new command(&AssignName, "name", 'n', 'n', 'N', false),
-  new command(&Offer, "offer", 'O', 'f', 'O', false),
+  new command(&AssignName, "name a team member", 'n', 'n', 'N', false),
+  new command(&Offer, "offer sacrifice", 'O', 'f', 'O', false),
   new command(&Open, "open", 'o', 'O', 'o', false),
   new command(&PickUp, "pick up", ',', ',', ',', false),
   new command(&Pray, "pray", 'p', 'p', 'p', false),
   new command(&Quit, "quit", 'Q', 'Q', 'Q', true),
   new command(&Read, "read", 'r', 'r', 'r', false),
-  new command(&Rest, "rest/heal", 'h', 'h', 'H', true),
+  new command(&Rest, "rest and heal", 'h', 'h', 'H', true),
   new command(&Save, "save game", 'S', 'S', 'S', true),
   new command(&ScrollMessagesDown, "scroll messages down", '+', '+', '+', true),
   new command(&ScrollMessagesUp, "scroll messages up", '-', '-', '-', true),
@@ -94,7 +95,7 @@ command* commandsystem::Command[] =
   new command(&DrawMessageHistory, "show message history", 'M', 'M', 'M', true),
   new command(&ShowWeaponSkills, "show weapon skills", '@', '@', '@', true),
   new command(&Search, "search", 's', 's', 's', false),
-  new command(&Sit, "sit", '_', '_', '_', false),
+  new command(&Sit, "sit down", '_', '_', '_', false),
   new command(&Throw, "throw", 't', 't', 't', false),
   new command(&ToggleRunning, "toggle running", 'u', 'U', 'U', true),
   new command(&ForceVomit, "vomit", 'V', 'V', 'V', false),
@@ -915,7 +916,7 @@ truth commandsystem::Pray(character* Char)
 
 truth commandsystem::Kick(character* Char)
 {
-  /** No multi-tile support */
+  /* No multi-tile support */
 
   if(!Char->CheckKick())
     return false;
@@ -951,6 +952,43 @@ truth commandsystem::Kick(character* Char)
 
   Char->Hostility(Square->GetCharacter());
   Char->Kick(Square, Dir);
+  return true;
+}
+
+truth commandsystem::Bite(character* Char)
+{
+  /* No multi-tile support */
+
+  if(!Char->HasHead())
+  {
+    return false;
+  }
+
+  if(Char->GetBurdenState() == OVER_LOADED)
+  {
+    ADD_MESSAGE("You try to attack, but you collapse under your load.");
+    Char->EditAP(-100000 / APBonus(Char->GetAttribute(AGILITY)));
+    return true;
+  }
+
+  int Dir = game::DirectionQuestion(CONST_S("In what direction do you wish to bite? [press a direction key]"), false);
+
+  if(Dir == DIR_ERROR || !Char->GetArea()->IsValidPos(Char->GetPos() + game::GetMoveVector(Dir)))
+    return false;
+
+  lsquare* Square = Char->GetNearLSquare(Char->GetPos() + game::GetMoveVector(Dir));
+
+  if(!Square->CheckBite(Char))
+    return false;
+
+  character* Enemy = Square->GetCharacter();
+
+  if(Enemy && Char->GetRelation(Enemy) != HOSTILE
+     && !game::TruthQuestion(CONST_S("This might cause a hostile reaction. Are you sure? [y/N]")))
+    return false;
+
+  Char->Hostility(Square->GetCharacter());
+  Char->Bite(Square, Dir);
   return true;
 }
 
@@ -1350,11 +1388,11 @@ truth commandsystem::WizardMode(character* Char)
         v2 ElpuriCavePos = game::GetWorldMap()->GetEntryPos(0, ELPURI_CAVE);
         game::GetWorldMap()->GetWSquare(ElpuriCavePos)->ChangeOWTerrain(elpuricave::Spawn());
         game::GetWorldMap()->RevealEnvironment(ElpuriCavePos, 1);
-        
+
         v2 XinrochTombPos = game::GetWorldMap()->GetEntryPos(0, XINROCH_TOMB);
         game::GetWorldMap()->GetWSquare(XinrochTombPos)->ChangeOWTerrain(locationAW::Spawn());
         game::GetWorldMap()->RevealEnvironment(XinrochTombPos, 1);
-        
+
         game::GetWorldMap()->SendNewDrawRequest();
       }
       else
@@ -1363,11 +1401,11 @@ truth commandsystem::WizardMode(character* Char)
         v2 ElpuriCavePos = game::GetWorldMap()->GetEntryPos(0, ELPURI_CAVE);
         game::GetWorldMap()->GetWSquare(ElpuriCavePos)->ChangeOWTerrain(elpuricave::Spawn());
         game::GetWorldMap()->RevealEnvironment(ElpuriCavePos, 1);
-        
+
         v2 XinrochTombPos = game::GetWorldMap()->GetEntryPos(0, XINROCH_TOMB);
         game::GetWorldMap()->GetWSquare(XinrochTombPos)->ChangeOWTerrain(locationAW::Spawn());
         game::GetWorldMap()->RevealEnvironment(XinrochTombPos, 1);
-        
+
         game::SaveWorldMap();
       }
 
