@@ -72,6 +72,8 @@
 #define FEARLESS (1 << 29)
 #define FASTING (1 << 30)
 #define PARASITE_MIND_WORM (1 << 31)
+#define INFECTION_GROWTH (1 << 32)
+#define INFECTION_SPORES (1 << 33)
 
 #define HEAD 1
 #define TORSO 2

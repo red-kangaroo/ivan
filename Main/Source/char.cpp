@@ -356,6 +356,26 @@ statedata StateData[STATES] =
     &character::CanBeParasitized, // We are using TorsoIsAlive right now, but I think it's OK,
                                   // because with unliving torso, your head will not be much better for mind worms.
     &character::ParasitizedSituationDangerModifier
+  }, {
+    "Infection (fungal growth)",
+    SECRET|(RANDOMIZABLE&~DUR_TEMPORARY),
+    &character::PrintBeginFungalGrowthMessage,
+    &character::PrintEndFungalGrowthMessage,
+    0,
+    0,
+    &character::FungalGrowthHandler,
+    &character::CanBeParasitized,
+    0
+  }, {
+    "Infection (fungal spores)",
+    SECRET|(RANDOMIZABLE&~DUR_TEMPORARY),
+    &character::PrintBeginFungalSporesMessage,
+    &character::PrintEndFungalSporesMessage,
+    0,
+    0,
+    &character::FungalSporesHandler,
+    &character::CanBeParasitized,
+    0
   }
 };
 
@@ -6926,6 +6946,24 @@ void character::ReceiveAntidote(long Amount)
     DeActivateTemporaryState(LEPROSY);
     Amount -= Min(100L, Amount);
   }
+
+  if((Amount > 500 || RAND_N(1000) < Amount) && StateIsActivated(INFECTION_GROWTH))
+  {
+    if(IsPlayer())
+      ADD_MESSAGE("Your skin no longer itches.");
+
+    DeActivateTemporaryState(INFECTION_GROWTH);
+    Amount -= Min(100L, Amount);
+  }
+
+  if((Amount > 500 || RAND_N(1000) < Amount) && StateIsActivated(INFECTION_SPORES))
+  {
+    if(IsPlayer())
+      ADD_MESSAGE("Your coughing stops.");
+
+    DeActivateTemporaryState(INFECTION_SPORES);
+    Amount -= Min(100L, Amount);
+  }
 }
 
 void character::AddAntidoteConsumeEndMessage() const
@@ -9140,11 +9178,14 @@ void character::ReceiveWhiteUnicorn(long Amount)
     game::DoEvilDeed(Amount / 50);
 
   BeginTemporaryState(TELEPORT, Amount / 100);
-  DecreaseStateCounter(LYCANTHROPY, -Amount / 100);
   DecreaseStateCounter(POISONED, -Amount / 100);
-  DecreaseStateCounter(PARASITE_TAPE_WORM, -Amount / 100);
-  DecreaseStateCounter(LEPROSY, -Amount / 100);
+  DecreaseStateCounter(LYCANTHROPY, -Amount / 100);
   DecreaseStateCounter(VAMPIRISM, -Amount / 100);
+  DecreaseStateCounter(PARASITE_TAPE_WORM, -Amount / 100);
+  DecreaseStateCounter(PARASITE_MIND_WORM, -Amount / 100);
+  DecreaseStateCounter(LEPROSY, -Amount / 100);
+  DecreaseStateCounter(INFECTION_GROWTH, -Amount / 100);
+  DecreaseStateCounter(INFECTION_SPORES, -Amount / 100);
 }
 
 /* Counter should be negative. Removes intrinsics. */
@@ -11262,4 +11303,96 @@ truth character::CheckAIZapOpportunity()
   //       No friendly fire!
   // (3) - Check inventory for zappable item.
   // (4) - Zap item in direction where the enemy is.
+}
+
+void character::PrintBeginFungalGrowthMessage() const
+{
+  if(IsPlayer())
+    ADD_MESSAGE("You are covered in tiny fungal spores.");
+}
+
+void character::PrintEndFungalGrowthMessage() const
+{
+  if(IsPlayer())
+    ADD_MESSAGE("Your skin no longer itches.");
+}
+
+void character::FungalGrowthHandler()
+{
+  if(!(RAND() % 1000) && IsPlayer())
+  {
+    ADD_MESSAGE("Your skin itches!");
+  }
+
+  if(!game::IsInWilderness() && !(RAND() % 500))
+  {
+    lsquare* CradleSquare = GetNeighbourLSquare(RAND() % 8);
+
+    if(CradleSquare && !CradleSquare->GetCharacter()
+       && (CradleSquare->GetWalkability() & WALK))
+    {
+      character* Child = mushroom::Spawn();
+      Child->SetTeam(game::GetTeam(MONSTER_TEAM));
+      Child->SetGenerationDanger(GetGenerationDanger());
+      Child->PutTo(CradleSquare->GetPos());
+
+      for(int c = 0; c < BASE_ATTRIBUTES; ++c)
+        Child->BaseExperience[c] = RandomizeBabyExperience(BaseExperience[c] * 4);
+
+      if(Child->CanBeSeenByPlayer())
+        ADD_MESSAGE("%s pops out from the ground.", Child->CHAR_NAME(INDEFINITE));
+    }
+  }
+  else if(!(RAND() % 2000))
+  {
+    int BodyPart = GetRandomNonVitalBodyPart();
+
+    if(BodyPart != NONE_INDEX)
+    {
+      GetBodyPart(BodyPart)->ChangeMainMaterial(MAKE_MATERIAL(MUSHROOM_FLESH));
+
+      if(IsPlayer())
+      {
+        festring LimbName = GetBodyPart(BodyPart)->GetBodyPartName();
+        ADD_MESSAGE("Your %s hurts.", LimbName.CStr());
+      }
+    }
+  }
+}
+
+void character::PrintBeginFungalSporesMessage() const
+{
+  if(IsPlayer())
+    ADD_MESSAGE("You breathe in some tiny fungal spores by accident.");
+}
+
+void character::PrintEndFungalSporesMessage() const
+{
+  if(IsPlayer())
+    ADD_MESSAGE("Your coughing stops.");
+}
+
+void character::FungalSporesHandler()
+{
+  if(!(RAND() % 1000) && IsPlayer())
+    ADD_MESSAGE("You cough.");
+
+  if(!game::IsInWilderness() && !(RAND() % 1000))
+  {
+    lsquare* Square = GetNeighbourLSquare(RAND() % 8);
+
+    if(Square && Square->IsFlyable())
+    {
+      if(IsPlayer())
+      {
+        ADD_MESSAGE("You release a cloud of odd-looking spores.");
+      }
+      else if(CanBeSeenByPlayer())
+      {
+        ADD_MESSAGE("%s releases odd-looking spores.", CHAR_NAME(DEFINITE));
+      }
+
+      Square->AddSmoke(gas::Spawn(MAGIC_VAPOUR, 1000));
+    }
+  }
 }

@@ -122,7 +122,7 @@ const name##prototype name::ProtoType
 #define BLOATED 5
 #define OVER_FED 6
 
-#define STATES 32
+#define STATES 34
 
 #define POLYMORPHED (1 << 0)
 #define HASTE (1 << 1)
@@ -156,6 +156,8 @@ const name##prototype name::ProtoType
 #define FEARLESS (1 << 29)
 #define FASTING (1 << 30)
 #define PARASITE_MIND_WORM (1 << 31)
+#define INFECTION_GROWTH (1 << 32)
+#define INFECTION_SPORES (1 << 33)
 
 
 #define TORSO 1

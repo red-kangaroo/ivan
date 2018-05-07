@@ -111,6 +111,18 @@ truth material::Effect(character* Char, int BodyPart, long Amount)
    case EFFECT_SKUNK_SMELL: Char->BeginTemporaryState(POISONED, Amount); break;
    case EFFECT_MAGIC_MUSHROOM:
     {
+      if(!RAND_N(20) && !Char->StateIsActivated(DISEASE_IMMUNITY))
+      {
+        if(!RAND_N(3))
+        {
+          Char->BeginTemporaryState(INFECTION_SPORES, Amount);
+        }
+        else
+        {
+          Char->BeginTemporaryState(INFECTION_GROWTH, Amount);
+        }
+      }
+
       v2 Pos = GetMotherEntity()->GetSquareUnderEntity()->GetPos();
       Char->ActivateRandomState(SRC_MAGIC_MUSHROOM, Amount,
                                 Volume % 250 + Pos.X + Pos.Y + 1);
@@ -141,6 +153,11 @@ truth material::Effect(character* Char, int BodyPart, long Amount)
    case EFFECT_TELEPORT_CONTROL: Char->BeginTemporaryState(TELEPORT_CONTROL, Amount); break;
    case EFFECT_MUSHROOM:
     {
+      if(!RAND_N(50) && !Char->StateIsActivated(DISEASE_IMMUNITY))
+      {
+        Char->BeginTemporaryState(INFECTION_GROWTH, Amount);
+      }
+
       v2 Pos = GetMotherEntity()->GetSquareUnderEntity()->GetPos();
       Char->ActivateRandomState(SRC_MUSHROOM, Amount,
                                 Volume % 250 + Pos.X + Pos.Y + 1);

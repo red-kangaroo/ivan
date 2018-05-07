@@ -871,6 +871,12 @@ class character : public entity, public id
   void PrintBeginMindwormedMessage() const;
   void PrintEndMindwormedMessage() const;
   void MindwormedHandler();
+  void PrintBeginFungalGrowthMessage() const;
+  void PrintEndFungalGrowthMessage() const;
+  void FungalGrowthHandler();
+  void PrintBeginFungalSporesMessage() const;
+  void PrintEndFungalSporesMessage() const;
+  void FungalSporesHandler();
   truth CanFollow() const;
   truth LeftOversAreUnique() const;
   virtual festring GetKillName() const;

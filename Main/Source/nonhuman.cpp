@@ -1104,7 +1104,7 @@ void magicmushroom::GetAICommand()
     if(Square && Square->IsFlyable())
     {
       if(CanBeSeenByPlayer())
-        ADD_MESSAGE("%s releases odd-looking gas.", CHAR_NAME(DEFINITE));
+        ADD_MESSAGE("%s releases odd-looking spores.", CHAR_NAME(DEFINITE));
 
       Square->AddSmoke(gas::Spawn(MAGIC_VAPOUR, 1000));
       EditAP(-1000);
