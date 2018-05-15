@@ -2557,7 +2557,7 @@ goblin
                   wand(WAND_OF_WEBBING) { Chance = 50; LifeExpectancy = 10000; },
                   wand(WAND_OF_MIRRORING) { Chance = 5; LifeExpectancy = 10000; },
                   wand(WAND_OF_POLYMORPH) { Chance = 5; LifeExpectancy = 10000; },
-                  wand(WAND_OF_SLOW) { Chance = 50; LifeExpectancy = 10000; },
+                  wand(WAND_OF_SLOW) { Chance = 50; LifeExpectancy = 10000; }
                 }
     DangerModifier = 150;
     HPRequirementForGeneration = 50;

@@ -39,7 +39,7 @@ typedef const character ccharacter;
 
 struct databasebase
 {
-  int Config;
+  unsigned long long int Config;
   ulong CommonFlags;
   ulong NameFlags;
 };
@@ -49,7 +49,7 @@ class sysbase : public base
 {
  public:
   typedef sysbase<type, base, prototype> mybase;
-  static type* Spawn(int Config = 0, int SpecialFlags = 0)
+  static type* Spawn(unsigned long long int Config = 0, int SpecialFlags = 0)
   {
     type* T = new type;
     T->Initialize(Config, SpecialFlags);
@@ -158,7 +158,6 @@ const name##prototype name::ProtoType
 #define PARASITE_MIND_WORM (1 << 31)
 #define INFECTION_GROWTH (1 << 32)
 #define INFECTION_SPORES (1 << 33)
-
 
 #define TORSO 1
 #define HEAD 2
