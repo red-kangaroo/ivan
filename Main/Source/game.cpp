@@ -1312,9 +1312,6 @@ int game::RotateMapNotes()
 
 int game::CheckAutoPickup(square* sqr)
 {
-  if(!ivanconfig::IsAutoPickupThrownItems())
-    return false;
-
   if(sqr==NULL)
     sqr = PLAYER->GetSquareUnder();
 
@@ -1323,12 +1320,34 @@ int game::CheckAutoPickup(square* sqr)
 
   lsquare* lsqr = (lsquare*)sqr;
 
+  static std::vector<festring> afsMatch;
+  static bool bDummyInit = [](){
+    festring fsAutoPickList="kiwi|wand|dagger"; //TODO make this an user option at config menu, also for dynamicity
+    
+    //TODO use pcre for powerful regex see message.cpp
+    std::stringstream ss(fsAutoPickList.CStr());
+    std::string match;
+    while(std::getline(ss,match,'|'))
+      afsMatch.push_back(festring(match.c_str()));
+    return true;
+  }();
+
   itemvector iv;
   lsqr->GetStack()->FillItemVector(iv);
   int j=0;
   for(int i=0;i<iv.size();i++){
     item* it = iv[i];
-    if(it->HasTag('t')){ //throw
+    bool b=false;
+    if(!b && ivanconfig::IsAutoPickupThrownItems() && it->HasTag('t') )b=true; //was thrown
+    if(!b){
+      for(int i=0;i<afsMatch.size();i++){
+        if(it->GetNameSingular().Find(afsMatch[i].CStr(),0) != festring::NPos){
+          b=true;
+          break;
+        }
+      }
+    }
+    if(b){
       it->MoveTo(PLAYER->GetStack());
       ADD_MESSAGE("%s picked up.", it->GetName(INDEFINITE).CStr());
       j++;
@@ -4735,6 +4754,9 @@ void game::EnterArea(charactervector& Group, int Area, int EntryIndex)
         lsqr->KickAnyoneStandingHereAway();
 
       Player->PutToOrNear(Pos);
+      
+      game::CheckAddAutoMapNote();
+      game::CheckAutoPickup();
     }
     else
     {
