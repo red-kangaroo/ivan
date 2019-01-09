@@ -385,6 +385,7 @@ class game
   static bool ToggleShowMapNotes();
   static bool CheckAddAutoMapNote(square* =NULL);
   static int CheckAutoPickup(square* sqr = NULL);
+  static void UpdateAutoPickUpMatching();
   static int RotateMapNotes();
   static char MapNoteToken();
 

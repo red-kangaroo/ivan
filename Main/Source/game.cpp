@@ -1310,6 +1310,19 @@ int game::RotateMapNotes()
   return iMapNotesRotation;
 }
 
+std::vector<festring> afsAutoPickupMatch;
+void game::UpdateAutoPickUpMatching()
+{
+  afsAutoPickupMatch.clear();
+  
+  if(ivanconfig::GetAutoPickUpMatching().GetSize()==0 || ivanconfig::GetAutoPickUpMatching()[0]=='!')return;
+  
+  //TODO use pcre for powerful regex see message.cpp
+  std::stringstream ss(ivanconfig::GetAutoPickUpMatching().CStr());
+  std::string match;
+  while(std::getline(ss,match,'|'))
+    afsAutoPickupMatch.push_back(festring(match.c_str()));
+}
 int game::CheckAutoPickup(square* sqr)
 {
   if(sqr==NULL)
@@ -1320,18 +1333,7 @@ int game::CheckAutoPickup(square* sqr)
 
   lsquare* lsqr = (lsquare*)sqr;
 
-  static std::vector<festring> afsMatch;
-  static bool bDummyInit = [](){
-    festring fsAutoPickList="kiwi|wand|dagger"; //TODO make this an user option at config menu, also for dynamicity
-    
-    //TODO use pcre for powerful regex see message.cpp
-    std::stringstream ss(fsAutoPickList.CStr());
-    std::string match;
-    while(std::getline(ss,match,'|'))
-      afsMatch.push_back(festring(match.c_str()));
-    return true;
-  }();
-
+  static bool bDummyInit = [](){UpdateAutoPickUpMatching();return true;}();
   itemvector iv;
   lsqr->GetStack()->FillItemVector(iv);
   int j=0;
@@ -1340,8 +1342,8 @@ int game::CheckAutoPickup(square* sqr)
     bool b=false;
     if(!b && ivanconfig::IsAutoPickupThrownItems() && it->HasTag('t') )b=true; //was thrown
     if(!b){
-      for(int i=0;i<afsMatch.size();i++){
-        if(it->GetNameSingular().Find(afsMatch[i].CStr(),0) != festring::NPos){
+      for(int i=0;i<afsAutoPickupMatch.size();i++){
+        if(it->GetNameSingular().Find(afsAutoPickupMatch[i].CStr(),0) != festring::NPos){
           b=true;
           break;
         }
