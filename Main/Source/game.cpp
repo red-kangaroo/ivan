@@ -1339,6 +1339,7 @@ int game::CheckAutoPickup(square* sqr)
   int j=0;
   for(int i=0;i<iv.size();i++){
     item* it = iv[i];
+    if(it->GetRoom() && it->GetRoom()->GetMaster())continue; //not from owned rooms
     bool b=false;
     if(!b && ivanconfig::IsAutoPickupThrownItems() && it->HasTag('t') )b=true; //was thrown
     if(!b){
