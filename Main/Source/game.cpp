@@ -1340,6 +1340,9 @@ int game::CheckAutoPickup(square* sqr)
   for(int i=0;i<iv.size();i++){
     item* it = iv[i];
     if(it->GetRoom() && it->GetRoom()->GetMaster())continue; //not from owned rooms
+    if(it->GetSpoilLevel()>0)continue;
+    //TODO REGEX would work great about specific broken unwanted things like lantern and bottles #if(it->IsBroken() && it->is)
+    //TODO REGEX sticks on fire may not be wanted while scrolls, books etc may be #if(it->IsOnFire())continue;
     bool b=false;
     if(!b && ivanconfig::IsAutoPickupThrownItems() && it->HasTag('t') )b=true; //was thrown
     if(!b){
