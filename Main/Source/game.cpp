@@ -18,6 +18,7 @@
 #include <vector>
 #include <bitset>
 #include <ctime>
+#include <pcre.h>
 
 #if defined(UNIX) || defined(__DJGPP__)
 #include <sys/stat.h>
@@ -1311,17 +1312,37 @@ int game::RotateMapNotes()
 }
 
 std::vector<festring> afsAutoPickupMatch;
-void game::UpdateAutoPickUpMatching()
+pcre *reAutoPickup=NULL;
+void game::UpdateAutoPickUpMatching() //simple matching syntax
 {
   afsAutoPickupMatch.clear();
   
-  if(ivanconfig::GetAutoPickUpMatching().GetSize()==0 || ivanconfig::GetAutoPickUpMatching()[0]=='!')return;
-  
-  //TODO use pcre for powerful regex see message.cpp
-  std::stringstream ss(ivanconfig::GetAutoPickUpMatching().CStr());
-  std::string match;
-  while(std::getline(ss,match,'|'))
-    afsAutoPickupMatch.push_back(festring(match.c_str()));
+  bool bSimple=false;
+  if(bSimple){ //TODO just drop the simple code? or start the string with something to let it be used instead of regex? tho is cool to let ppl learn regex :)
+    if(ivanconfig::GetAutoPickUpMatching().GetSize()==0 || ivanconfig::GetAutoPickUpMatching()[0]=='!')return;
+
+    std::stringstream ss(ivanconfig::GetAutoPickUpMatching().CStr());
+    std::string match;
+    while(std::getline(ss,match,'|'))
+      afsAutoPickupMatch.push_back(festring(match.c_str()));
+  }else{
+    //TODO test regex about: ignoring broken lanterns and bottles, ignore sticks on fire but pickup scrolls on fire
+  //  static bool bDummyInit = [](){reAutoPickup=NULL;return true;}();
+    const char *errMsg;
+    int iErrOffset;
+    if(reAutoPickup)pcre_free(reAutoPickup);
+    reAutoPickup = pcre_compile(
+      ivanconfig::GetAutoPickUpMatching().CStr(), //pattern
+      0, //no options
+      &errMsg,    &iErrOffset,
+      0); // default char tables
+    if (!reAutoPickup){
+      std::vector<festring> afsFullProblems;
+      afsFullProblems.push_back(festring(errMsg));
+      afsFullProblems.push_back(festring()+"offset:"+iErrOffset);
+      bool bDummy = iosystem::AlertConfirmMsg("regex validation failed, if ignored will just not work at all",afsFullProblems,false);
+    }
+  }
 }
 int game::CheckAutoPickup(square* sqr)
 {
@@ -1336,31 +1357,38 @@ int game::CheckAutoPickup(square* sqr)
   static bool bDummyInit = [](){UpdateAutoPickUpMatching();return true;}();
   itemvector iv;
   lsqr->GetStack()->FillItemVector(iv);
-  int j=0;
+  int iTot=0;
+  festring fsNm;
   for(int i=0;i<iv.size();i++){
     item* it = iv[i];
     if(it->GetRoom() && it->GetRoom()->GetMaster())continue; //not from owned rooms
     if(it->GetSpoilLevel()>0)continue;
-    //TODO REGEX would work great about specific broken unwanted things like lantern and bottles #if(it->IsBroken() && it->is)
-    //TODO REGEX sticks on fire may not be wanted while scrolls, books etc may be #if(it->IsOnFire())continue;
     bool b=false;
     if(!b && ivanconfig::IsAutoPickupThrownItems() && it->HasTag('t') )b=true; //was thrown
     if(!b){
-      for(int i=0;i<afsAutoPickupMatch.size();i++){
+      if(reAutoPickup!=NULL){
+        fsNm=it->GetName(DEFINITE);
+        if(pcre_exec(reAutoPickup, 0, fsNm.CStr(), fsNm.GetSize(), 0, 0, NULL, 0) >= 0 ){
+          b=true;
+        }
+      }
+    }
+    if(!b){
+      for(int i=0;i<afsAutoPickupMatch.size();i++){ //each simple match
         if(it->GetNameSingular().Find(afsAutoPickupMatch[i].CStr(),0) != festring::NPos){
           b=true;
-          break;
+          break; //each simple match loop
         }
       }
     }
     if(b){
       it->MoveTo(PLAYER->GetStack());
       ADD_MESSAGE("%s picked up.", it->GetName(INDEFINITE).CStr());
-      j++;
+      iTot++;
     }
   }
 
-  return j;
+  return iTot;
 }
 
 bool game::CheckAddAutoMapNote(square* sqr)
