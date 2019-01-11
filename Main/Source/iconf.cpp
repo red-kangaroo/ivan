@@ -47,7 +47,7 @@ stringoption ivanconfig::SelectedBkgColor("SelectedBkgColor",
                                           &SelectedBkgColorChanger);
 stringoption ivanconfig::AutoPickUpMatching("AutoPickUpMatching",
                                           "Set items to auto pick up. To disable something no need to remove just invalidate it ex.: '_dagger'. To disable everything at once, just begin this config with '!'.",
-                                          "((wand|ring|scroll|vial|bottle|kiwi|dagger|can|key|book)|^(?:(?!broken).)*lantern.*$|^.*stick(?:(?!on fire).)*$)",
+                                          "((wand|ring|scroll|kiwi|dagger|can|key|book)|^(?:(?!broken).)*(lantern|bottle|vial).*$|^.*stick(?:(?!on fire).)*$)",
                                           &configsystem::NormalStringDisplayer,
                                           &AutoPickUpMatchingChangeInterface,
                                           &AutoPickUpMatchingChanger);
