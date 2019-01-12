@@ -1373,7 +1373,7 @@ int game::CheckAutoPickup(square* sqr)
         }
       }
     }
-    if(!b){
+    if(!b){ //TODO use player's perception, in case of a stack of items, to allow random pickup based on item volume (size) where smaller = harder like tiny rings, to compensate for the easiness of not losing a round having to pick up the item interactively
       for(int i=0;i<afsAutoPickupMatch.size();i++){ //each simple match
         if(it->GetNameSingular().Find(afsAutoPickupMatch[i].CStr(),0) != festring::NPos){
           b=true;
