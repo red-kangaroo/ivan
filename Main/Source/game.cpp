@@ -5223,7 +5223,7 @@ festring game::GetDataDir()
 {
 #ifdef UNIX
 #ifdef MAC_APP
-  return "../Resources/ivan/";
+  return "../Resources/data/";
 #else
   return DATADIR "/ivan/";
 #endif
