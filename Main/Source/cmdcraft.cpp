@@ -131,20 +131,36 @@ bool craftcore::canBeCrafted(item* it){
 
   const itemdatabase* itdb = it->GetDataBase();
 
-  // TODO figure out how to create an empty can or bottle
   if(
     game::IsQuestItem(it) ||
     it->GetEnchantment()!=0 ||
     it->GetCategory()==BOOK ||
-    it->GetCategory()==FOOD || //TODO allow near oven, but the problem is the ingredients... also may be blocked below too
     it->GetCategory()==MISC ||
     it->GetCategory()==SCROLL ||
-    it->GetCategory()==POTION ||
     !itdb->CanBeWished ||
     itdb->Possibility <= 0 ||
     !itdb->PostFix.IsEmpty() ||
     false // just to make it easier to re-organize and add checks above
   ){
+    return false;
+  }
+
+  if(it->GetCategory()==POTION)
+  {
+    item* Bottle = dynamic_cast<potion*>(it);
+    if(Bottle && !Bottle->GetSecondaryMaterial() && Bottle->GetNameSingular() == "bottle")
+      return true;
+
+    return false;
+  }
+
+  // TODO allow near oven, but the problem is the ingredients... also may be blocked below too
+  if(it->GetCategory()==FOOD)
+  {
+    item* Can = dynamic_cast<can*>(it);
+    if(Can && !Can->GetSecondaryMaterial())
+      return true;
+
     return false;
   }
 
@@ -540,9 +556,9 @@ olterrain* crafthandle::SpawnTerrain(recipedata& rpd, festring& fsCreated){
   if(otSpawn==NULL)
     ABORT("craft spawned no terrain.");
 
-  otSpawn->SetMainMaterial(material::MakeMaterial(rpd.otSpawnMatMainCfg,rpd.otSpawnMatMainVol));
+  delete otSpawn->SetMainMaterial(material::MakeMaterial(rpd.otSpawnMatMainCfg,rpd.otSpawnMatMainVol));
   if(rpd.otSpawnMatSecCfg>0)
-    otSpawn->SetSecondaryMaterial(material::MakeMaterial(rpd.otSpawnMatSecCfg,rpd.otSpawnMatSecVol));
+    delete otSpawn->SetSecondaryMaterial(material::MakeMaterial(rpd.otSpawnMatSecCfg,rpd.otSpawnMatSecVol));
 
   fsCreated << "You built ";
   rpd.lsqrPlaceAt->ChangeOLTerrainAndUpdateLights(otSpawn); //TODO a forge seems to not be emitting light...
@@ -1696,7 +1712,7 @@ struct srpMelt : public srpJoinLumps{
     }
     DBG4(lVolRemaining,rpd.itSpawnTot,lVolM,iIngotVol);
 
-//    rpd.itSpawn->SetMainMaterial(material::MakeMaterial(
+//    delete rpd.itSpawn->SetMainMaterial(material::MakeMaterial(
 //        LumpMeltable->GetMainMaterial()->GetConfig(), iIngotVol ));
     rpd.itSpawnMatMainCfg = LumpMeltable->GetMainMaterial()->GetConfig();
     rpd.itSpawnMatMainVol = iIngotVol;
@@ -2329,9 +2345,9 @@ struct srpForgeItem : public recipe{
 
     rpd.bCanBeBroken = itSpawn->CanBeBroken();
 
-    itSpawn->SetMainMaterial(material::MakeMaterial(iCfgM,lVolM));
+    delete itSpawn->SetMainMaterial(material::MakeMaterial(iCfgM,lVolM));
     if(bAllowS)
-      itSpawn->SetSecondaryMaterial(material::MakeMaterial(iCfgS,lVolS));
+      delete itSpawn->SetSecondaryMaterial(material::MakeMaterial(iCfgS,lVolS));
 
     material* matM = itSpawn->GetMainMaterial();
     material* matS = itSpawn->GetSecondaryMaterial();
@@ -2602,7 +2618,7 @@ struct srpFluidsBASE : public recipe{
     rpd.itSpawnMatSecCfg = iLiqCfg;
     rpd.itSpawnMatSecVol = volume;
 //    rpd.itSpawn = potion::Spawn(itBottle->GetConfig()); //may be a vial
-//    rpd.itSpawn->SetSecondaryMaterial(liquid::Spawn(iLiqCfg, volume));
+//    delete rpd.itSpawn->SetSecondaryMaterial(liquid::Spawn(iLiqCfg, volume));
 //    rpd.SetSpawnItemCfg(rpd.itSpawn);
 
     rpd.ingredientsIDs.push_back(itBottle->GetID()); //just to be destroyed too if crafting completes
@@ -3091,7 +3107,7 @@ item* crafthandle::SpawnItem(recipedata& rpd, festring& fsCreated)
 //  material* matM = material::MakeMaterial(rpd.itSpawnMatMainCfg,rpd.itSpawnMatMainVol);
 //  matM->SetSpoilCounter(rpd.itSpawnMatMainSpoilLevel);
   material* matM = craftcore::CreateMaterial(true,rpd);
-  itSpawn->SetMainMaterial(matM);
+  delete itSpawn->SetMainMaterial(matM);
 
   if(rpd.itSpawnMatSecCfg==0)
     craftcore::EmptyContentsIfPossible(rpd,itSpawn);
@@ -3101,7 +3117,7 @@ item* crafthandle::SpawnItem(recipedata& rpd, festring& fsCreated)
 //      matS = material::MakeMaterial(rpd.itSpawnMatSecCfg,rpd.itSpawnMatSecVol);
     if(matS!=NULL){
 //      matS->SetSpoilCounter(rpd.itSpawnMatSecSpoilLevel);
-      itSpawn->SetSecondaryMaterial(matS);
+      delete itSpawn->SetSecondaryMaterial(matS);
     }
   }
 
@@ -3605,8 +3621,8 @@ item* craftcore::PrepareRemains(recipedata& rpd, material* mat, int ForceType) /
       break;
   }
 
-//    itTmp->SetMainMaterial(material::MakeMaterial(mat->GetConfig(),mat->GetVolume()));
-  itTmp->SetMainMaterial(CreateMaterial(mat));
+//    delete itTmp->SetMainMaterial(material::MakeMaterial(mat->GetConfig(),mat->GetVolume()));
+  delete itTmp->SetMainMaterial(CreateMaterial(mat));
 
   craftcore::CopyDegradation(mat,itTmp->GetMainMaterial());
 
