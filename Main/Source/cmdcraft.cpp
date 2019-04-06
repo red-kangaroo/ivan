@@ -3169,11 +3169,20 @@ void crafthandle::CraftWorkTurn(recipedata& rpd){ DBG1(rpd.iRemainingTurnsToFini
     if(!lsqrHF)lsqrHF=rpd.v2XplodAt.Is0() ? NULL : rpd.rc.H()->GetNearLSquare(rpd.v2XplodAt);
     if(lsqrHF){
       hiteffectSetup* pHitEff=new hiteffectSetup();
-      pHitEff->Type=WEAPON_ATTACK;
+      
+      pHitEff->Type = (rpd.itTool || rpd.itTool2) ? WEAPON_ATTACK : UNARMED_ATTACK;
       pHitEff->WhoHits=rpd.rc.H();
       pHitEff->HitAtSquare=lsqrHF;
-      pHitEff->lItemEffectReferenceID  = rpd.itTool->GetID();
-      lsqrHF->AddHitEffect(*pHitEff);
+      
+      item* itHF=NULL; //keep the below order
+      if(!itHF)itHF = rpd.itTool ? rpd.itTool : NULL;
+      if(!itHF)itHF = rpd.itTool2 ? rpd.itTool2 : NULL;
+      if(!itHF)itHF = rpd.rc.H()->GetRightArm() ? rpd.rc.H()->GetRightArm() : NULL;
+      if(!itHF)itHF = rpd.rc.H()->GetLeftArm() ? rpd.rc.H()->GetLeftArm() : NULL;
+      if(itHF){
+        pHitEff->lItemEffectReferenceID = itHF->GetID();
+        lsqrHF->AddHitEffect(*pHitEff);
+      }
       delete pHitEff;
     }
   }
