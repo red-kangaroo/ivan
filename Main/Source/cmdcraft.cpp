@@ -3132,12 +3132,6 @@ item* crafthandle::SpawnItem(recipedata& rpd, festring& fsCreated)
     fsCreated << " ";
   fsCreated << "You crafted ";
 
-  itSpawn = CheckBreakItem(bAllowBreak, rpd, itSpawn, fsCreated);
-  if(itSpawn!=NULL){
-    fsCreated << itSpawn->GetName(INDEFINITE);
-    itSpawn->MoveTo(rpd.rc.H()->GetStack());DBGLN;
-  }
-  
   // this check is more detailed and must be when the item is completely ready!
   if(!craftcore::canBeCrafted(itSpawn)){
     ABORT(
@@ -3149,6 +3143,12 @@ item* crafthandle::SpawnItem(recipedata& rpd, festring& fsCreated)
       "This attempt: %s",
       itSpawn->GetName(DEFINITE).CStr()
     );
+  }
+  
+  itSpawn = CheckBreakItem(bAllowBreak, rpd, itSpawn, fsCreated);
+  if(itSpawn!=NULL){
+    fsCreated << itSpawn->GetName(INDEFINITE);
+    itSpawn->MoveTo(rpd.rc.H()->GetStack());DBGLN;
   }
   
   return itSpawn;
