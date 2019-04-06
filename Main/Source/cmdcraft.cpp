@@ -134,16 +134,18 @@ bool craftcore::canBeCrafted(item* it){
   if(it->GetCategory()==POTION)
   {
     item* Bottle = dynamic_cast<potion*>(it);
-    if(Bottle && Bottle->GetNameSingular() == "bottle"){
+    if(Bottle && (Bottle->GetNameSingular() == "bottle" || Bottle->GetNameSingular() == "vial")){ //TODO really necessary the singular name check? excessive?
       if(!Bottle->GetSecondaryMaterial())
         return true;
-      if( // extracting from corpses TODO may be the kind of action (as a parameter for this func) could allow some specific materials, so a new action EXTRACT_FROM_CORPSE would allow only the ones below
+      if( // extracting from corpses 
+          // TODO may be the "kind of action" (as a parameter for this func) could allow some specific materials only,  so a new action EXTRACT_FROM_CORPSE would allow only the ones below
          Bottle->GetSecondaryMaterial()->GetConfig()==SULPHURIC_ACID || 
          Bottle->GetSecondaryMaterial()->GetConfig()==POISON_LIQUID
         )
         return true;
     }
-
+    
+    DBG3(Bottle->GetSecondaryMaterial()->GetConfig(),SULPHURIC_ACID,POISON_LIQUID);
     return false;
   }
 
@@ -154,12 +156,15 @@ bool craftcore::canBeCrafted(item* it){
     if(Can && !Can->GetSecondaryMaterial())
       return true;
 
+    DBGLN;
     return false;
   }
 
   //TODO all these things should have some easier kind of property to be checked
-  if(!craftcore::MoreCraftDeniedFilters(it))
+  if(!craftcore::MoreCraftDeniedFilters(it)){
+    DBGLN;
     return false;
+  }
 
   if( // more complex/generic filter, better keep as last check?
     game::IsQuestItem(it) ||
@@ -172,6 +177,7 @@ bool craftcore::canBeCrafted(item* it){
     !itdb->PostFix.IsEmpty() ||
     false // just to make it easier to re-organize and add checks above
   ){
+    DBGLN;
     return false;
   }
   
@@ -3105,6 +3111,8 @@ item* crafthandle::SpawnItem(recipedata& rpd, festring& fsCreated)
       "- Magical items as rings, amulets, wands, scrolls, horns etc.\n"
       "Crafting any of this would be unbalanced as hell and unrealistic given your characters upbringing.\n"
       "You're after all a slave, with no knowledge of magic, and crafting magical items should be beyond most craftsmen.\n"
+      "This attempt: %s",
+      itSpawn->GetName(DEFINITE).CStr()
     );
   }
 
