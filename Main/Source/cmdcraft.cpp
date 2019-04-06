@@ -14,6 +14,7 @@
 
 #include <typeinfo>
 
+#include "hiteffect.h"
 #include "traps.h"
 #include "dbgmsgproj.h"
 
@@ -3156,7 +3157,27 @@ item* crafthandle::SpawnItem(recipedata& rpd, festring& fsCreated)
 void crafthandle::CraftWorkTurn(recipedata& rpd){ DBG1(rpd.iRemainingTurnsToFinish);
   rpd.iRemainingTurnsToFinish--;
   rpd.bSuccesfullyCompleted = rpd.iRemainingTurnsToFinish==0;
-
+  
+  if(clock()%2==0 ? rpd.iRemainingTurnsToFinish%3==0 : rpd.iRemainingTurnsToFinish%5==0){ // to avoid unnecessarily spamming hiteffects
+    // keep this preference order!
+    lsquare* lsqrHF=NULL;
+    if(!lsqrHF)lsqrHF=rpd.lsqrPlaceAt;
+    if(!lsqrHF)lsqrHF=rpd.v2AnvilLocation.Is0() ? NULL : rpd.rc.H()->GetNearLSquare(rpd.v2AnvilLocation);
+    if(!lsqrHF)lsqrHF=rpd.v2WorkbenchLocation.Is0() ? NULL : rpd.rc.H()->GetNearLSquare(rpd.v2WorkbenchLocation);
+    if(!lsqrHF)lsqrHF=rpd.v2PlaceAt.Is0() ? NULL : rpd.rc.H()->GetNearLSquare(rpd.v2PlaceAt);
+    if(!lsqrHF)lsqrHF=rpd.v2ForgeLocation.Is0() ? NULL : rpd.rc.H()->GetNearLSquare(rpd.v2ForgeLocation);
+    if(!lsqrHF)lsqrHF=rpd.v2XplodAt.Is0() ? NULL : rpd.rc.H()->GetNearLSquare(rpd.v2XplodAt);
+    if(lsqrHF){
+      hiteffectSetup* pHitEff=new hiteffectSetup();
+      pHitEff->Type=WEAPON_ATTACK;
+      pHitEff->WhoHits=rpd.rc.H();
+      pHitEff->HitAtSquare=lsqrHF;
+      pHitEff->lItemEffectReferenceID  = rpd.itTool->GetID();
+      lsqrHF->AddHitEffect(*pHitEff);
+      delete pHitEff;
+    }
+  }
+  
   if(rpd.bGradativeCraftOverride){
     GradativeCraftOverride(rpd);
   }else{
