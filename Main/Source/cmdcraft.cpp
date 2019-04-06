@@ -131,25 +131,18 @@ bool craftcore::canBeCrafted(item* it){
 
   const itemdatabase* itdb = it->GetDataBase();
 
-  if(
-    game::IsQuestItem(it) ||
-    it->GetEnchantment()!=0 ||
-    it->GetCategory()==BOOK ||
-    it->GetCategory()==MISC ||
-    it->GetCategory()==SCROLL ||
-    !itdb->CanBeWished ||
-    itdb->Possibility <= 0 ||
-    !itdb->PostFix.IsEmpty() ||
-    false // just to make it easier to re-organize and add checks above
-  ){
-    return false;
-  }
-
   if(it->GetCategory()==POTION)
   {
     item* Bottle = dynamic_cast<potion*>(it);
-    if(Bottle && !Bottle->GetSecondaryMaterial() && Bottle->GetNameSingular() == "bottle")
-      return true;
+    if(Bottle && Bottle->GetNameSingular() == "bottle"){
+      if(!Bottle->GetSecondaryMaterial())
+        return true;
+      if( // extracting from corpses TODO may be the kind of action (as a parameter for this func) could allow some specific materials, so a new action EXTRACT_FROM_CORPSE would allow only the ones below
+         Bottle->GetSecondaryMaterial()->GetConfig()==SULPHURIC_ACID || 
+         Bottle->GetSecondaryMaterial()->GetConfig()==POISON_LIQUID
+        )
+        return true;
+    }
 
     return false;
   }
@@ -168,6 +161,20 @@ bool craftcore::canBeCrafted(item* it){
   if(!craftcore::MoreCraftDeniedFilters(it))
     return false;
 
+  if( // more complex/generic filter, better keep as last check?
+    game::IsQuestItem(it) ||
+    it->GetEnchantment()!=0 ||
+    it->GetCategory()==BOOK ||
+    it->GetCategory()==MISC ||
+    it->GetCategory()==SCROLL ||
+    !itdb->CanBeWished ||
+    itdb->Possibility <= 0 ||
+    !itdb->PostFix.IsEmpty() ||
+    false // just to make it easier to re-organize and add checks above
+  ){
+    return false;
+  }
+  
   return true;
 }
 
