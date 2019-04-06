@@ -2628,7 +2628,7 @@ struct srpFluidsBASE : public recipe{
     rpd.itSpawnCfg = itBottle->GetConfig(); //may be a vial
     rpd.itSpawnMatMainCfg = itBottle->GetMainMaterial()->GetConfig();
     rpd.itSpawnMatMainVol = itBottle->GetMainMaterial()->GetVolume();
-    rpd.itSpawnMatSecCfg = iLiqCfg;
+    rpd.itSpawnMatSecCfg = iLiqCfg;DBG1(iLiqCfg);
     rpd.itSpawnMatSecVol = volume;
 //    rpd.itSpawn = potion::Spawn(itBottle->GetConfig()); //may be a vial
 //    delete rpd.itSpawn->SetSecondaryMaterial(liquid::Spawn(iLiqCfg, volume));
@@ -2640,7 +2640,7 @@ struct srpFluidsBASE : public recipe{
 
     rpd.iBaseTurnsToFinish=5;
 
-    rpd. bCanStart=true;
+    rpd.bCanStart=true;
 
     return true;
   }
@@ -3072,7 +3072,7 @@ item* crafthandle::SpawnItem(recipedata& rpd, festring& fsCreated)
 
   item* itSpawn = NULL;
   material* matS = NULL;
-  bool bAllowBreak=false;
+  bool bAllowBreak=false;DBG3(rpd.itSpawnType,rpd.itSpawnCfg,rpd.itSpawnMatSecCfg);
   switch(rpd.itSpawnType){
     case CIT_POTION:
       /**
@@ -3103,18 +3103,6 @@ item* crafthandle::SpawnItem(recipedata& rpd, festring& fsCreated)
 
   if(itSpawn==NULL)
     ABORT("craft spawned no item.");
-
-  if(!craftcore::canBeCrafted(itSpawn)){
-    ABORT(
-      "Dear developer, for the sake of balance and challenge do not create recipes for:\n"
-      "- Quest items.\n"
-      "- Magical items as rings, amulets, wands, scrolls, horns etc.\n"
-      "Crafting any of this would be unbalanced as hell and unrealistic given your characters upbringing.\n"
-      "You're after all a slave, with no knowledge of magic, and crafting magical items should be beyond most craftsmen.\n"
-      "This attempt: %s",
-      itSpawn->GetName(DEFINITE).CStr()
-    );
-  }
 
   if(rpd.itSpawnMatMainCfg==0 || rpd.itSpawnMatMainVol==0)
     ABORT("main material and/or volume is 0 %lu %lu",rpd.itSpawnMatMainCfg,rpd.itSpawnMatMainVol);
@@ -3147,7 +3135,20 @@ item* crafthandle::SpawnItem(recipedata& rpd, festring& fsCreated)
     fsCreated << itSpawn->GetName(INDEFINITE);
     itSpawn->MoveTo(rpd.rc.H()->GetStack());DBGLN;
   }
-
+  
+  // this check is more detailed and must be when the item is completely ready!
+  if(!craftcore::canBeCrafted(itSpawn)){
+    ABORT(
+      "Dear developer, for the sake of balance and challenge do not create recipes for:\n"
+      "- Quest items.\n"
+      "- Magical items as rings, amulets, wands, scrolls, horns etc.\n"
+      "Crafting any of this would be unbalanced as hell and unrealistic given your characters upbringing.\n"
+      "You're after all a slave, with no knowledge of magic, and crafting magical items should be beyond most craftsmen.\n"
+      "This attempt: %s",
+      itSpawn->GetName(DEFINITE).CStr()
+    );
+  }
+  
   return itSpawn;
 }
 

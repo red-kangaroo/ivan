@@ -1763,7 +1763,7 @@ item* humanoid::GetEquipment(int I) const
 void humanoid::SetEquipment(int I, item* What)
 {
   if(ivanconfig::GetRotateTimesPerSquare() > 0)
-    What->ResetFlyingThrownStep();
+    if(What)What->ResetFlyingThrownStep();
 
   switch(I)
   {
