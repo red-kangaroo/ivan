@@ -1146,10 +1146,11 @@ struct recipe{
   }
   static bool findOLT(recipedata& rpd,int iCfgOLT,bool bReqOnlyVisible=false){
     bool bFound=false;
+    //obs.: lsqr->CanBeFeltByPlayer() will NOT work if player CAN MOVE on it!
     if(bReqOnlyVisible){DBGLN; //even if far away
       for(int iY=0;iY<game::GetCurrentLevel()->GetYSize();iY++){for(int iX=0;iX<game::GetCurrentLevel()->GetXSize();iX++){
         lsquare* lsqr = game::GetCurrentLevel()->GetLSquare(v2(iX,iY));DBG3(lsqr,iX,iY);
-        if((lsqr->CanBeFeltByPlayer() || lsqr->CanBeSeenBy(rpd.rc.H())) && chkOLT(rpd,lsqr,iCfgOLT)){
+        if( chkOLT(rpd,lsqr,iCfgOLT) && (lsqr->GetPos().IsAdjacent(rpd.rc.H()->GetPos()) || lsqr->CanBeSeenBy(rpd.rc.H())) ){
           SetOLT(rpd,lsqr,iCfgOLT);
           bFound = true;
           break;
@@ -1162,7 +1163,7 @@ struct recipe{
         if(game::GetCurrentLevel()->IsValidPos(v2Pos)){
           lsquare* lsqr = rpd.rc.H()->GetNearLSquare(v2Pos);DBG1(lsqr);
 //          if(lsqr->CanBeFeltBy(rpd.rc.H()) && chkOLT(rpd,lsqr,iCfgOLT)){
-          if(lsqr->CanBeFeltByPlayer() && chkOLT(rpd,lsqr,iCfgOLT)){
+          if(chkOLT(rpd,lsqr,iCfgOLT) && lsqr->GetPos().IsAdjacent(rpd.rc.H()->GetPos())){
             SetOLT(rpd,lsqr,iCfgOLT);
             bFound = true;
             break;
@@ -2388,7 +2389,7 @@ struct srpForgeItem : public recipe{
         return false;
       }
 
-      if(!recipe::findOLT(rpd,ANVIL,true)){
+      if(!recipe::findOLT(rpd,ANVIL)){ //must be near the anvil to use it!!!
         craftcore::SendToHellSafely(itSpawn);
         return false;
       }
