@@ -3419,9 +3419,10 @@ void crafthandle::CheckFacilities(recipedata& rpd){
       ADD_MESSAGE("The workbench was destroyed!");
       rpd.bFailedTerminateCancel=true;
     }
-
-    rpd.bOnlyXplodIfCriticalFumble=true;
-    rpd.v2XplodAt=rpd.v2WorkbenchLocation;
+    
+    //TODO workbench should be damaged w/o explosions (that is area effect related to fire/forge)
+    rpd.bOnlyXplodIfCriticalFumble=true; //TODO kept as WIP
+    //explode/sparks at workbench doesnt make much sense: rpd.v2XplodAt=rpd.v2WorkbenchLocation;
   }
 }
 
