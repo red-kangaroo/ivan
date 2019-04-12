@@ -744,7 +744,14 @@ struct recipe{
 
     ABORT("at most 2 tools '%s' '%s' '%s'",rpd.itTool->GetName(INDEFINITE).CStr(),rpd.itTool2->GetName(INDEFINITE).CStr(),itTool->GetName(INDEFINITE).CStr());
   }
-
+  
+  static item* findCarvingToolSpecific(recipedata& rpd, item* itTool,int iMinCarvingStr, int iType, int& riMult, int iIncMult){ //this one is to avoid using #define mess :>, but instead of a simple if() we get several method calls... tho more readable...
+    if(itTool==NULL){ 
+      itTool = FindTool(rpd, iType, 0, iMinCarvingStr); 
+      if(itTool!=NULL)riMult+=iIncMult; 
+    } 
+    return itTool;
+  }
   static item* findCarvingTool(recipedata& rpd,item* itToWorkOn){
     int iCarvingStr=0;
 
@@ -756,11 +763,18 @@ struct recipe{
       iCarvingStr=Max(iCarvingStr,matS->GetStrengthValue());
 
     int iMinCarvingStr = iCarvingStr/2;
-
+    
+    // any blanded thing bug preferably a dagger
+    int iMult=1;
     item* itTool = FindTool(rpd, DAGGER, 0, iMinCarvingStr); //carving: tool cant be too much weaker
-
+    itTool = findCarvingToolSpecific(rpd,itTool,iMinCarvingStr,DAGGER,iMult,0);
+    itTool = findCarvingToolSpecific(rpd,itTool,iMinCarvingStr,SICKLE,iMult,1);
+    itTool = findCarvingToolSpecific(rpd,itTool,iMinCarvingStr,SHORT_SWORD,iMult,1);
+    itTool = findCarvingToolSpecific(rpd,itTool,iMinCarvingStr,AXE,iMult,2);
+    itTool = findCarvingToolSpecific(rpd,itTool,iMinCarvingStr,MEAT_CLEAVER,iMult,2);
+    itTool = findCarvingToolSpecific(rpd,itTool,iMinCarvingStr,LONG_SWORD,iMult,2);
+    itTool = findCarvingToolSpecific(rpd,itTool,iMinCarvingStr,SPEAR,iMult,3); // mmm... spear is easy enough to be found already TODO all other more difficult to be used weapons with blades may be added below here :), basically create a balsa dagger using a balsa spear and you are good to go xD
     if(itTool!=NULL){
-      int iMult=1;
       if(iCarvingStr>1){
         int itStr=itTool->GetMainMaterial()->GetStrengthValue();
         if(itStr<iCarvingStr)
