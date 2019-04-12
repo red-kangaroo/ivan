@@ -129,7 +129,9 @@ float craftcore::CraftSkill(character* Char){ //is the current capability of suc
 bool craftcore::canBeCrafted(item* it){
   if(dynamic_cast<lump*>(it)!=NULL)
     return true;
-  if(dynamic_cast<stick*>(it)!=NULL)
+  if(dynamic_cast<stick*>(it)!=NULL) //checked when splitting
+    return true;
+  if(dynamic_cast<itemcontainer*>(it)!=NULL) //to allow crafting chests again
     return true;
 
   const itemdatabase* itdb = it->GetDataBase();
