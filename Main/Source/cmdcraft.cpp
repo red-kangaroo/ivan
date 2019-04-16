@@ -3165,7 +3165,8 @@ item* crafthandle::SpawnItem(recipedata& rpd, festring& fsCreated)
   
   itSpawn = CheckBreakItem(bAllowBreak, rpd, itSpawn, fsCreated);
   if(itSpawn!=NULL){
-    fsCreated << itSpawn->GetName(INDEFINITE);
+    if(fsCreated.GetSize()<200) // this will prevent a crash about "stack smashing detected". TODO to test it and provide a better solution, just comment this `if` line and split a corpse in 40 parts or more
+      fsCreated << itSpawn->GetName(INDEFINITE);
     itSpawn->MoveTo(rpd.rc.H()->GetStack());DBGLN;
   }
   
