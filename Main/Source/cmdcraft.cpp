@@ -1032,7 +1032,7 @@ struct recipe{
               ABORT("ingredient volume reduced to negative or zero %ld %ld %s %s",lVolM,lRemainingVol,matM->GetName(DEFINITE).CStr(),ToUse[i]->GetNameSingular().CStr());
             if(!CI.bMultSelect && lVolM!=reqVolPrecise) //TODO use error margin because of float VS integer calc? ex.: if diff is +1 or -1, just allow it.
               ABORT("remaining vol calc needs fixing %ld != %ld, %f, %ld",lVolM,reqVolPrecise,CI.fUsablePercVol,lRemainingVol);
-            matM->SetVolume(lVolM);
+            matM->SetVolume(lVolM); //TODO there is a big problem here... if the crafting cannot be started because a tool is missing, this ingredient will have less volume than required and may not be reused in case it is a non-meltable!!!
 
 //            bool bForceLump = CI.fUsablePercVol<1.0;
 //            item* lumpR = craftcore::PrepareRemains(rpd,matM,bForceLump);

@@ -444,7 +444,7 @@ lsquare* character::GetNeighbourLSquare(int I) const
 { return static_cast<lsquare*>(GetSquareUnder())->GetNeighbourLSquare(I); }
 wsquare* character::GetNeighbourWSquare(int I) const
 { return static_cast<wsquare*>(GetSquareUnder())->GetNeighbourWSquare(I); }
-god* character::GetMasterGod() const { return game::GetGod(GetConfig()); }
+god* character::GetMasterGod() const { return game::GetGod(GetConfig())!=NULL ? game::GetGod(GetConfig()) : game::GetGod(GetAttachedGod()); } //TODO explain why GetConfig() works in most cases? test-case Terra@UT4 vs Lycanthropy. Is the priest Config ID at char.dat the same found for such ID at ivandef.h? so in short, should this just use GetAttachedGod() coherency from the very beggining?
 col16 character::GetBodyPartColorA(int, truth) const
 { return GetSkinColor(); }
 col16 character::GetBodyPartColorB(int, truth) const
