@@ -1346,7 +1346,8 @@ truth commandsystem::Throw(character* Char)
     Char->EditNP(-50);
     Char->DexterityAction(5);
     if(ivanconfig::IsAutoPickupThrownItems())
-      Item->SetTag('t');
+      if(Item->IsWeapon(PLAYER)) //TODO never made much sense auto-picking up other things than weapons, but this could be optional
+        Item->SetTag('t');
     return true;
   }
   else

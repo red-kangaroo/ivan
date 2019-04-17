@@ -124,7 +124,7 @@ truthoption ivanconfig::ShowMapAtDetectMaterial("ShowMapAtDetectMaterial",
                                           "show map while detecting material",
                                           false);
 truthoption ivanconfig::AutoPickupThrownItems("AutoPickupThrownItems",
-                                          "auto pick up thrown items",
+                                          "auto pick up thrown weapons",
                                           true);
 truthoption ivanconfig::TransparentMapLM    ("TransparentMapLM",
                                           "show transparent map in look mode",
