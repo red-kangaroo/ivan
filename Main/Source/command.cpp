@@ -897,6 +897,7 @@ truth commandsystem::Read(character* Char)
   }
 
   item* Item = Char->GetStack()->DrawContents(Char, CONST_S("What do you want to read?"), 0, &item::IsReadable);
+  if(Item)game::DisableAutoPlayMode(); // stops auto question timeout that was preventing reading at all
   return Item && Char->ReadItem(Item);
 }
 

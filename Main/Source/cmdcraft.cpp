@@ -3108,6 +3108,7 @@ item* crafthandle::SpawnItem(recipedata& rpd, festring& fsCreated)
       break;
     case CIT_PROTOTYPE:
       itSpawn = protosystem::CreateItemToCraft(rpd.fsItemSpawnSearchPrototype);
+      
       bAllowBreak=true;
       break;
     case CIT_STONE:
@@ -3124,6 +3125,12 @@ item* crafthandle::SpawnItem(recipedata& rpd, festring& fsCreated)
   if(itSpawn==NULL)
     ABORT("craft spawned no item.");
 
+  itemcontainer* ic = dynamic_cast<itemcontainer*>(itSpawn);
+  if(ic!=NULL){
+    if(ic->IsLocked())
+      ic->SetIsLocked(false); //to prevent annoyance of not having the key TODO should instead be always a broken lock considering the complexity of the locking system itself?
+  }
+  
   if(rpd.itSpawnMatMainCfg==0 || rpd.itSpawnMatMainVol==0)
     ABORT("main material and/or volume is 0 %lu %lu",rpd.itSpawnMatMainCfg,rpd.itSpawnMatMainVol);
 
