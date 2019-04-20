@@ -1416,6 +1416,7 @@ bool game::CheckAddAutoMapNote(square* sqr)
   if(
     dynamic_cast<christmastree*>(olt)!=NULL ||
     dynamic_cast<coffin*>(olt)!=NULL ||
+    dynamic_cast<fountain*>(olt)!=NULL ||
     dynamic_cast<monsterportal*>(olt)!=NULL ||
     dynamic_cast<stairs*>(olt)!=NULL ||
     olt->GetConfig() == ANVIL ||
