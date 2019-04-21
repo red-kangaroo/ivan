@@ -2719,7 +2719,7 @@ void updateCraftDesc(){
 }
 
 void addRecipe(recipe* prp){
-  prp->iListIndex=vrpAllRecipes.size();
+  prp->iListIndex=vrpAllRecipes.size()+1; //+1 is about the 1st entry related to suspended actions
 
   if(prp->name.IsEmpty())
     ABORT("empty recipe name '%s' '%s' %d",prp->name.CStr(),prp->desc.CStr(),prp->iListIndex);
@@ -2775,6 +2775,14 @@ humanoid* craftcore::CheckHumanoid(character* Char)
   }
   return h;
 }
+
+recipe* CheckSelectedAndInitRecipeIfNeeded(bool bInitRecipes,recipedata& rpd,recipe* prp, recipe& rp){ // to avoid macro hard readability
+  if(prp==NULL && rp.IsTheSelectedOne(rpd))prp=&rp; \
+  DBG3(prp,&rp,rp.desc.CStr()); \
+  if(bInitRecipes)addRecipe((recipe*)&rp);
+  return prp;
+}
+
 truth craftcore::Craft(character* Char) //TODO currently this is an over simplified crafting system... should be easy to add recipes and show their formulas...
 {
   humanoid* h = CheckHumanoid(Char);
@@ -2785,42 +2793,47 @@ truth craftcore::Craft(character* Char) //TODO currently this is an over simplif
   if(!CheckArms(h,bLOk,bROk))
     return false;
 
-  if(craftcore::HasSuspended()){
-    int key = game::KeyQuestion(CONST_S("There are suspended crafting actions: (r)esume/ENTER, (c)ancel or start a (n)ew one/SPACE?"),
-      KEY_ESC, 5, 'r', 'c', 'n', KEY_ENTER, KEY_SPACE);
-    if(key==KEY_ESC)return false;
+  uint sel = FELIST_ERROR_BIT;
+  if(vrpAllRecipes.size()>0){
+    game::SetStandardListAttributes(craftRecipes);
+    craftRecipes.AddFlags(SELECTABLE);
+    craftRecipes.ClearFilter();
+    updateCraftDesc();
+    sel = craftRecipes.Draw(); DBG1(sel);
 
-    if(key==KEY_ENTER)key='r';
-    if(key==KEY_SPACE)key='n';
+    if(sel & FELIST_ERROR_BIT)
+      return false;
+    
+    if(sel==0 && craftcore::HasSuspended()){
+      int key = game::KeyQuestion(CONST_S("There are suspended crafting actions: (r)esume/ENTER or (c)ancel?"),
+        KEY_ESC, 3, 'r', 'c', KEY_ENTER);
+      if(key==KEY_ESC)return false;
 
-    felist LSusp("Suspended crafting actions:",WHITE);
-    game::SetStandardListAttributes(LSusp);
-    LSusp.AddFlags(SELECTABLE);
-    for(int i=0;i<vSuspended.size();i++)
-      LSusp.AddEntry(vSuspended[i].fsCraftInfo,LIGHT_GRAY);
+      if(key==KEY_ENTER)key='r';
 
-    festring fsDo;
-    bool bResume=false;
-    bool bNew=false;
-    col16 col=WHITE;
-    switch(key){
-    case 'r':
-      fsDo="Resume";
-      bResume=true;
-      break;
-    case 'c':
-      fsDo="Cancel (cannot be restored after this)"; //TODO could...
-      col=RED;
-      bResume=false;
-      break;
-    case 'n':
-      bNew=true;
-      break;
-    default:
-      return false; //TODO ever reached?
-    }
+      felist LSusp("Suspended crafting actions:",WHITE);
+      game::SetStandardListAttributes(LSusp);
+      LSusp.AddFlags(SELECTABLE);
+      for(int i=0;i<vSuspended.size();i++)
+        LSusp.AddEntry(vSuspended[i].fsCraftInfo,LIGHT_GRAY);
 
-    if(!bNew){
+      festring fsDo;
+      bool bResume=false;
+      col16 col=WHITE;
+      switch(key){
+      case 'r':
+        fsDo="Resume";
+        bResume=true;
+        break;
+      case 'c':
+        fsDo="Cancel (cannot be restored after this)"; //TODO could...
+        col=RED;
+        bResume=false;
+        break;
+      default:
+        return false; //TODO ever reached?
+      }
+
       fsDo<<" which crafting action?";
       LSusp.AddDescription(fsDo,col);
       uint Sel = LSusp.Draw();
@@ -2834,18 +2847,7 @@ truth craftcore::Craft(character* Char) //TODO currently this is an over simplif
       }
       return false;
     }
-  }
-
-  uint sel = FELIST_ERROR_BIT;
-  if(vrpAllRecipes.size()>0){
-    game::SetStandardListAttributes(craftRecipes);
-    craftRecipes.AddFlags(SELECTABLE);
-    craftRecipes.ClearFilter();
-    updateCraftDesc();
-    sel = craftRecipes.Draw(); DBG1(sel);
-
-    if(sel & FELIST_ERROR_BIT)
-      return false;
+    
   }
   recipedata rpd(h,sel);
 
@@ -2853,12 +2855,16 @@ truth craftcore::Craft(character* Char) //TODO currently this is an over simplif
    * 1st call it just initializes the recipes list after all recipes have been configured!
    */
   bool bInitRecipes = vrpAllRecipes.size()==0;
+  
+  if(bInitRecipes){
+    craftRecipes.AddEntry(festring()+"Suspended crafting actions.", LIGHT_GRAY, 20, 0, true);
+    craftRecipes.SetLastEntryHelp("Here they can be resumed or deleted.");
+  }
+  
+  // these are kind of grouped and not ordered like a-z
   recipe* prp=NULL;
-  #define RP(rp) \
-    if(prp==NULL && rp.IsTheSelectedOne(rpd))prp=&rp; \
-    DBG3(prp,&rp,rp.desc.CStr()); \
-    if(bInitRecipes)addRecipe((recipe*)&rp);
-  // these are kind of grouped and not ordered like a-z TODO add the commented section code as felist (non selectable) section entries?
+  #define RP(MACRO_PARAM_rp) prp=CheckSelectedAndInitRecipeIfNeeded(bInitRecipes,rpd,prp,MACRO_PARAM_rp); // just a simple macro to easify maintenance
+  
   if(bInitRecipes)craftRecipes.AddEntry(festring()+"Furniture:", DARK_GRAY, 0, NO_IMAGE, false);
   RP(rpChair);
   RP(rpDoor);
