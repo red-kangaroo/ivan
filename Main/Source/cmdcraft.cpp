@@ -2904,6 +2904,7 @@ truth craftcore::Craft(character* Char) //TODO currently this is an over simplif
     return false;
   }DBGLN;
 
+  ADD_MESSAGE("Your chosen crafting action is to %s %s.",prp->action.CStr(),prp->name.CStr());
   bool bDummy = prp->work(rpd); //bDummy(fied) as there is more detailed fail status from rpd bools
 
   //TODO these messages are generic, therefore dont look good... improve it
