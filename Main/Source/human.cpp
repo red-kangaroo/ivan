@@ -1206,16 +1206,19 @@ void slave::BeTalkedTo()
 
 void slave::GetAICommand()
 {
-  SeekLeader(GetLeader());
+  SeekLeader(GetLeader()); DBG2(GetNameSingular().CStr(), GetLeader());
 
-  if(CheckAIZapOpportunity())
+  if(CheckAIZapOpportunity()){ DBG1(GetNameSingular().CStr());
     return;
+  }
 
-  if(CheckForEnemies(true, true, true))
+  if(CheckForEnemies(true, true, true)){ DBG1(GetNameSingular().CStr());
     return;
+  }
 
-  if(CheckForUsefulItemsOnGround())
+  if(CheckForUsefulItemsOnGround()){ DBG1(GetNameSingular().CStr());
     return;
+  }
 
   if(FollowLeader(GetLeader()))
     return;

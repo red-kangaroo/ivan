@@ -657,7 +657,7 @@ struct recipe{
     rpd.bAlreadyExplained=true;
   }
   void failToolMsg(recipedata& rpd,festring tool){
-    ADD_MESSAGE("You don't have %s to work on.",tool.CStr());
+    ADD_MESSAGE("You don't have a (good enough) %s to work on.",tool.CStr()); // ex.: "good enough" means that a too weak dagger wont be able to work on a much stronger material
     rpd.bAlreadyExplained=true;
   }
 

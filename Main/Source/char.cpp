@@ -3939,9 +3939,13 @@ truth character::CheckForEnemies(truth CheckDoors, truth CheckGround, truth MayM
 
         if(CheckGround && CheckForUsefulItemsOnGround())
           return true;
-
-        if(MayMoveRandomly && MoveRandomly()) // one has heard that an enemy is near but doesn't know where
-          return true;
+        
+        if(!Leader || Leader!=PLAYER || (Leader==PLAYER && ivanconfig::GetHoldPosMaxDist()==0)){ // this lets all pets stay put if hold pos is > 0
+          if(MayMoveRandomly){
+            if(MoveRandomly()) // one has heard that an enemy is near but doesn't know where
+              return true;
+          }
+        }
       }
 
       return false;
@@ -3990,10 +3994,11 @@ truth character::CheckForUsefulItemsOnGround(truth CheckFood)
 
 truth character::FollowLeader(character* Leader)
 {
-  if(!Leader || Leader == this || !IsEnabled())
+  if(!Leader || Leader == this || !IsEnabled()) { DBG1(GetNameSingular().CStr());
     return false;
+  }
 
-  if(CommandFlags & FOLLOW_LEADER && Leader->CanBeSeenBy(this) && Leader->SquareUnderCanBeSeenBy(this, true)){
+  if(CommandFlags & FOLLOW_LEADER && Leader->CanBeSeenBy(this) && Leader->SquareUnderCanBeSeenBy(this, true)){ DBG1(GetNameSingular().CStr());
     v2HoldPos = GoingTo; //will keep the last reference position possible
 
     v2 Distance = GetPos() - GoingTo; //set by SeekLeader()
@@ -4004,10 +4009,10 @@ truth character::FollowLeader(character* Leader)
   }
 
   if(IsGoingSomeWhere()){
-    if(!MoveTowardsTarget(true)){
+    if(!MoveTowardsTarget(true)){ DBG1(GetNameSingular().CStr());
       TerminateGoingTo();
       return false;
-    }else{
+    }else{ DBG1(GetNameSingular().CStr());
       return true;
     }
   }else{
@@ -4016,7 +4021,7 @@ truth character::FollowLeader(character* Leader)
       v2HoldPos=GetPos(); //when the game is loaded keep current pos TODO could be savegamed tho
     if(ivanconfig::GetHoldPosMaxDist()>0){
       v2 v2HoldDist = GetPos() - v2HoldPos;
-      if(abs(v2HoldDist.X) < ivanconfig::GetHoldPosMaxDist() && abs(v2HoldDist.Y) < ivanconfig::GetHoldPosMaxDist()){
+      if(abs(v2HoldDist.X) < ivanconfig::GetHoldPosMaxDist() && abs(v2HoldDist.Y) < ivanconfig::GetHoldPosMaxDist()){ DBG1(GetNameSingular().CStr());
         // will do other things
         return false;
       }else{
