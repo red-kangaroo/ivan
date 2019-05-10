@@ -1584,7 +1584,15 @@ truth commandsystem::ShowMapWork(character* Char,v2* pv2ChoseLocation)
               }
               if(start.Is0())
                 start=Char->GetPos();
-
+              
+              if(!game::GetCurrentArea()->IsValidPos(start)){
+                // very rare case when opening the map will crash at game::PositionQuestion(,start,...) ... area::GetSquare(start)
+                DBG4("CrashWorkaround",DBGAV2(start),game::GetCurrentArea()->GetXSize(),game::GetCurrentArea()->GetYSize());
+                DBGBREAKPOINT;
+                game::ToggleDrawMapOverlay(); //TODO hint something to the player like internal error was avoided and should just retry?
+                return false;
+              }
+              
               noteAddPos = game::PositionQuestion(fsMsg, start, NULL, NULL, true); DBGSV2(noteAddPos);
               if(noteAddPos==ERROR_V2){
                 game::ToggleDrawMapOverlay();
