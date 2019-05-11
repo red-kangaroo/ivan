@@ -1104,8 +1104,9 @@ truth commandsystem::Pray(character* Char)
       {
         desc.Empty();
         desc << game::GetGod(c)->GetCompleteDescription();
-        if(ivanconfig::IsShowGodInfo())desc << " ("<<game::GetGod(c)->GetDescription()<<")";
+        if(ivanconfig::IsShowGodInfo())desc << " " << game::GetGod(c)->GetLastKnownRelation();
         Panthenon.AddEntry(desc, LIGHT_GRAY, 20, c);
+        Panthenon.SetLastEntryHelp(game::GetGod(c)->GetDescription()); //using F1 is the correct way for this
         Known[Index++] = c;
       }
   }
@@ -1113,6 +1114,7 @@ truth commandsystem::Pray(character* Char)
     if(game::GetGod(DivineMaster)->IsKnown())
     {
       Panthenon.AddEntry(game::GetGod(DivineMaster)->GetCompleteDescription(), LIGHT_GRAY, 20, DivineMaster);
+      Panthenon.SetLastEntryHelp(game::GetGod(DivineMaster)->GetDescription());
       Known[0] = DivineMaster;
     }
     else
