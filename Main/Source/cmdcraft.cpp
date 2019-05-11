@@ -2715,7 +2715,12 @@ void updateCraftDesc(){
   static char cSkill[20];
   sprintf(cSkill, "%.1f",fSkill);
   fsSkill<<cSkill;
-  craftRecipes.AddDescription(fsSkill,fSkill<10?RED:WHITE);
+  
+  festring fsDesc=fsSkill;
+  if(vSuspended.size()>0)
+    fsDesc<<" (Suspended Actions: "<<vSuspended.size()<<")";
+  
+  craftRecipes.AddDescription(fsDesc,fSkill<10?RED:WHITE);
 }
 
 void addRecipe(recipe* prp){
