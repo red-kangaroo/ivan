@@ -1826,12 +1826,17 @@ struct srpDismantle : public recipe{ //TODO this is instantaneous, should take t
       rpd.bAlreadyExplained=true;
       return false;
     }
-
+    
+    /**
+     * Meltable sticks should be lumpable to easify the code.
+     * Kept in case of wanting to re-enabling for some reason...
+     * 
     if(dynamic_cast<stick*>(itToUse)!=NULL){
       ADD_MESSAGE("%s is already a stick.", itToUse->GetName(DEFINITE).CStr());
       rpd.bAlreadyExplained=true;
       return false;
     }
+     */
 
     // for now, uses just one turn to smash anything into lumps but needs to be near a FORGE TODO should actually require a stronger hammer than the material's hardness being smashed, and could be anywhere...
     bool bW = itToUse->IsWeapon(rpd.rc.H());
