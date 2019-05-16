@@ -744,6 +744,8 @@ truth commandsystem::Quit(character* Char)
 
 truth commandsystem::Talk(character* Char)
 {
+  static char cmdKey = findCmdKey(&Talk);
+  
   if(!Char->CheckTalk())
     return false;
 
@@ -775,11 +777,15 @@ truth commandsystem::Talk(character* Char)
     return ToTalk->ChatMenu();
   else
   {
-    int Dir = game::DirectionQuestion(CONST_S("To whom do you wish to talk? [press a direction key]"), false, true);
+    static festring fsQ;
+    static bool bInitDummy=[](){fsQ<<"To whom do you wish to talk? [press a direction key or '"<<cmdKey<<"']";return true;}();
+    static int iPreviousDirChosen = DIR_ERROR;
+    int Dir = game::DirectionQuestion(fsQ, false, true, cmdKey, iPreviousDirChosen);
 
     if(Dir == DIR_ERROR || !Char->GetArea()->IsValidPos(Char->GetPos() + game::GetMoveVector(Dir)))
       return false;
 
+    iPreviousDirChosen = Dir;
     character* Dude = Char->GetNearSquare(Char->GetPos() + game::GetMoveVector(Dir))->GetCharacter();
 
     if(Dude == Char)
@@ -1199,8 +1205,8 @@ truth commandsystem::Kick(character* Char)
     return true;
   }
 
-  festring fsQ;
-  fsQ<<"In what direction do you wish to kick? [press a direction key or '"<<cmdKey<<"']";
+  static festring fsQ;
+  static bool bInitDummy=[](){fsQ<<"In what direction do you wish to kick? [press a direction key or '"<<cmdKey<<"']";return true;}();
   static int iPreviousDirChosen = DIR_ERROR;
   int Dir = game::DirectionQuestion(fsQ, false, false, cmdKey, iPreviousDirChosen);
 
