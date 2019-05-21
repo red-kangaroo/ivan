@@ -519,8 +519,12 @@ truth commandsystem::Drop(character* Char)
       for(uint c = 0; c < ToDrop.size(); ++c)
       {
         ToDrop[c]->MoveTo(Char->GetStackUnder());
-        if(ivanconfig::IsAutoPickupThrownItems())
+        if(ivanconfig::IsAutoPickupThrownItems()){
           ToDrop[c]->ClearTag('t'); //throw: to avoid auto-pickup
+          if(game::IsAutoPickupMatch(ToDrop[c]->GetName(DEFINITE))){
+            ToDrop[c]->SetTag('d'); //intentionally dropped: this will let user decide specific items to NOT auto-pickup regex matching
+          }
+        }
       }
       Success = true;
     }
@@ -667,6 +671,10 @@ truth commandsystem::PickUp(character* Char)
             PileVector[0][c]->ResetFlyingThrownStep();
 
           PileVector[0][c]->MoveTo(Char->GetStack());
+          
+          if(game::IsAutoPickupMatch(PileVector[0][c]->GetName(DEFINITE))){
+            PileVector[0][c]->ClearTag('d'); //intentionally drop tag dismissed for autopickup regex match
+          }
         }
 
         ADD_MESSAGE("%s picked up.", PileVector[0][0]->GetName(INDEFINITE, Amount).CStr());
@@ -709,6 +717,10 @@ truth commandsystem::PickUp(character* Char)
             ToPickup[c]->ResetFlyingThrownStep();
 
           ToPickup[c]->MoveTo(Char->GetStack());
+          
+          if(game::IsAutoPickupMatch(ToPickup[c]->GetName(DEFINITE))){
+            ToPickup[c]->ClearTag('d'); //intentionally drop tag dismissed for autopickup regex match
+          }
         }
 
         ADD_MESSAGE("%s picked up.", ToPickup[0]->GetName(INDEFINITE, ToPickup.size()).CStr());
@@ -1742,6 +1754,7 @@ truth commandsystem::Go(character* Char)
 
 truth commandsystem::ShowConfigScreen(character*)
 {
+  configsystem::Load(); // some fields may be too big to be edited from the game interface ex.: autopickup regex would require multiline editing otherwise would not work. TODO should this be optional?
   ivanconfig::Show();
   return false;
 }

@@ -657,7 +657,7 @@ struct recipe{
     rpd.bAlreadyExplained=true;
   }
   void failToolMsg(recipedata& rpd,festring tool){
-    ADD_MESSAGE("You don't have a (good enough) %s to work on.",tool.CStr()); // ex.: "good enough" means that a too weak dagger wont be able to work on a much stronger material
+    ADD_MESSAGE("You don't have %s (at least good enough one) to work on it.",tool.CStr()); // ex.: "good enough" means that a too weak dagger wont be able to work on a much stronger material
     rpd.bAlreadyExplained=true;
   }
 
@@ -791,7 +791,7 @@ struct recipe{
         rpd.iBaseTurnsToFinish *= 3;
       }
     }else{
-      ADD_MESSAGE("You have no dagger to work on it."); //it is good to measure, hold tight, has a good height etc...
+      ADD_MESSAGE("You have no carving tool (at least a good enough one) to work on it."); //it is good to measure, hold tight, has a good height etc...
                                                         // Does it have to be dagger? Wouldn't "tool" be better? --red_kangaroo
       rpd.bAlreadyExplained=true;
     }

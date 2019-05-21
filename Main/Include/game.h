@@ -388,6 +388,7 @@ class game
   static void UpdateAutoPickUpMatching();
   static int RotateMapNotes();
   static char MapNoteToken();
+  static bool IsAutoPickupMatch(cfestring fsName);
 
 #ifdef WIZARD
   static void ActivateWizardMode() { WizardMode = true; }

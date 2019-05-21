@@ -1344,13 +1344,16 @@ void game::UpdateAutoPickUpMatching() //simple matching syntax
     }
   }
 }
+bool game::IsAutoPickupMatch(cfestring fsName) {
+  return pcre_exec(reAutoPickup, 0, fsName.CStr(), fsName.GetSize(), 0, 0, NULL, 0) >= 0;
+}
 int game::CheckAutoPickup(square* sqr)
 {
   if(sqr==NULL)
     sqr = PLAYER->GetSquareUnder();
 
   if(dynamic_cast<lsquare*>(sqr)==NULL)
-    return false;
+    return 0;
 
   lsquare* lsqr = (lsquare*)sqr;
 
@@ -1358,17 +1361,15 @@ int game::CheckAutoPickup(square* sqr)
   itemvector iv;
   lsqr->GetStack()->FillItemVector(iv);
   int iTot=0;
-  festring fsNm;
   for(int i=0;i<iv.size();i++){
     item* it = iv[i];
     if(it->GetRoom() && it->GetRoom()->GetMaster())continue; //not from owned rooms
     if(it->GetSpoilLevel()>0)continue;
     bool b=false;
     if(!b && ivanconfig::IsAutoPickupThrownItems() && it->HasTag('t') )b=true; //was thrown
-    if(!b){
+    if(!b && !it->HasTag('d')){
       if(reAutoPickup!=NULL){
-        fsNm=it->GetName(DEFINITE);
-        if(pcre_exec(reAutoPickup, 0, fsNm.CStr(), fsNm.GetSize(), 0, 0, NULL, 0) >= 0 ){
+        if(IsAutoPickupMatch(it->GetName(DEFINITE))){
           b=true;
         }
       }
