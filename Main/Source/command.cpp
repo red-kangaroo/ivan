@@ -1890,7 +1890,7 @@ truth commandsystem::WizardMode(character* Char)
         game::GetWorldMap()->RevealEnvironment(ElpuriCavePos, 1);
 
         v2 XinrochTombPos = game::GetWorldMap()->GetEntryPos(0, XINROCH_TOMB);
-        game::GetWorldMap()->GetWSquare(XinrochTombPos)->ChangeOWTerrain(locationAW::Spawn());
+        game::GetWorldMap()->GetWSquare(XinrochTombPos)->ChangeOWTerrain(xinrochtomb::Spawn());
         game::GetWorldMap()->RevealEnvironment(XinrochTombPos, 1);
 
         game::GetWorldMap()->SendNewDrawRequest();
@@ -1903,7 +1903,7 @@ truth commandsystem::WizardMode(character* Char)
         game::GetWorldMap()->RevealEnvironment(ElpuriCavePos, 1);
 
         v2 XinrochTombPos = game::GetWorldMap()->GetEntryPos(0, XINROCH_TOMB);
-        game::GetWorldMap()->GetWSquare(XinrochTombPos)->ChangeOWTerrain(locationAW::Spawn());
+        game::GetWorldMap()->GetWSquare(XinrochTombPos)->ChangeOWTerrain(xinrochtomb::Spawn());
         game::GetWorldMap()->RevealEnvironment(XinrochTombPos, 1);
 
         game::SaveWorldMap();
