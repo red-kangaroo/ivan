@@ -1,6 +1,5 @@
 # If you want to set up another Travis CI service for your fork (not branch),
 # you can alter it to disable tests and notification for the official repo.
-if: repo = Attnam/ivan
 
 sudo: required
 dist: trusty
@@ -91,6 +90,4 @@ deploy:
     - $IVAN_BUILD_DIR/$IVAN_PLATFORM/*.dmg
   on:
     condition: '"$IVAN_PLATFORM" =~ ^(win|osx)$'
-    repo: Attnam/ivan
     tags: true
-    branch: master
