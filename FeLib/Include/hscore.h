@@ -17,6 +17,7 @@
 #include <ctime>
 
 #include "festring.h"
+#include "felist.h"
 
 #ifdef UNIX
 #define HIGH_SCORE_FILENAME "ivan-highscore.scores"
@@ -46,6 +47,7 @@ class highscore
   ushort GetVersion() const { return Version; }
   void Clear();
   truth CheckVersion() const;
+  void GetLastEntry(felist&) const;
  private:
   truth Add(long, cfestring&, time_t, long);
   std::vector<festring> Entry;

@@ -367,6 +367,7 @@ class game
   static festring GetScrshotDir();
   static festring GetBoneDir();
   static festring GetMusicDir();
+  static festring GetMorgueDir();
   static truth PlayerWasHurtByExplosion() { return PlayerHurtByExplosion; }
   static void SetPlayerWasHurtByExplosion(truth What) { PlayerHurtByExplosion = What; }
   static void SetCurrentArea(area* What) { CurrentArea = What; }
@@ -505,6 +506,7 @@ class game
   static int GetCurrentDungeonTurnsCount(){return iCurrentDungeonTurn;}
   static int GetSaveFileVersionHardcoded();
   static void ValidateCommandKeys(char Key1,char Key2,char Key3);
+  static void CreateMorgueFile();
  private:
   static void UpdateCameraCoordinate(int&, int, int, int);
   static cchar* const Alignment[];

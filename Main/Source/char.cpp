@@ -9384,8 +9384,9 @@ void character::ShowAdventureInfoAlt() const
       return;
     }
   }
-}
 
+  game::CreateMorgueFile();
+}
 
 truth character::EditAllAttributes(int Amount)
 {
@@ -13261,4 +13262,190 @@ festring character::GetHitPointDescription() const
 truth character::WillGetTurnSoon() const
 {
   return GetAP() >= 900;
+}
+
+void character::GetMorgueEntry(felist& Info) const
+{
+  Info.AddEntry(CONST_S("Turns:  ") + game::GetTurn());
+  ivantime Time;
+  game::GetTime(Time);
+  Info.AddEntry(CONST_S("Day:    ") + Time.Day);
+  Info.AddEntry(CONST_S("Time:   ") + Time.Hour + ":" + (Time.Min < 10 ? "0" : "") + Time.Min);
+  Info.AddEntry(CONST_S("Gold:   ") + GetMoney());
+
+  Info.AddEntry(CONST_S("Attributes"));
+  Info.AddEntry(CONST_S("=========="));
+  AddSpecialStethoscopeInfo(Info);
+  Info.AddEntry(CONST_S("Endurance:    ") + GetAttribute(ENDURANCE));
+  Info.AddEntry(CONST_S("Perception:   ") + GetAttribute(PERCEPTION));
+  Info.AddEntry(CONST_S("Intelligence: ") + GetAttribute(INTELLIGENCE));
+  Info.AddEntry(CONST_S("Wisdom:       ") + GetAttribute(WISDOM));
+  Info.AddEntry(CONST_S("Willpower:    ") + GetAttribute(WILL_POWER));
+  Info.AddEntry(CONST_S("Charisma:     ") + GetAttribute(CHARISMA));
+  Info.AddEntry(CONST_S("Mana:         ") + GetAttribute(MANA));
+  Info.AddEntry(CONST_S(""));
+  Info.AddEntry(CONST_S("Height: ") + GetSize() + " cm");
+  Info.AddEntry(CONST_S("Weight: ") + GetTotalCharacterWeight() + " kg");
+  Info.AddEntry(CONST_S(""));
+  Info.AddEntry(CONST_S("Hit points: ") + GetHP() + "/" + GetMaxHP() + " (" + GetHitPointDescription() + ")");
+  Info.AddEntry(CONST_S(""));
+
+  if(CanUseEquipment())
+  {
+    Info.AddEntry(CONST_S("Equipment"));
+    Info.AddEntry(CONST_S("========="));
+    for(int c = 0; c < GetEquipments(); ++c)
+    {
+      item* Equipment = GetEquipment(c);
+
+      if(Equipment)
+        Info.AddEntry(festring(GetEquipmentName(c)) + ": " + Equipment->GetName(INDEFINITE));
+    }
+  }
+
+  Info.AddEntry(CONST_S(""));
+  Info.AddEntry(CONST_S("Inventory"));
+  Info.AddEntry(CONST_S("========="));
+  //TODO
+
+  Info.AddEntry(CONST_S(""));
+  Info.AddEntry(CONST_S("Body parts"));
+  Info.AddEntry(CONST_S("=========="));
+  festring EntryBP;
+  for(int c = 0; c < BodyParts; ++c)
+  {
+    bodypart* BodyPart = GetBodyPart(c);
+    if(!BodyPart) continue;
+
+    EntryBP.Empty();
+    if(BodyPart->GetMainMaterial()->GetConfig() == GetTorso()->GetMainMaterial()->GetConfig())
+    {
+      BodyPart->GetMainMaterial()->AddName(EntryBP, UNARTICLED);
+      EntryBP << " ";
+    }
+    BodyPart->AddName(EntryBP, UNARTICLED);
+    Info.AddEntry(EntryBP);
+  }
+
+  Info.AddEntry(CONST_S(""));
+  Info.AddEntry(CONST_S("Status effects"));
+  Info.AddEntry(CONST_S("=============="));
+
+  if(GetTalent() != GetWeakness())
+  {
+    if(GetTalent())
+    {
+      switch(GetTalent())
+      {
+        case TALENT_STRONG:
+         Info.AddEntry("Strong");
+         break;
+        case TALENT_FAST_N_ACCURATE:
+         Info.AddEntry("Swift");
+         break;
+        case TALENT_HEALTHY:
+         Info.AddEntry("Healthy");
+         break;
+        case TALENT_CLEVER:
+         Info.AddEntry("Clever");
+         break;
+      }
+    }
+    if(GetWeakness())
+    {
+      switch(GetWeakness())
+      {
+        case TALENT_STRONG:
+         Info.AddEntry("Weak");
+         break;
+        case TALENT_FAST_N_ACCURATE:
+         Info.AddEntry("Clumsy");
+         break;
+        case TALENT_HEALTHY:
+         Info.AddEntry("Frail");
+         break;
+        case TALENT_CLEVER:
+         Info.AddEntry("Dim");
+         break;
+      }
+    }
+  }
+
+  if(GetAction())
+    Info.AddEntry(festring(GetAction()->GetDescription()).CapitalizeCopy());
+
+  static festring HungerStateStrings[] = { "Starving!", "Very hungry", "Hungry", "", "Satiated", "Bloated", "Overfed!" };
+  int HungerState = GetHungerState();
+  if(HungerState != NOT_HUNGRY)
+    Info.AddEntry(HungerStateStrings[HungerState]);
+
+  static festring BurdenStateStrings[] = { "Overload!", "Stressed", "Burdened" };
+  int BurdenState = GetBurdenState();
+  if(BurdenState != UNBURDENED)
+    Info.AddEntry(BurdenStateStrings[BurdenState]);
+
+  static festring TirednessStateStrings[] = { "Fainting!", "Exhausted" };
+  int TirednessState = GetTirednessState();
+  if(TirednessState != UNTIRED)
+    Info.AddEntry(TirednessStateStrings[TirednessState]);
+
+  for(int c = 0; c < STATES; ++c)
+    if(StateIsActivated(1 << c)
+       && (1 << c != HASTE || !StateIsActivated(SLOW))
+       && (1 << c != SLOW || !StateIsActivated(HASTE)))
+      Info.AddEntry(StateData[c].Description);
+
+  if(game::PlayerIsRunning())
+    Info.AddEntry(festring(GetRunDescriptionLine(0)) + festring(GetRunDescriptionLine(1)));
+
+  if(game::PlayerIsGodChampion())
+    Info.AddEntry("Divine Champion");
+  if(game::PlayerHasBoat())
+  {
+    Info.AddEntry("Ship Owned");
+
+    if(game::IsInWilderness() && IsSwimming())
+      Info.AddEntry("On Ship");
+  }
+
+  Info.AddEntry(CONST_S(""));
+  Info.AddEntry(CONST_S("Skills"));
+  Info.AddEntry(CONST_S("======"));
+  Info.AddEntry(CONST_S("                              Level     Points    Needed    Battle bonus"));
+  festring Buffer;
+
+  for(int c = 0; c < GetAllowedWeaponSkillCategories(); ++c)
+  {
+    cweaponskill* Skill = GetCWeaponSkill(c);
+
+    if(Skill->GetHits() / 100 || (IsUsingWeaponOfCategory(c)))
+    {
+      Buffer = Skill->GetName(c);
+      Buffer.Resize(30);
+      Buffer << Skill->GetLevel();
+      Buffer.Resize(40);
+      Buffer << Skill->GetHits() / 100;
+      Buffer.Resize(50);
+
+      if(Skill->GetLevel() != 20)
+        Buffer << (Skill->GetLevelMap(Skill->GetLevel() + 1) - Skill->GetHits()) / 100;
+      else
+        Buffer << '-';
+
+      Buffer.Resize(60);
+      Buffer << '+' << (Skill->GetBonus() - 1000) / 10;
+
+      if(Skill->GetBonus() % 10)
+        Buffer << '.' << Skill->GetBonus() % 10;
+
+      Buffer << '%';
+      Info.AddEntry(Buffer);
+    }
+  }
+
+  AddSpecialSkillInfo(Info);
+  Info.AddEntry(CONST_S(""));
+  // TODO:
+  //  Gods known + favor
+  //  List of pets?
 }

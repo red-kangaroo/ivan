@@ -742,12 +742,14 @@ truth game::Init(cfestring& loadBaseName)
   _mkdir("Save");
   _mkdir("Bones");
   _mkdir("Scrshot");
+  _mkdir("Morgue");
 #endif
 
 #ifdef __DJGPP__
   mkdir("Save", S_IWUSR);
   mkdir("Bones", S_IWUSR);
   mkdir("Scrshot", S_IWUSR);
+  mkdir("Morgue", S_IWUSR);
 #endif
 
 #ifdef UNIX
@@ -755,6 +757,7 @@ truth game::Init(cfestring& loadBaseName)
   mkdir(GetSaveDir().CStr(), S_IRWXU|S_IRWXG);
   mkdir(GetBoneDir().CStr(), S_IRWXU|S_IRWXG);
   mkdir(GetScrshotDir().CStr(), S_IRWXU|S_IRWXG);
+  mkdir(GetMorgueDir().CStr(), S_IRWXU|S_IRWXG);
 #endif
 
   LOSTick = 2;
@@ -5305,6 +5308,11 @@ festring game::GetMusicDir()
   return GetDataDir() + "Music/";
 }
 
+festring game::GetMorgueDir()
+{
+  return GetUserDataDir() + "Morgue/";
+}
+
 level* game::GetLevel(int I)
 {
   return GetCurrentDungeon()->GetLevel(I);
@@ -6805,4 +6813,32 @@ void game::ShowDeathSmiley(bitmap* Buffer, truth)
 
   if(Buffer == DOUBLE_BUFFER)
     graphics::BlitDBToScreen();
+}
+
+void game::CreateMorgueFile()
+{
+  /*if(game::WizardModeIsActive())
+  {
+    //TODO
+  }*/
+
+  time_t rawtime;
+  struct tm* timeinfo;
+  time(&rawtime);
+  timeinfo = localtime(&rawtime);
+  festring Header;
+  Header << "Morgue file for Iter Vehemens ad Necem v" << IVAN_VERSION << " at " << asctime(timeinfo);
+  felist Info(Header);
+
+  festring Name;
+  Name << PLAYER->GetAssignedName() << " the " << game::GetVerbalPlayerAlignment() << ' ';
+  //id::AddName(Name, UNARTICLED); TODO
+  Info.AddEntry(Name);
+  Info.AddEntry(CONST_S(""));
+  highscore HScore(GetUserDataDir() + HIGH_SCORE_FILENAME);
+  HScore->GetLastEntry(Info);
+  PLAYER->GetMorgueEntry(Info);
+  // Massacre list
+  // Message history
+  Info.PrintToFile(GetMorgueDir() + "morgue.txt");
 }

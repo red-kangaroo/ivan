@@ -186,3 +186,12 @@ truth highscore::CheckVersion() const
 {
   return Version == HIGH_SCORE_VERSION;
 }
+
+void highscore::GetLastEntry(felist& List) const
+{
+  int c = int(LastAdd);
+
+  List.AddEntry(Entry[c]);
+  List.AddEntry(CONST_S(""));
+  List.AddEntry(CONST_S("Score:  ") + Score[c]);
+}

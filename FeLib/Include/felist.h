@@ -38,7 +38,7 @@ class felist
  public:
   felist(cfestring&, col16 = WHITE, uint = 0);
   ~felist();
-  void AddEntry(cfestring&, col16, uint = 0,
+  void AddEntry(cfestring&, col16 = WHITE, uint = 0,
                 uint = NO_IMAGE, truth = true);
   void SetLastEntryHelp(cfestring Help);
   void AddDescription(cfestring&, col16 = WHITE);
