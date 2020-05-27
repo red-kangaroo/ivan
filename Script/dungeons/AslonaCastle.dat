@@ -104,6 +104,7 @@ Dungeon ASLONA_CASTLE;
     Rooms = 1;
     Items = 0;
     IsOnGround = true;
+    LeaveToWorldMap = true;
     TeamDefault = ASLONA_TEAM;
     LOSModifier = 48;
     IgnoreDefaultSpecialSquares = true;

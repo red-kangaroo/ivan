@@ -36,6 +36,7 @@ Dungeon REBEL_CAMP;
     Rooms = 10:15;
     Items = 0;
     IsOnGround = true;
+    LeaveToWorldMap = true;
     TeamDefault = REBEL_TEAM;
     LOSModifier = 48;
     IgnoreDefaultSpecialSquares = false;

@@ -81,6 +81,7 @@ Dungeon MONDEDR;
     ShortDescription = "Mondedr;
     FillSquare = solidterrain(DARK_GRASS_TERRAIN), 0;
     IsOnGround = true;
+    LeaveToWorldMap = true;
     LOSModifier = 48;
 
     Square, Pos 30,0;

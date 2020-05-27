@@ -259,6 +259,11 @@ class level : public area
   spawnresult SpawnMonsters(characterspawner, team*, v2, int = 0, int = 1, truth = false);
   void AddSpecialCursors();
   void GasExplosion(gas*, lsquare*, character*);
+  truth LeaveToWorldMap() const;
+  int AttachedAreaNorth() const;
+  int AttachedAreaEast() const;
+  int AttachedAreaSouth() const;
+  int AttachedAreaWest() const;
  protected:
   truth CheckExpansiveArea(olterrain*, int, int, truth = false) const;
   truth GenerateLanterns(int, int, int) const;
