@@ -110,6 +110,17 @@
 #define RIGHT_LEG_INDEX 5
 #define LEFT_LEG_INDEX 6
 
+#define NORTHWEST 0
+#define NORTH 1
+#define NORTHEAST 2
+#define WEST 3
+#define EAST 4
+#define SOUTHWEST 5
+#define SOUTH 6
+#define SOUTHEAST 7
+#define YOURSELF 8
+#define RANDOM_DIR 9
+
 #define ALPP 0
 #define ALP 1
 #define AL 2
@@ -153,18 +164,16 @@
 #define NEUTRAL 2
 #define EVIL 3
 
-#define CT_FRUIT (1 << 0)
-#define CT_MEAT (1 << 1)
-#define CT_METAL (1 << 2)
-#define CT_MINERAL (1 << 3)
-#define CT_LIQUID (1 << 4)
-#define CT_BONE (1 << 5)
-#define CT_PROCESSED (1 << 6)
-#define CT_MISC_PLANT (1 << 7)
-#define CT_MISC_ANIMAL (1 << 8)
-#define CT_PLASTIC (1 << 9)
-#define CT_GAS (1 << 10)
-#define CT_MAGIC (1 << 11)
+#define CT_FRUIT 1
+#define CT_MEAT 2
+#define CT_METAL 4
+#define CT_MINERAL 8
+#define CT_LIQUID 16
+#define CT_BONE 32
+#define CT_PROCESSED 64
+#define CT_MISC_ORGANIC 128
+#define CT_PLASTIC 256
+#define CT_GAS 512
 
 #define LEFT 0
 #define DOWN 1
@@ -230,15 +239,6 @@
 #define EFFECT_OMMEL_BLOOD 34
 #define EFFECT_PANIC 35
 #define EFFECT_TRAIN_WISDOM 36
-#define EFFECT_REGENERATION 37
-#define EFFECT_TELEPORTATION 38
-#define EFFECT_LAUGH 39
-#define EFFECT_POLYJUICE 40
-#define EFFECT_PUKE 41
-#define EFFECT_SICKNESS 42
-#define EFFECT_PHASE 43
-#define EFFECT_ACID_GAS 44
-#define EFFECT_FIRE_GAS 45
 
 /* CEM = Consume End Message */
 
@@ -506,8 +506,6 @@
 #define PYRITE (SOLID_ID + 229)
 #define HARDENED_ASH (SOLID_ID + 230)
 #define PSYPHER (SOLID_ID + 231)
-#define CRYSTEEL (SOLID_ID + 232)
-#define FLAWLESS_CRYSTEEL (SOLID_ID + 233)
 
 #define ORGANIC_ID (4096 * 2)
 
@@ -554,10 +552,6 @@
 #define FART (GAS_ID + 10)
 #define MUSTARD_GAS (GAS_ID + 11)
 #define SLEEPING_GAS (GAS_ID + 12)
-#define TELEPORT_GAS (GAS_ID + 13)
-#define LAUGHING_GAS (GAS_ID + 14)
-#define ACID_GAS (GAS_ID + 15)
-#define FIRE_GAS (GAS_ID + 16)
 
 #define LIQUID_ID (4096 * 4)
 
@@ -615,12 +609,6 @@
 #define QUICK_SILVER (LIQUID_ID + 52)
 #define MUD (LIQUID_ID + 53)
 #define QUICK_SAND (LIQUID_ID + 54)
-#define TELEPORT_FLUID (LIQUID_ID + 55)
-#define VINEGAR (LIQUID_ID + 56)
-#define BLACK_BLOOD (LIQUID_ID + 57)
-#define POLYMORPHINE (LIQUID_ID + 58)
-#define LAVA (LIQUID_ID + 59)
-#define NAPALM (LIQUID_ID + 60)
 
 #define FLESH_ID (4096 * 5)
 
@@ -689,6 +677,8 @@
 #define SOIL (POWDER_ID + 8)
 #define ASH (POWDER_ID + 9)
 #define SOOT (POWDER_ID + 10)
+#define UMBER_SAND (POWDER_ID + 11)
+#define BURNT_SIENNA_SAND (POWDER_ID + 12)
 
 #define IRON_ALLOY_ID (4096 * 7)
 
@@ -703,8 +693,6 @@
 #define SOUL_STEEL (IRON_ALLOY_ID + 9)
 #define BLOOD_IRON (IRON_ALLOY_ID + 10)
 #define BLOOD_STEEL (IRON_ALLOY_ID + 11)
-#define WHITE_STEEL (IRON_ALLOY_ID + 12)
-#define UR_STEEL (IRON_ALLOY_ID + 13)
 
 #define UNARMED_ATTACK 0
 #define WEAPON_ATTACK 1
@@ -765,20 +753,18 @@
 #define QUARTER_STAFF 15
 #define HAMMER 16
 #define GRAND_STOLLEN_KNIFE 17
+#define MAGE_STAFF 18
 #define ROLLING_PIN 19
 #define FRYING_PAN 20
 #define CLAW 21
 #define MEAT_CLEAVER 22
 #define RUNE_SWORD 23
-#define KATANA 24
 
 #define PUPPY_SKULL 1
 
 #define GOROVITS_HAMMER 1
 #define GOROVITS_SICKLE 2
 #define GOROVITS_SCIMITAR 3
-
-#define ROYAL_STAFF 1
 
 #define CHAIN_MAIL 1
 #define PLATE_MAIL 2
@@ -804,22 +790,15 @@
 #define WAND_OF_NECROMANCY 14
 #define WAND_OF_WEBBING 15
 #define WAND_OF_ALCHEMY 16
-#define WAND_OF_SOFTEN_MATERIAL 17
 
 #define RUNED_WHIP 1
 
-#define VIAL 1
-
 #define SOL_STONE 1
-#define INGOT 2
 
 #define BIG_MINE 1
 
 #define PHOENIX_SHIELD 1
 #define AEGIS_SHIELD 2
-#define SHIELD_OF_FIRE_RESISTANCE 3
-#define SHIELD_OF_ELECTRICITY_RESISTANCE 4
-#define SHIELD_OF_MAGIC_RESISTANCE 5
 
 #define CLOAK_OF_INVISIBILITY 1
 #define CLOAK_OF_FIRE_RESISTANCE 2
@@ -838,7 +817,6 @@
 #define BOOT_OF_STRENGTH 1
 #define BOOT_OF_AGILITY 2
 #define BOOT_OF_KICKING 3
-#define BOOT_OF_DISPLACEMENT 4
 
 #define GAUNTLET_OF_STRENGTH 1
 #define GAUNTLET_OF_DEXTERITY 2
@@ -860,7 +838,6 @@
 #define RING_OF_POLYMORPH_LOCK 15
 #define RING_OF_WORM 16
 #define RING_OF_BRAVERY 17
-#define RING_OF_SPEED 18
 
 #define AMULET_OF_LIFE_SAVING 1
 #define AMULET_OF_ESP 2
@@ -870,7 +847,6 @@
 #define AMULET_OF_PHASING 6
 #define AMULET_OF_DISEASE_IMMUNITY 7
 #define AMULET_OF_DIMENSION_ANCHOR 8
-#define AMULET_OF_FASTING 9
 
 #define FULL_HELMET 1
 #define HELM_OF_PERCEPTION 2
@@ -884,7 +860,6 @@
 #define HELM_OF_ENLIGHTENMENT 10
 #define HELM_OF_MANA 11
 #define MASK 12
-#define WAR_MASK 13
 
 #define BELT_OF_CARRYING 1
 #define BELT_OF_LEVITATION 2
@@ -912,9 +887,8 @@
 #define LARGE_CLOCK 6
 
 #define IMPRISONED_FARMER 1
-/* 2 reserved for ATTNAM */
-#define CULTIST 3
-#define CRAZED_FARMER 4
+#define CULTIST 2
+#define CRAZED_FARMER 3
 
 #define ROOKIE 1
 #define VETERAN 2
@@ -934,9 +908,6 @@
 #define ROOKIE_FEMALE 14
 #define VETERAN_FEMALE 15
 #define ELITE_FEMALE 16
-#define CASTLE 17
-#define ROYAL 18
-#define REBEL 19
 
 #define DARK 1
 #define GREATER_DARK 2
@@ -957,18 +928,12 @@
 
 #define CONICAL 1
 #define FLAT 2
-#define MAGMA 3
-#define BLOAT 4
-
-#define DIRE 1
 
 #define SKELETON_DOG 1
 
 #define LARGE 1
 #define GIANT 2
-#define PHASE 3
-#define GIANT_GOLD 4
-#define ARANEA 5
+#define ARANEA 3
 
 #define IMPRISONED_HUNTER 1
 
@@ -1005,10 +970,6 @@
 #define GREATER 1
 #define GIANT 2
 
-#define RED_SNAKE 1
-#define GREEN_SNAKE 2
-#define BLUE_SNAKE 3
-
 #define SLAUGHTERER 1
 #define SQUAD_LEADER 2
 #define OFFICER 3
@@ -1016,12 +977,8 @@
 #define MARSHAL 5
 #define REPRESENTATIVE 6
 
-#define REBEL_SOLDIER 1
-#define REBEL_LIEUTENANT 2
-
-#define VICE_ROY 1
-#define MASTER_TORTURER 2
-#define HOARD_MASTER 3
+#define MASTER_TORTURER 1
+#define HOARD_MASTER 2
 
 #define APPRENTICE 1
 #define BATTLE_MAGE 2
@@ -1072,10 +1029,11 @@
 #define SNOW_TERRAIN 6
 #define DARK_GRASS_TERRAIN 7
 #define SAND_TERRAIN 8
+#define UROK_CITY_TERRAIN 9
+#define UROK_BADLANDS_TERRAIN 10
 
 #define POOL 1
 #define UNDERGROUND_LAKE 2
-#define SEA 3
 
 #define BRICK_FINE 1
 #define BRICK_PROPAGANDA 2
@@ -1085,7 +1043,6 @@
 #define STONE_WALL 6
 #define ICE_WALL 7
 #define BROKEN_WALL 8
-#define TENT_WALL 9
 
 #define PINE 1
 #define FIR 2
@@ -1146,9 +1103,10 @@
 
 #define BARDOOR 1
 #define SECRET_DOOR 2
-#define CURTAIN 3
 
 #define WORLD_MAP 255
+
+#define NO_EXIT 256
 
 #define DEFAULT_TEAM 255
 
@@ -1158,8 +1116,6 @@
 #define MONSTER_TEAM 1
 #define ATTNAM_TEAM 2
 #define SUMO_TEAM 3
-#define ANGEL_TEAM 4
-#define GUILD_TEAM 5
 #define IVAN_TEAM 6
 #define NEW_ATTNAM_TEAM 7
 #define COLONIST_TEAM 8
@@ -1170,9 +1126,6 @@
 #define XINROCH_TOMB_NECRO_TEAM 13
 #define XINROCH_TOMB_KAMIKAZE_DWARF_TEAM 14
 #define PRISONER_TEAM 15
-#define TERRA_TEAM 16
-#define ASLONA_TEAM 17
-#define REBEL_TEAM 18
 
 #define NOT_WALKABLE 1
 #define HAS_CHARACTER 2
@@ -1188,16 +1141,7 @@
 #define UNDER_WATER_TUNNEL 4
 #define EMPTY_AREA 5
 #define XINROCH_TOMB 6
-#define BLACK_MARKET 7
-#define ASLONA_CASTLE 8
-#define REBEL_CAMP 9
-#define GOBLIN_FORT 10
-#define FUNGAL_CAVE 11
-#define PYRAMID 12
-#define MONDEDR 13
-#define IRINOX 14
-#define DARK_FOREST 15
-
+#define UROK 7
 #define UNDER_WATER_TUNNEL_EXIT 128
 
 #define ALL_DUNGEONS  32767
@@ -1214,10 +1158,6 @@
 
 #define DUAL_ENNER_BEAST_LEVEL 5
 #define NECRO_CHAMBER_LEVEL 6
-
-#define FUSANGA_LEVEL 3
-
-#define KING_LEVEL 5
 
 #define RECTANGLE 1
 #define ROUND_CORNERS 2
@@ -1249,7 +1189,6 @@
 #define ROOM_LIBRARY 4
 #define ROOM_BANANA_DROP_AREA 5
 #define ROOM_SUMO_ARENA 6
-#define ROOM_OWNED_AREA 7
 
 #define BEAM_POLYMORPH 0
 #define BEAM_STRIKE 1
@@ -1266,8 +1205,6 @@
 #define BEAM_NECROMANCY 12
 #define BEAM_WEBBING 13
 #define BEAM_ALCHEMY 14
-#define BEAM_SOFTEN_MATERIAL 15
-#define BEAM_WALL_CREATION 16
 
 #define BEAM_STYLES 3
 
@@ -1376,7 +1313,6 @@
 #define CAN_BE_DESTROYED 16
 #define IS_VALUABLE 32
 #define CAN_BE_MIRRORED 64
-#define CAN_BE_DETECTED 128
 
 /* NameFlags */
 #define USE_AN 1
