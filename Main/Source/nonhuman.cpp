@@ -30,11 +30,15 @@ cchar* billswill::ThirdPersonCriticalBiteVerb() const { return "emits powerful p
 int billswill::GetBodyPartWobbleData(int) const { return WOBBLE_HORIZONTALLY|(2 << WOBBLE_FREQ_SHIFT); }
 
 int mommo::GetBodyPartWobbleData(int) const
-{ return (GetConfig() == CONICAL ? WOBBLE_HORIZONTALLY : WOBBLE_VERTICALLY)|(2 << WOBBLE_FREQ_SHIFT); }
+{ return (GetConfig() % 2 != 0 ? WOBBLE_HORIZONTALLY : WOBBLE_VERTICALLY)|(2 << WOBBLE_FREQ_SHIFT); }
 
 bodypart* dog::MakeBodyPart(int) const { return dogtorso::Spawn(0, NO_MATERIALS); }
 
 bodypart* spider::MakeBodyPart(int) const { return spidertorso::Spawn(0, NO_MATERIALS); }
+
+bodypart* snake::MakeBodyPart(int) const { return snaketorso::Spawn(0, NO_MATERIALS); }
+
+bodypart* magpie::MakeBodyPart(int) const { return magpietorso::Spawn(0, NO_MATERIALS); }
 
 int dolphin::GetSpecialBodyPartFlags(int) const { return RAND() & (MIRROR|ROTATE); }
 
@@ -48,6 +52,8 @@ bodypart* eddy::MakeBodyPart(int) const { return eddytorso::Spawn(0, NO_MATERIAL
 int eddy::GetBodyPartWobbleData(int) const { return WOBBLE_VERTICALLY|(2 << WOBBLE_FREQ_SHIFT); }
 
 bodypart* magicmushroom::MakeBodyPart(int) const { return magicmushroomtorso::Spawn(0, NO_MATERIALS); }
+
+bodypart* fusanga::MakeBodyPart(int) const { return fusangatorso::Spawn(0, NO_MATERIALS); }
 
 cchar* magpie::FirstPersonBiteVerb() const { return "peck"; }
 cchar* magpie::FirstPersonCriticalBiteVerb() const { return "critically peck"; }
@@ -63,6 +69,8 @@ int hattifattener::GetBodyPartWobbleData(int) const
 { return WOBBLE_HORIZONTALLY|(1 << WOBBLE_SPEED_SHIFT)|(1 << WOBBLE_FREQ_SHIFT); }
 
 col16 vladimir::GetSkinColor() const { return MakeRGB16(60 + RAND() % 190, 60 + RAND() % 190, 60 + RAND() % 190); }
+
+col16 fusanga::GetSkinColor() const { return MakeRGB16(60 + RAND() % 190, 60 + RAND() % 190, 60 + RAND() % 190); }
 
 bodypart* blinkdog::MakeBodyPart(int) const { return blinkdogtorso::Spawn(0, NO_MATERIALS); }
 
@@ -114,7 +122,7 @@ truth elpuri::Hit(character* Enemy, v2, int, int Flags)
   return true;
 }
 
-truth dog::Catches(item* Thingy)
+truth canine::Catches(item* Thingy)
 {
   if(Thingy->DogWillCatchAndConsume(this))
   {
@@ -127,7 +135,38 @@ truth dog::Catches(item* Thingy)
         if(CanBeSeenByPlayer())
           ADD_MESSAGE("%s catches %s and eats it.", CHAR_NAME(DEFINITE), Thingy->CHAR_NAME(DEFINITE));
 
-        ChangeTeam(PLAYER->GetTeam());
+        if(PLAYER->GetRelativeDanger(this, true) > 0.1)
+          ChangeTeam(PLAYER->GetTeam());
+          ADD_MESSAGE("%s seems to be much more friendly towards you.", CHAR_NAME(DEFINITE));
+      }
+    }
+    else if(IsPlayer())
+      ADD_MESSAGE("You catch %s in mid-air.", Thingy->CHAR_NAME(DEFINITE));
+    else if(CanBeSeenByPlayer())
+      ADD_MESSAGE("%s catches %s.", CHAR_NAME(DEFINITE), Thingy->CHAR_NAME(DEFINITE));
+
+    return true;
+  }
+  else
+    return false;
+}
+
+truth feline::Catches(item* Thingy)
+{
+  if(Thingy->CatWillCatchAndConsume(this))
+  {
+    if(ConsumeItem(Thingy, CONST_S("eating")))
+    {
+      if(IsPlayer())
+        ADD_MESSAGE("You catch %s in mid-air and consume it.", Thingy->CHAR_NAME(DEFINITE));
+      else
+      {
+        if(CanBeSeenByPlayer())
+          ADD_MESSAGE("%s catches %s and eats it.", CHAR_NAME(DEFINITE), Thingy->CHAR_NAME(DEFINITE));
+
+        if(PLAYER->GetRelativeDanger(this, true) > 0.1)
+          ChangeTeam(PLAYER->GetTeam());
+          ADD_MESSAGE("%s seems to be much more friendly towards you.", CHAR_NAME(DEFINITE));
       }
     }
     else if(IsPlayer())
@@ -145,13 +184,13 @@ truth unicorn::SpecialEnemySightedReaction(character*)
 {
   if(!(RAND() & 15))
   {
-    MonsterTeleport("neighs happily");
+    MonsterTeleport(" happily");
     return true;
   }
 
   if(StateIsActivated(PANIC) || (RAND() & 1 && IsInBadCondition()))
   {
-    MonsterTeleport("neighs");
+    MonsterTeleport("");
     return true;
   }
 
@@ -241,7 +280,7 @@ void nonhumanoid::Bite(character* Enemy, v2 HitPos, int Direction, truth ForceHi
   EditAP(-GetBiteAPCost());
   EditExperience(ARM_STRENGTH, 75, 1 << 8);
   EditExperience(AGILITY, 150, 1 << 8);
-  EditStamina(-10000 / GetAttribute(ARM_STRENGTH), false);
+  EditStamina(GetAdjustedStaminaCost(-1000, GetAttribute(AGILITY)), false);
   Enemy->TakeHit(this, 0, GetTorso(), HitPos, GetBiteDamage(), GetBiteToHitValue(), RAND() % 26 - RAND() % 26,
                  BITE_ATTACK, Direction, !(RAND() % GetCriticalModifier()), ForceHit);
 }
@@ -250,7 +289,7 @@ void nonhumanoid::Kick(lsquare* Square, int Direction, truth ForceHit)
 {
   EditNP(-50);
   EditAP(-GetKickAPCost());
-  EditStamina(-10000 / GetAttribute(ARM_STRENGTH), false);
+  EditStamina(GetAdjustedStaminaCost(-1000, GetAttribute(ARM_STRENGTH)), false);
 
   if(Square->BeKicked(this, 0, GetTorso(), GetKickDamage(), GetKickToHitValue(), RAND() % 26 - RAND() % 26,
                       Direction, !(RAND() % GetCriticalModifier()), ForceHit))
@@ -339,7 +378,7 @@ void nonhumanoid::UnarmedHit(character* Enemy, v2 HitPos, int Direction, truth F
 {
   EditNP(-50);
   EditAP(-GetUnarmedAPCost());
-  EditStamina(-10000 / GetAttribute(ARM_STRENGTH), false);
+  EditStamina(GetAdjustedStaminaCost(-1000, GetAttribute(ARM_STRENGTH)), false);
 
   switch(Enemy->TakeHit(this, 0, GetTorso(), HitPos, GetUnarmedDamage(), GetUnarmedToHitValue(),
                         RAND() % 26 - RAND() % 26, UNARMED_ATTACK, Direction,
@@ -528,7 +567,13 @@ void nonhumanoid::CalculateBiteAttackInfo()
 
 void dog::BeTalkedTo()
 {
-  if(RAND_N(5))
+  if(StateIsActivated(CONFUSED))
+  {
+    ADD_MESSAGE("%s looks a bit confused: \"Meow.\"", CHAR_NAME(DEFINITE));
+    return;
+  }
+
+  if(GetPos().IsAdjacent(PLAYER->GetPos()))
   {
     if(GetRelation(PLAYER) != HOSTILE)
     {
@@ -536,20 +581,21 @@ void dog::BeTalkedTo()
       cchar* Reply;
 
       if(GetHP() << 1 > GetMaxHP())
-        Reply = Last ? "barks happily" : "wags its tail happily";
+        Reply = Last ? "barks happily" : "wags its tail";
       else
         Reply = Last ? "yelps" : "howls";
 
       ADD_MESSAGE("%s %s.", CHAR_NAME(DEFINITE), Reply);
       Last = !Last;
     }
+    else if(!RAND_N(100))
+      ADD_MESSAGE("%s scoffs at you: \"Can't you understand I can't speak?\"", CHAR_NAME(DEFINITE));
     else
-      character::BeTalkedTo();
+      ADD_MESSAGE("%s snarls at you.", CHAR_NAME(DEFINITE));
+    return;
   }
-  else if(RAND_N(5))
-    ADD_MESSAGE("\"Can't you understand I can't speak?\"");
-  else
-    ADD_MESSAGE("\"Meow.\"");
+
+  character::BeTalkedTo();
 }
 
 void dog::CreateCorpse(lsquare* Square)
@@ -660,7 +706,9 @@ col16 carnivorousplant::GetTorsoSpecialColor() const // the flower
 
 void ostrich::GetAICommand()
 {
-  if(game::TweraifIsFree())
+  if(game::TweraifIsFree() ||
+     (GetDungeon()->GetIndex() != NEW_ATTNAM)
+   ) // Behave normally outside of New Attnam.
   {
     nonhumanoid::GetAICommand();
     return;
@@ -831,8 +879,8 @@ void genetrixvesana::CreateCorpse(lsquare* Square)
 
 void nonhumanoid::AddSpecialStethoscopeInfo(felist& Info) const
 {
-  Info.AddEntry(CONST_S("Strength: ") + GetAttribute(ARM_STRENGTH), LIGHT_GRAY);
-  Info.AddEntry(CONST_S("Agility: ") + GetAttribute(AGILITY), LIGHT_GRAY);
+  Info.AddEntry(CONST_S("Strength:     ") + GetAttribute(ARM_STRENGTH), LIGHT_GRAY);
+  Info.AddEntry(CONST_S("Agility:      ") + GetAttribute(AGILITY), LIGHT_GRAY);
 }
 
 void floatingeye::Save(outputfile& SaveFile) const
@@ -912,24 +960,63 @@ void elpuri::CreateCorpse(lsquare* Square)
 
 truth snake::SpecialBiteEffect(character* Char, v2, int, int, truth BlockedByArmour, truth Critical, int DoneDamage)
 {
-  if(!BlockedByArmour)
+  if(!BlockedByArmour || Critical)
   {
-    Char->BeginTemporaryState(POISONED, 400 + RAND_N(200));
+    switch (GetConfig())
+    {
+      case RED_SNAKE: Char->BeginTemporaryState(PANIC, 400 + RAND_N(200)); break;
+      case GREEN_SNAKE: Char->BeginTemporaryState(POISONED, 400 + RAND_N(200)); break;
+      case BLUE_SNAKE: Char->BeginTemporaryState(SLOW, 400 + RAND_N(200)); break;
+    }
     return true;
   }
   else
     return false;
 }
 
-truth spider::SpecialBiteEffect(character* Char, v2, int, int, truth BlockedByArmour, truth Critical, int DoneDamage)
+truth spider::SpecialBiteEffect(character* Victim, v2 HitPos, int BodyPartIndex, int Direction, truth BlockedByArmour, truth Critical, int DoneDamage)
 {
-  if(!BlockedByArmour)
+  if(!BlockedByArmour || Critical)
   {
-    Char->BeginTemporaryState(POISONED, GetConfig() == LARGE ? 80 + RAND_N(40) : 400 + RAND_N(200));
-    return true;
+    if(GetConfig() == GIANT_GOLD)
+    {
+      bodypart* BodyPart = Victim->GetBodyPart(BodyPartIndex);
+
+      if(BodyPart && BodyPart->IsMaterialChangeable())
+      {
+        festring Desc;
+        int CurrentHP = BodyPart->GetHP();
+        BodyPart->AddName(Desc, UNARTICLED);
+
+        // Instead of a cockatrice turning you to stone, gold spider will turn you to gold!
+        delete BodyPart->SetMainMaterial(MAKE_MATERIAL(GOLD));
+
+        // Here changing material would revert all damage done, but we don't want that.
+        CurrentHP = Min(CurrentHP, BodyPart->GetHP());
+        BodyPart->SetHP(CurrentHP);
+
+        if(Victim->IsPlayer())
+        {
+          Desc << " tingles painfully";
+          ADD_MESSAGE("Your %s.", Desc.CStr());
+        }
+        else if(Victim->CanBeSeenByPlayer())
+        {
+          Desc << " vibrates and changes into gold";
+          ADD_MESSAGE("%s's %s.", Victim->CHAR_DESCRIPTION(DEFINITE), Desc.CStr());
+        }
+
+        return true;
+      }
+    }
+    else
+    {
+      Victim->BeginTemporaryState(POISONED, GetConfig() == LARGE ? 80 + RAND_N(40) : 400 + RAND_N(200));
+      return true;
+    }
   }
-  else
-    return false;
+
+  return false;
 }
 
 truth vampirebat::SpecialBiteEffect(character* Victim, v2 HitPos, int BodyPartIndex, int Direction, truth BlockedByArmour, truth Critical, int DoneDamage)
@@ -955,11 +1042,46 @@ truth vampirebat::SpecialBiteEffect(character* Victim, v2 HitPos, int BodyPartIn
     return false;
 }
 
-truth chameleon::SpecialEnemySightedReaction(character*)
+int nerfbat::TakeHit(character* Enemy, item* Weapon, bodypart* EnemyBodyPart, v2 HitPos, double Damage,
+                     double ToHitValue, int Success, int Type, int Direction, truth Critical, truth ForceHit)
 {
-  if(HP != MaxHP || !(RAND() % 3))
+  int Return = nonhumanoid::TakeHit(Enemy, Weapon, EnemyBodyPart, HitPos, Damage, ToHitValue,
+                                    Success, Type, Direction, Critical, ForceHit);
+
+  if(Return != HAS_DIED)
   {
-    character* NewForm = PolymorphRandomly(100, 1000, 500 + RAND() % 500);
+    // Compare Mana against enemy Willpower to see if they resist polymorph.
+    if(RAND_N(GetAttribute(MANA)) > RAND_N(Enemy->GetAttribute(WILL_POWER)))
+    {
+      if(IsPlayer())
+        ADD_MESSAGE("You are engulfed in a malignant aura!.");
+      else if(CanBeSeenByPlayer())
+        ADD_MESSAGE("%s is engulfed in a malignant aura!", CHAR_DESCRIPTION(DEFINITE));
+
+      if(Weapon)
+        Weapon->Polymorph(this, Enemy);
+      else if(EnemyBodyPart)
+        Enemy->PolymorphRandomly(1, 999999, (int)(Damage * 300 + RAND() % 500));
+    }
+    else
+    {
+      if(IsPlayer())
+        ADD_MESSAGE("You are engulfed in a malignant aura, but nothing seems to happen.");
+      else if(CanBeSeenByPlayer())
+        ADD_MESSAGE("%s is engulfed in a malignant aura, but nothing seems to happen.", CHAR_DESCRIPTION(DEFINITE));
+
+      Enemy->EditExperience(WILL_POWER, 100, 1 << 12);
+    }
+  }
+
+  return Return;
+}
+
+bool ChameleonPolymorphRandomly(chameleon* c){
+  character* NewForm = c->PolymorphRandomly(100, 1000, 500 + RAND() % 500);
+
+  if(NewForm != NULL)
+  {
     NewForm->GainIntrinsic(POLYMORPH);
     return true;
   }
@@ -967,17 +1089,23 @@ truth chameleon::SpecialEnemySightedReaction(character*)
   return false;
 }
 
+truth chameleon::SpecialEnemySightedReaction(character*)
+{
+  if(HP != MaxHP || !(RAND() % 3))
+    if(ChameleonPolymorphRandomly(this))
+      return true;
+
+  return false;
+}
+
 int chameleon::TakeHit(character* Enemy, item* Weapon, bodypart* EnemyBodyPart, v2 HitPos, double Damage,
                        double ToHitValue, int Success, int Type, int Direction, truth Critical, truth ForceHit)
-{
+{DBG1(GetNameSingular().CStr());
   int Return = nonhumanoid::TakeHit(Enemy, Weapon, EnemyBodyPart, HitPos, Damage, ToHitValue,
                                     Success, Type, Direction, Critical, ForceHit);
 
   if(Return != HAS_DIED)
-  {
-    character* NewForm = PolymorphRandomly(100, 1000, 500 + RAND() % 500);
-    NewForm->GainIntrinsic(POLYMORPH);
-  }
+    ChameleonPolymorphRandomly(this);
 
   return Return;
 }
@@ -1087,8 +1215,46 @@ void mushroom::PostConstruct()
   }
 }
 
+/**
+ * This is not gameplay wise as far AI events will not happen,
+ * but will allow the game to still be playable at least...
+ * Use this on any NPC class that may encumber the CPU too much.
+ */
+bool CPUwiseAI(nonhumanoid* nh)
+{
+  if(!nh->IsRooted())return true; //only NPCs that can't move
+  if(nh->StateIsActivated(LEVITATION))return true; //this keeps levitating ones still active what may be good TODO add user option to deny them?
+
+  int iDist = ivanconfig::GetDistLimitMagicMushrooms();
+  if(iDist==0)return true;
+
+  int iSqDist = nh->GetDistanceSquareFrom(PLAYER);
+  int iSqLim = iDist*iDist;
+  int iMaxActiveAI = iDist*2 * iDist*2;
+
+  static int iPreviousTurnActivatedAIs=0;
+  static int iTurnChkAI = 0;
+  if(iTurnChkAI != game::GetTurn()){ DBG4(iTurnChkAI,iPreviousTurnActivatedAIs,iSqLim,iMaxActiveAI);
+    iPreviousTurnActivatedAIs=0;
+    iTurnChkAI = game::GetTurn();
+  }
+
+  bool bActivated = false;
+  if(iTurnChkAI==game::GetTurn()){
+    if(iPreviousTurnActivatedAIs<iMaxActiveAI && iSqDist<=iSqLim){
+      bActivated=true;
+      iPreviousTurnActivatedAIs++;
+    }
+  }
+
+  return bActivated;
+}
+
 void magicmushroom::GetAICommand()
 {
+  if(!CPUwiseAI(this))
+    return;
+
   if(!(RAND() % 750))
   {
     if(CanBeSeenByPlayer())
@@ -1341,9 +1507,9 @@ truth nonhumanoid::EditAllAttributes(int Amount)
 
 void nonhumanoid::AddAttributeInfo(festring& Entry) const
 {
-  Entry.Resize(45);
+  Entry.Resize(42);
   Entry << GetAttribute(ARM_STRENGTH);
-  Entry.Resize(48);
+  Entry.Resize(45);
   Entry << "-  -  " << GetAttribute(AGILITY);
   character::AddAttributeInfo(Entry);
 }
@@ -1570,7 +1736,8 @@ void hattifattener::GetAICommand()
         BEAM_LIGHTNING,
         RAND() & 7,
         1 + (RAND() & 7),
-        0
+        0,
+        NULL
       );
 
     GetLevel()->LightningBeam(Beam);
@@ -1839,6 +2006,7 @@ truth bunny::Catches(item* Thingy)
       {
         if(CanBeSeenByPlayer())
           ADD_MESSAGE("%s catches %s and eats it.", CHAR_NAME(DEFINITE), Thingy->CHAR_NAME(DEFINITE));
+          ADD_MESSAGE("%s seems to be much more friendly towards you.", CHAR_NAME(DEFINITE));
 
         ChangeTeam(PLAYER->GetTeam());
       }
@@ -1880,9 +2048,11 @@ truth mommo::Hit(character* Enemy, v2 Pos, int, int)
   Hostility(Enemy);
 
   if(IsPlayer())
-    ADD_MESSAGE("You spill acidous slime at %s.", Enemy->CHAR_DESCRIPTION(DEFINITE));
+    ADD_MESSAGE("You spill %s at %s.", GetTorso()->GetMainMaterial()->GetName(false, false).CStr(),
+                Enemy->CHAR_DESCRIPTION(DEFINITE));
   else if(Enemy->IsPlayer() || CanBeSeenByPlayer() || Enemy->CanBeSeenByPlayer())
-    ADD_MESSAGE("%s spills acidous slime at %s.", CHAR_DESCRIPTION(DEFINITE), Enemy->CHAR_DESCRIPTION(DEFINITE));
+    ADD_MESSAGE("%s spills %s at %s.", CHAR_DESCRIPTION(DEFINITE),
+                GetTorso()->GetMainMaterial()->GetName(false, false).CStr(), Enemy->CHAR_DESCRIPTION(DEFINITE));
 
   Vomit(Pos, 250 + RAND() % 250, false);
   EditAP(-1000);
@@ -2071,6 +2241,8 @@ void genetrixvesana::FinalProcessForBone()
 
 void carnivorousplant::GetAICommand()
 {
+  if(!CPUwiseAI(this))return;
+
   SeekLeader(GetLeader());
 
   if(FollowLeader(GetLeader()))
@@ -2270,7 +2442,7 @@ void spider::GetAICommand()
 
           if((ThisDistance < NearestDistance
               || (ThisDistance == NearestDistance && !(RAND() % 3)))
-             && p->CanBeSeenBy(this, false, IsGoingSomeWhere())
+             && p->CanBeSeenBy(this, false, false /*IsGoingSomeWhere()*/)
              && (!IsGoingSomeWhere() || HasClearRouteTo(p->GetPos())))
           {
             NearestChar = p;
@@ -2278,10 +2450,10 @@ void spider::GetAICommand()
           }
         }
 
-  if(Hostiles && !RAND_N(Max(80 / Hostiles, 8)))
+  if(Hostiles && !RAND_N(Max(80 / Hostiles, 8)) && GetLSquareUnder()->IsFlyable())
   {
     web* Web = web::Spawn();
-    Web->SetStrength(GetConfig() == LARGE ? 10 : 25);
+    Web->SetStrength(GetConfig() * 10);
 
     if(GetLSquareUnder()->AddTrap(Web))
     {
@@ -2295,7 +2467,8 @@ void spider::GetAICommand()
 
   if(NearestChar)
   {
-    if(NearestChar->IsStuck())
+    if(NearestChar->IsStuck() || GetConfig() == ARANEA ||
+       (GetConfig() == PHASE && !CanBeSeenBy(NearestChar)))
       SetGoingTo(NearestChar->GetPos());
     else
       SetGoingTo((Pos << 1) - NearestChar->GetPos());
@@ -2305,6 +2478,10 @@ void spider::GetAICommand()
   }
 
   if(MoveRandomly())
+    return;
+
+  // Attack if trapped in a corner.
+  if(AttackAdjacentEnemyAI())
     return;
 
   EditAP(-1000);
@@ -2373,77 +2550,233 @@ truth lobhse::MustBeRemovedFromBone() const
          || GetLevel()->GetIndex() != SPIDER_LEVEL;
 }
 
+void lobhse::FinalProcessForBone()
+{
+  largecreature::FinalProcessForBone();
+  TurnsExisted = 0;
+}
+
+void lobhse::Bite(character* Enemy, v2 HitPos, int Direction, truth ForceHit)
+{
+  if(!RAND_N(7))
+  {
+    if(IsPlayer())
+      ADD_MESSAGE("You vomit at %s.", Enemy->CHAR_DESCRIPTION(DEFINITE));
+    else if(Enemy->IsPlayer() || CanBeSeenByPlayer() || Enemy->CanBeSeenByPlayer())
+      ADD_MESSAGE("%s vomits at %s.", CHAR_DESCRIPTION(DEFINITE), Enemy->CHAR_DESCRIPTION(DEFINITE));
+
+    Vomit(HitPos, 500 + RAND() % 500, false);
+  }
+  else
+    nonhumanoid::Bite(Enemy, HitPos, Direction, ForceHit);
+}
+
 truth lobhse::SpecialBiteEffect(character* Char, v2, int, int, truth BlockedByArmour, truth Critical, int DoneDamage)
 {
-  if(!BlockedByArmour)
+  if(!BlockedByArmour || Critical)
   {
-    Char->BeginTemporaryState(POISONED, 80 + RAND() % 40);
+    int Effect = Char->StateIsActivated(DISEASE_IMMUNITY) ? 6 : RAND() % 10;
+    switch(Effect)
+    {
+     case 0: Char->BeginTemporaryState(LYCANTHROPY, 6000 + RAND_N(2000)); break;
+     case 1: Char->BeginTemporaryState(VAMPIRISM, 5000 + RAND_N(2500)); break;
+     case 2: Char->BeginTemporaryState(PARASITE_TAPE_WORM, 6000 + RAND_N(3000)); break;
+     case 3: Char->BeginTemporaryState(PARASITE_MIND_WORM, 400 + RAND_N(200)); break;
+     case 4: Char->GainIntrinsic(LEPROSY); break;
+     default: Char->BeginTemporaryState(POISONED, 80 + RAND() % 40); break;
+    }
     return true;
   }
   else
     return false;
 }
 
-void lobhse::GetAICommand()
+void lobhse::Save(outputfile& SaveFile) const
 {
-  SeekLeader(GetLeader()); // will follow if tamed
+  nonhumanoid::Save(SaveFile);
+  SaveFile << TurnsExisted;
+}
 
-  if(FollowLeader(GetLeader()))
-    return;
-
-  if(MoveRandomly())
-    return;
-
-  EditAP(-1000);
+void lobhse::Load(inputfile& SaveFile)
+{
+  nonhumanoid::Load(SaveFile);
+  SaveFile >> TurnsExisted;
 }
 
 void lobhse::CreateCorpse(lsquare* Square)
 {
   largecreature::CreateCorpse(Square);
+  Square->AddItem(mangoseedling::Spawn());
+  game::SetFreedomStoryState(2);
+}
+
+void lobhse::GetAICommand()
+{
+  ++TurnsExisted;
+
+  /* Follow the leader, if any. */
+  SeekLeader(GetLeader());
+
+  if(FollowLeader(GetLeader()))
+    return;
+
+  /*
+   Summon spiders
+    Lobh-se will summon some spiders to harass the player, but only if she's
+    hostile. As she can be tamed, we don't want to allow the player to amass
+    a free spidery army. We can explain it away as her summoning being tied
+    to SPIDER_LEVEL or something, if someone nags. ;)
+   */
+  if(!(RAND() % 60) && GetRelation(PLAYER) == HOSTILE && !GetPos().IsAdjacent(PLAYER->GetPos()))
+  {
+    int NumberOfSpiders = RAND() % 3 + RAND() % 3 + RAND() % 3 + RAND() % 3;
+
+    for(int i = 0; i < NumberOfSpiders; i++)
+    {
+      lsquare* LSquare = PLAYER->GetNeighbourLSquare(RAND() % GetNeighbourSquares());
+
+      if(LSquare && (LSquare->GetWalkability() & WALK) && !LSquare->GetCharacter())
+      {
+        character* NewSpider;
+        long RandomValue = RAND() % TurnsExisted;
+
+        if(RandomValue < 250)
+          NewSpider = spider::Spawn(!RAND_N(5) ? LARGE : GIANT);
+        else if(RandomValue < 1500)
+          NewSpider = spider::Spawn(ARANEA);
+        else
+          NewSpider = spider::Spawn(PHASE);
+
+        for(int c = 3; c < TurnsExisted / 500; ++c)
+          NewSpider->EditAllAttributes(1);
+
+        NewSpider->SetGenerationDanger(GetGenerationDanger());
+        NewSpider->SetTeam(GetTeam());
+        NewSpider->PutTo(LSquare->GetPos());
+
+        if(NewSpider->CanBeSeenByPlayer())
+          ADD_MESSAGE("%s descends from the darkness above.", NewSpider->CHAR_NAME(INDEFINITE));
+      }
+    }
+
+    EditAP(-2000);
+    return;
+  }
+
+  if(GetHP() > (GetMaxHP() / 2))
+  {
+    /* Boss fight, first phase: Spin webs and attack when player is entangled. */
+    character* NearestChar = 0;
+    long NearestDistance = 0x7FFFFFFF;
+    v2 Pos = GetPos();
+    int Hostiles = 0;
+
+    for(int c = 0; c < game::GetTeams(); ++c)
+      if(GetTeam()->GetRelation(game::GetTeam(c)) == HOSTILE)
+        for(character* p : game::GetTeam(c)->GetMember())
+          if(p->IsEnabled() && GetAttribute(WISDOM) < p->GetAttackWisdomLimit())
+          {
+            long ThisDistance = Max<long>(abs(p->GetPos().X - Pos.X), abs(p->GetPos().Y - Pos.Y));
+            ++Hostiles;
+
+            if((ThisDistance < NearestDistance
+                || (ThisDistance == NearestDistance && !(RAND() % 3)))
+               && p->CanBeSeenBy(this, false, IsGoingSomeWhere())
+               && (!IsGoingSomeWhere() || HasClearRouteTo(p->GetPos())))
+            {
+              NearestChar = p;
+              NearestDistance = ThisDistance;
+            }
+          }
+
+    if(Hostiles && !RAND_N(Max(80 / Hostiles, 8)))
+    {
+      web* Web = web::Spawn();
+      Web->SetStrength(30);
+
+      if(GetLSquareUnder()->AddTrap(Web))
+      {
+        if(CanBeSeenByPlayer())
+          ADD_MESSAGE("%s spins a web.", CHAR_NAME(DEFINITE));
+
+        EditAP(-1000);
+        return;
+      }
+    }
+
+    if(NearestChar)
+    {
+      if(NearestChar->IsStuck())
+        SetGoingTo(NearestChar->GetPos());
+      else
+        SetGoingTo((Pos << 1) - NearestChar->GetPos());
+
+      if(MoveTowardsTarget(true))
+        return;
+    }
+
+    if(MoveRandomly())
+      return;
+
+    // Attack if trapped in a corner.
+    if(AttackAdjacentEnemyAI())
+      return;
+
+    EditAP(-1000);
+    return;
+  }
+  else
+  {
+    /* Boss fight, second phase: Attack all the time. */
+    character::GetAICommand();
+  }
 }
 
 void mindworm::GetAICommand()
 {
   character* NeighbourEnemy = GetRandomNeighbour(HOSTILE);
-
-  if(NeighbourEnemy && NeighbourEnemy->IsHumanoid() && NeighbourEnemy->HasHead()
-  && !NeighbourEnemy->IsInfectedByMindWorm())
-  {
-    TryToImplantLarvae(NeighbourEnemy);
-    return;
-  }
-
   character* NearestEnemy = GetNearestEnemy();
 
-  if(NearestEnemy)
+  if(GetConfig() == BOIL && NeighbourEnemy)
+  {
+    if(NeighbourEnemy->HasHead() && !NeighbourEnemy->StateIsActivated(PARASITE_MIND_WORM))
+    {
+      if(TryToImplantLarvae(NeighbourEnemy))
+        return;
+    }
+  }
+  if(NearestEnemy && !NearestEnemy->IsESPBlockedByEquipment() && !StateIsActivated(CONFUSED) && !(RAND() & 2))
   {
     PsiAttack(NearestEnemy);
     return;
   }
-
-  if(MoveRandomly())
-    return;
-
-  EditAP(-1000);
+  else
+    nonhumanoid::GetAICommand();
 }
 
-void mindworm::TryToImplantLarvae(character* Victim)
+truth mindworm::TryToImplantLarvae(character* Victim)
 {
-  if(Victim->MindWormCanPenetrateSkull(this))
+  if(Victim->MindWormCanPenetrateSkull(this) && Victim->CanBeParasitized())
   {
-    Victim->SetCounterToMindWormHatch(100);
     if(Victim->IsPlayer())
     {
-      ADD_MESSAGE("%s penetrates digs through your skull, lays %s eggs and jumps out.",
+      ADD_MESSAGE("%s digs through your skull, lays %s eggs and jumps out.",
                   CHAR_NAME(DEFINITE), CHAR_POSSESSIVE_PRONOUN);
     }
     else if(Victim->CanBeSeenByPlayer())
     {
-      ADD_MESSAGE("%s penetrates digs through %s's skull, lays %s eggs and jumps out.",
+      ADD_MESSAGE("%s digs through %s's skull, lays %s eggs and jumps out.",
                   CHAR_NAME(DEFINITE), Victim->CHAR_NAME(DEFINITE), CHAR_POSSESSIVE_PRONOUN);
     }
+
+    Victim->BeginTemporaryState(PARASITE_MIND_WORM, 400 + RAND_N(200));
+
     MoveRandomly();
+    EditAP(-1000);
+    return true;
   }
+  else
+    return false;
 }
 
 void mindworm::PsiAttack(character* Victim)
@@ -2454,9 +2787,213 @@ void mindworm::PsiAttack(character* Victim)
   }
   else if(Victim->CanBeSeenByPlayer() && PLAYER->GetAttribute(PERCEPTION) > RAND_N(20))
   {
-    ADD_MESSAGE("%s looks scared.", Victim->CHAR_NAME(DEFINITE));
+    ADD_MESSAGE("%s looks pained.", Victim->CHAR_NAME(DEFINITE));
   }
 
-  Victim->ReceiveDamage(this, 1 + RAND_N(5), PSI, ALL, 8, false, false, false, false);
+  Victim->ReceiveDamage(this, 1, PSI, HEAD, YOURSELF, true);
   Victim->CheckDeath(CONST_S("killed by ") + GetName(INDEFINITE) + "'s psi attack", this);
+  EditAP(-2000);
+  EditStamina(GetAdjustedStaminaCost(-1000, GetAttribute(INTELLIGENCE)), false);
+}
+
+void bat::GetAICommand()
+{
+  if(!IsRetreating() && PLAYER->WillGetTurnSoon() &&
+     GetPos().IsAdjacent(PLAYER->GetPos()))
+  {
+    // Bats sometimes move away from the player.
+    SetGoingTo((GetPos() << 1) - PLAYER->GetPos());
+
+    if(MoveTowardsTarget(true))
+      return;
+  }
+
+  nonhumanoid::GetAICommand();
+}
+
+void invisiblestalker::GetAICommand()
+{
+  if(GetPos().IsAdjacent(PLAYER->GetPos()))
+  {
+    if(CanBeSeenByPlayer() &&
+       (GetHP() < (GetMaxHP() >> 1) || IsRetreating())
+     )
+    {
+      ADD_MESSAGE("%s notices you looking and disappears.", CHAR_NAME(DEFINITE));
+
+      TeleportRandomly(true);
+      EditAP(-1000);
+      return;
+    }
+    else if(!IsRetreating() && PLAYER->WillGetTurnSoon())
+    {
+      SetGoingTo((GetPos() << 1) - PLAYER->GetPos());
+
+      if(MoveTowardsTarget(true))
+        return;
+    }
+  }
+
+  nonhumanoid::GetAICommand();
+}
+
+truth fruitbat::IsRetreating() const
+{
+  if(nonhumanoid::IsRetreating())
+    return true;
+
+  for(stackiterator i = GetStack()->GetBottom(); i.HasItem(); ++i)
+    if((*i)->IsFood())
+      return true;
+
+  return false;
+}
+
+void fruitbat::GetAICommand()
+{
+  if(!IsRetreating())
+  {
+    character* Char = GetRandomNeighbour();
+
+    if(Char)
+    {
+      itemvector Fruits;
+
+      for(stackiterator i = Char->GetStack()->GetBottom(); i.HasItem(); ++i)
+      {
+        if((*i)->IsFood() && !MakesBurdened((*i)->GetWeight()))
+          Fruits.push_back(*i);
+      }
+
+      if(!Fruits.empty())
+      {
+        item* ToSteal = Fruits[RAND() % Fruits.size()];
+        ToSteal->RemoveFromSlot();
+        GetStack()->AddItem(ToSteal);
+
+        if(Char->IsPlayer())
+          ADD_MESSAGE("%s steals your %s.", CHAR_NAME(DEFINITE), ToSteal->CHAR_NAME(UNARTICLED));
+
+        EditAP(-500);
+        return;
+      }
+    }
+  }
+
+  bat::GetAICommand();
+}
+
+void fusanga::GetAICommand()
+{
+  if(AttackAdjacentEnemyAI())
+    return;
+
+  /* Chaos magic */
+  lsquare* Square = GetLevel()->GetLSquare(GetLevel()->GetRandomSquare(0, HAS_NO_OTERRAIN));
+
+  if(Square && !RAND_N(20))
+  {
+    if(CanBeSeenByPlayer())
+      ADD_MESSAGE("%s radiates pure magic.", CHAR_NAME(DEFINITE));
+
+    switch (RAND_4)
+    {
+      case 0: // Random spell
+      {
+        int BeamEffect = RAND_N(17); // Change if more beams are added.
+        beamdata Beam
+          (
+            this,
+            CONST_S("killed by the sorcery of ") + GetName(DEFINITE),
+            GetPos(),
+            RANDOM_COLOR,
+            BeamEffect,
+            YOURSELF,
+            1,
+            0,
+            NULL
+          );
+        (Square->*lsquare::GetBeamEffect(BeamEffect))(Beam);
+        break;
+      }
+      case 1: // Create gas
+      {
+        // Change if more gases are added.
+        if(!RAND_2)
+          GetLevel()->GasExplosion(gas::Spawn(GAS_ID + RAND_N(14) + 3, 100), Square, this);
+        else
+          Square->AddSmoke(gas::Spawn(GAS_ID + RAND_N(14) + 3, 100));
+
+        ADD_MESSAGE("You hear the hiss of gas.");
+        break;
+      }
+      default: // Create rain
+      {
+        beamdata Beam
+          (
+            this,
+            CONST_S("killed by the showers of ") + GetName(DEFINITE),
+            YOURSELF,
+            0
+          );
+        Square->LiquidRain(Beam, LIQUID_ID + RAND_N(60) + 1); // Change if more liquids are added.
+
+        if(Square->CanBeSeenByPlayer())
+          ADD_MESSAGE("A drizzle comes down.");
+        else
+          ADD_MESSAGE("You hear the sounds of rainfall.");
+
+        break;
+      }
+    }
+
+    EditAP(-4000);
+    return;
+  }
+
+  /* Spawn mushrooms */
+  if(!RAND_N(40))
+  {
+    int NumberOfMushrooms = RAND() % 3 + RAND() % 3 + RAND() % 3 + RAND() % 3;
+
+    if(CanBeSeenByPlayer())
+      ADD_MESSAGE("%s radiates strange magic.", CHAR_NAME(DEFINITE));
+
+    for(int i = 0; i < NumberOfMushrooms; i++)
+    {
+      character* NewShroom;
+
+      switch (RAND_4)
+      {
+        case 2: NewShroom = magicmushroom::Spawn(); break;
+        //case 3: NewShroom = weepmushroom::Spawn(); break;
+        default: NewShroom = mushroom::Spawn(); break;
+      }
+
+      NewShroom->SetGenerationDanger(GetGenerationDanger());
+      NewShroom->SetTeam(GetTeam());
+      NewShroom->PutTo(GetLevel()->GetRandomSquare(NewShroom));
+
+      if(NewShroom->CanBeSeenByPlayer())
+        ADD_MESSAGE("%s sprouts from the ground.", NewShroom->CHAR_NAME(INDEFINITE));
+    }
+
+    EditAP(-2000);
+    return;
+  }
+
+  /* Just chill there. */
+  EditAP(-1000);
+}
+
+void fusanga::CreateCorpse(lsquare* Square)
+{
+  largecreature::CreateCorpse(Square);
+}
+
+truth fusanga::MustBeRemovedFromBone() const
+{
+  return !IsEnabled() || GetTeam()->GetID() != MONSTER_TEAM
+                      || GetDungeon()->GetIndex() != FUNGAL_CAVE
+                      || GetLevel()->GetIndex() != FUSANGA_LEVEL;
 }

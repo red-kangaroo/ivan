@@ -18,8 +18,8 @@
 #include "save.h"
 #include "femath.h"
 #include "bitmap.h"
+#include "graphics.h"
 #include "message.h"
-
 #include "audio.h"
 
 dungeon::dungeon(int Index) : Index(Index)
@@ -76,6 +76,8 @@ const levelscript* dungeon::GetLevelScript(int I)
 
 truth dungeon::PrepareLevel(int Index, truth Visual)
 {
+  graphics::SetDenyStretchedBlit();
+
   if(Generated[Index])
   {
     level* NewLevel = LoadLevel(game::SaveName(), Index);
@@ -134,12 +136,12 @@ void dungeon::PrepareMusic(int Index)
 {
   const levelscript* LevelScript = GetLevelScript(Index);
   bool hasCurrentTrack = false;
-  cchar* CurrentTrack = audio::GetCurrentlyPlayedFile();
+  festring CurrentTrack = audio::GetCurrentlyPlayedFile();
 
   for( int i = 0; i < LevelScript->GetAudioPlayList()->Size; ++i  )
   {
      festring Music = LevelScript->GetAudioPlayList()->Data[i];
-     if( strcmp(CurrentTrack, (char*) Music.CStr()) == 0 )
+     if( CurrentTrack == Music )
      {
         hasCurrentTrack = true;
         break;
@@ -152,12 +154,12 @@ void dungeon::PrepareMusic(int Index)
      for( int i = 0; i < LevelScript->GetAudioPlayList()->Size; ++i  )
      {
         festring Music = LevelScript->GetAudioPlayList()->Data[i];
-        if( strcmp(CurrentTrack, (char*) Music.CStr()) == 0 )
+        if( CurrentTrack == Music )
         {
         }
         else
         {
-           audio::LoadMIDIFile( (char*) Music.CStr(), 0, 100);
+           audio::LoadMIDIFile(Music, 0, 100);
         }
      }
   }
@@ -165,11 +167,11 @@ void dungeon::PrepareMusic(int Index)
   if( hasCurrentTrack == false )
   {
      audio::SetPlaybackStatus(audio::STOPPED);
-     audio::ClearMIDIPlaylist(0);
+     audio::ClearMIDIPlaylist();
      for( int i = 0; i < LevelScript->GetAudioPlayList()->Size; ++i  )
      {
         festring Music = LevelScript->GetAudioPlayList()->Data[i];
-        audio::LoadMIDIFile( (char*) Music.CStr(), 0, 100);
+        audio::LoadMIDIFile(Music, 0, 100);
      }
      audio::SetPlaybackStatus(audio::PLAYING);
   }
@@ -219,12 +221,26 @@ int dungeon::GetLevels() const
   return *DungeonScript->GetLevels();
 }
 
-festring dungeon::GetLevelDescription(int I)
+festring dungeon::GetLevelDescription(int I,bool bPretty)
 {
-  if(GetLevel(I)->GetLevelScript()->GetDescription())
+  if(GetLevel(I)->GetLevelScript()->GetDescription()){
     return *GetLevel(I)->GetLevelScript()->GetDescription();
-  else
-    return *DungeonScript->GetDescription() + " level " + (I + 1);
+  }else{
+    festring fs = *DungeonScript->GetDescription();
+    int i = I+1;
+
+    if(bPretty){
+      festring fsRoman; // roman numbers
+      const char* X[] = {"","X","XX","XXX","XL","L","LX","LXX","LXXX","XC"};
+      fsRoman << X[(i%100)/10];
+      const char* I[] = {"","I","II","III","IV","V","VI","VII","VIII","IX"};
+      fsRoman << I[(i%10)];
+
+      return fs + " " + fsRoman;
+    }else{
+      return fs + " level " + i;
+    }
+  }
 }
 
 festring dungeon::GetShortLevelDescription(int I)
@@ -232,7 +248,7 @@ festring dungeon::GetShortLevelDescription(int I)
   if(GetLevel(I)->GetLevelScript()->GetShortDescription())
     return *GetLevel(I)->GetLevelScript()->GetShortDescription();
   else
-    return *DungeonScript->GetShortDescription() + " level " + (I + 1);
+    return *DungeonScript->GetShortDescription() + " lvl " + (I + 1);
 }
 
 outputfile& operator<<(outputfile& SaveFile, const dungeon* Dungeon)

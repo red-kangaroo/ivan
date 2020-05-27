@@ -17,16 +17,21 @@
 #include <sys/farptr.h>
 #endif
 
+#ifdef BACKTRACE
+#include <execinfo.h>
+#endif
+
 #ifndef WIN32
 #include <csignal>
 #include <cstring>
 #include <cstdlib>
-#include <execinfo.h>
 #include <unistd.h>
 #endif
 
 #include "game.h"
 #include "database.h"
+#include "definesvalidator.h"
+#include "devcons.h"
 #include "feio.h"
 #include "igraph.h"
 #include "iconf.h"
@@ -34,27 +39,31 @@
 #include "hscore.h"
 #include "graphics.h"
 #include "script.h"
+#include "specialkeys.h"
 #include "message.h"
 #include "proto.h"
 #include "audio.h"
 
-#ifndef WIN32
+#include "dbgmsgproj.h"
 
+#include "bugworkaround.h"
+
+#ifdef BACKTRACE
 void CrashHandler(int Signal)
 {
-  // Prints stack trace to stderr.
-  void* CallStack[128];
-  size_t Frames = backtrace(CallStack, 128);
-  std::cerr << strsignal(Signal) << std::endl;
-  backtrace_symbols_fd(CallStack, Frames, STDERR_FILENO);
+  globalerrorhandler::DumpStackTraceToStdErr(Signal);
   exit(1);
 }
-
 #endif
+
+void SkipGameScript(inputfile* pSaveFile){
+  gamescript* gs=0;
+  (*pSaveFile) >> gs; //dummy just to "seek" for next binary data TODO if dungeon and level was saved before it, this would not be necessary... re-structuring the savegame file (one day) would be good.
+}
 
 int main(int argc, char** argv)
 {
-#ifndef WIN32
+#ifdef BACKTRACE
   signal(SIGABRT, CrashHandler);
   signal(SIGBUS, CrashHandler);
   signal(SIGFPE, CrashHandler);
@@ -66,6 +75,8 @@ int main(int argc, char** argv)
   signal(SIGTRAP, CrashHandler);
   signal(SIGQUIT, CrashHandler);
 #endif
+
+  game::GetUserDataDir(); //just to properly initialize as soon as possible DBGMSG correct path b4 everywhere it may be used.
 
   if(argc > 1 && festring(argv[1]) == "--version")
   {
@@ -94,9 +105,14 @@ int main(int argc, char** argv)
   game::CreateBusyAnimationCache();
   globalwindowhandler::SetQuitMessageHandler(game::HandleQuitMessage);
   globalwindowhandler::SetScrshotDirectory(game::GetScrshotDir());
+  specialkeys::init();
+  bugfixdp::init();
+  devcons::Init();
+  definesvalidator::init();
   msgsystem::Init();
   protosystem::Initialize();
   igraph::LoadMenu();
+  game::PrepareStretchRegionsLazy();
 
   /* Set off the main menu music */
   audio::SetPlaybackStatus(0);
@@ -104,13 +120,15 @@ int main(int argc, char** argv)
   audio::LoadMIDIFile("mainmenu.mid", 0, 100);
   audio::SetPlaybackStatus(audio::PLAYING);
 
-  for(;;)
+  for(int running = 1; running;)
   {
     int Select = iosystem::Menu(igraph::GetMenuGraphic(),
                                 v2(RES.X / 2, RES.Y / 2 - 20),
                                 CONST_S("\r"),
-                                CONST_S("Start Game\rContinue Game\r"
-                                        "Configuration\rHighscores\r"
+                                CONST_S("Start Game\r"
+                                        "Continue Game\r"
+                                        "Configuration\r"
+                                        "Highscores\r"
                                         "Quit\r"),
                                 LIGHT_GRAY,
                                 CONST_S("Released under the GNU\r"
@@ -133,11 +151,12 @@ int main(int argc, char** argv)
       break;
      case 1:
       {
-        festring LoadName = iosystem::ContinueMenu(WHITE, LIGHT_GRAY, game::GetSaveDir());
+        iosystem::SetSkipSeekSave(&SkipGameScript);
+        festring LoadName = iosystem::ContinueMenu(WHITE, LIGHT_GRAY, game::GetSaveDir(), game::GetSaveFileVersionHardcoded(), ivanconfig::IsAllowImportOldSavegame());
 
         if(LoadName.GetSize())
         {
-          LoadName.Resize(LoadName.GetSize() - 4);
+          LoadName.Resize(LoadName.GetSize() - 4); // - ".sav"
 
           if(game::Init(LoadName))
           {
@@ -155,7 +174,7 @@ int main(int argc, char** argv)
       break;
      case 3:
       {
-        highscore HScore;
+        highscore HScore(game::GetUserDataDir() + HIGH_SCORE_FILENAME);
         HScore.Draw();
         break;
       }
@@ -169,7 +188,12 @@ int main(int argc, char** argv)
 
 #endif
 
-      return 0;
+      running = 0;
+      break;
     }
   }
+
+  msgsystem::DeInit();
+
+  return 0;
 }

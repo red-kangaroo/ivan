@@ -28,12 +28,14 @@ class fluid;
 class material;
 class item;
 class smoke;
+class hiteffect;
 class gas;
 class bodypart;
 class liquid;
 class rain;
 class trap;
 struct sortdata;
+struct hiteffectSetup;
 
 typedef std::vector<item*> itemvector;
 typedef truth (item::*sorter)(ccharacter*) const;
@@ -124,6 +126,7 @@ class lsquare : public square
   void UpdateMemorizedDescription(truth = false);
   truth BeKicked(character*, item*, bodypart*, double, double, int, int, truth, truth);
   int GetDivineMaster() const;
+  void DrawHitEffect();
   void Draw(blitdata&) const;
   void UpdateMemorized();
   truth CanBeDug() const;
@@ -178,11 +181,13 @@ class lsquare : public square
   truth Duplicate(const beamdata&);
   truth Lightning(const beamdata&);
   truth DoorCreation(const beamdata&);
+  truth WallCreation(const beamdata&);
   truth AcidRain(const beamdata&);
   truth Necromancy(const beamdata&);
   truth Webbing(const beamdata&);
   truth Alchemize(const beamdata&);
-  truth WaterRain(const beamdata&);
+  truth SoftenMaterial(const beamdata&);
+  truth LiquidRain(const beamdata&, int);
   int GetLevelIndex() const { return static_cast<level*>(AreaUnder)->GetIndex(); }
   int GetDungeonIndex() const { return static_cast<level*>(AreaUnder)->GetDungeon()->GetIndex(); }
   dungeon* GetDungeon() const { return static_cast<level*>(AreaUnder)->GetDungeon(); }
@@ -195,6 +200,9 @@ class lsquare : public square
   void AddSmoke(gas*);
   truth IsFlyable() const { return !OLTerrain || (OLTerrain->GetWalkability() & FLY); }
   truth IsTransparent() const { return Flags & IS_TRANSPARENT; }
+  truth IsMaterialDetected() const { return bMaterialDetected; }
+  hiteffect* AddHitEffect(hiteffectSetup);
+  void RemoveHitEffect(hiteffect* ToBeRemoved);
   void SignalSmokeAlphaChange(int);
   void ShowSmokeMessage() const;
   void DisplaySmokeInfo(festring&) const;
@@ -277,6 +285,8 @@ class lsquare : public square
   } StaticContentCache;
   fluid* Fluid;
   smoke* Smoke;
+  hiteffect* HitEffect;
+  truth bMaterialDetected; //temporary
   rain* Rain;
   trap* Trap;
   emittervector Emitter;

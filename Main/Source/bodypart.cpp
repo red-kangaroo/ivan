@@ -12,6 +12,8 @@
 
 /* Compiled through itemset.cpp */
 
+#include "dbgmsgproj.h"
+
 int bodypart::GetGraphicsContainerIndex() const { return GR_HUMANOID; }
 int bodypart::GetArticleMode() const { return IsUnique() ? FORCE_THE : 0; }
 truth bodypart::IsAlive() const { return MainMaterial->GetBodyFlags() & IS_ALIVE; }
@@ -252,7 +254,7 @@ void leg::Load(inputfile& SaveFile)
 }
 
 truth bodypart::ReceiveDamage(character* Damager, int Damage, int Type, int Direction)
-{
+{DBG1(Damager);
   if(Master)
   {
     if(Type & POISON && !IsAlive())
@@ -268,7 +270,7 @@ truth bodypart::ReceiveDamage(character* Damager, int Damage, int Type, int Dire
 
     EditHP(1, -Damage);
 
-    if(Type & DRAIN && IsAlive())
+    if(Damager!=NULL && (Type & DRAIN) && IsAlive())
       for(int c = 0; c < Damage; ++c)
         Damager->HealHitPoint();
 
@@ -808,19 +810,6 @@ arm::~arm()
 leg::~leg()
 {
   delete GetBoot();
-}
-
-truth corpse::IsDestroyable(ccharacter* Char) const
-{
-  for(int c = 0; c < GetDeceased()->GetBodyParts(); ++c)
-  {
-    bodypart* BodyPart = GetDeceased()->GetBodyPart(c);
-
-    if(BodyPart && !BodyPart->IsDestroyable(Char))
-      return false;
-  }
-
-  return true;
 }
 
 long corpse::GetTruePrice() const
@@ -2424,7 +2413,6 @@ truth arm::CheckIfWeaponTooHeavy(cchar* WeaponDescription) const
       else
         ADD_MESSAGE("%sIt is somewhat difficult for %s to use %s%s.", OtherHandInfo.CStr(),
                     Master->CHAR_DESCRIPTION(DEFINITE), WeaponDescription, HandInfo);
-
       return !game::TruthQuestion(CONST_S("Continue anyway? [y/N]"));
     }
   }
@@ -2643,10 +2631,19 @@ truth corpse::SuckSoul(character* Soul, character* Summoner)
 
 double arm::GetTypeDamage(ccharacter* Enemy) const
 {
-  if(!GetWielded() || !GetWielded()->IsGoodWithPlants() || !Enemy->IsPlant())
-    return Damage;
-  else
-    return Damage * 1.5;
+  double ActualDamage = GetDamage();
+
+  if(GetWielded())
+  {
+    if(GetWielded()->IsGoodWithPlants() && Enemy->IsPlant())
+      ActualDamage *= 1.5;
+    if(GetWielded()->IsGoodWithUndead() && Enemy->IsUndead())
+      ActualDamage *= 1.5;
+    if(HasSadistWeapon() && Enemy->IsMasochist())
+      ActualDamage *= 0.75;
+  }
+
+  return ActualDamage;
 }
 
 void largetorso::Draw(blitdata& BlitData) const
@@ -3238,20 +3235,61 @@ void bodypart::ReceiveAcid(material* Material, cfestring& LocationName, long Mod
       if(Master->GetLastAcidMsgMin() != Minute && (Master->CanBeSeenByPlayer() || Master->IsPlayer()))
       {
         Master->SetLastAcidMsgMin(Minute);
-        cchar* MName = Material->GetName(false, false).CStr();
+        cfestring MName = Material->GetName(false, false);
 
         if(Master->IsPlayer())
         {
           cchar* TName = LocationName.IsEmpty() ? GetBodyPartName().CStr() : LocationName.CStr();
-          ADD_MESSAGE("Acidous %s dissolves your %s.", MName, TName);
+          ADD_MESSAGE("Caustic %s dissolves your %s.", MName.CStr(), TName);
         }
         else
-          ADD_MESSAGE("Acidous %s dissolves %s.", MName, Master->CHAR_NAME(DEFINITE));
+          ADD_MESSAGE("Caustic %s dissolves %s.", MName.CStr(), Master->CHAR_NAME(DEFINITE));
       }
 
       Master->ReceiveBodyPartDamage(0, Damage, ACID, GetBodyPartIndex(), YOURSELF, false, false, false);
       ulong DeathFlags = Material->IsStuckTo(Master) ? IGNORE_TRAPS : 0;
       Master->CheckDeath(CONST_S("dissolved by ") + Material->GetName(), 0, DeathFlags);
+    }
+  }
+}
+
+void bodypart::ReceiveHeat(material* Material, cfestring& LocationName, long Modifier)
+{
+  if(Master && MainMaterial->GetInteractionFlags() & CAN_BURN)
+  {
+    long Tries = Modifier / 1000;
+    Modifier -= Tries * 1000;
+    int Damage = 0;
+
+    for(long c = 0; c < Tries; ++c)
+      if(!(RAND() % 100))
+        ++Damage;
+
+    if(Modifier && !(RAND() % 100000 / Modifier))
+      ++Damage;
+
+    if(Damage)
+    {
+      ulong Minute = game::GetTotalMinutes();
+      character* Master = this->Master;
+
+      if(Master->GetLastAcidMsgMin() != Minute && (Master->CanBeSeenByPlayer() || Master->IsPlayer()))
+      {
+        Master->SetLastAcidMsgMin(Minute); // I don't really think we need to track acid and heat damage messages separately.
+        cfestring MName = Material->GetName(false, false);
+
+        if(Master->IsPlayer())
+        {
+          cchar* TName = LocationName.IsEmpty() ? GetBodyPartName().CStr() : LocationName.CStr();
+          ADD_MESSAGE("Scorching %s burns your %s.", MName.CStr(), TName);
+        }
+        else
+          ADD_MESSAGE("Scorching %s burns %s.", MName.CStr(), Master->CHAR_NAME(DEFINITE));
+      }
+
+      Master->ReceiveBodyPartDamage(0, Damage, FIRE, GetBodyPartIndex(), YOURSELF, false, false, false);
+      ulong DeathFlags = Material->IsStuckTo(Master) ? IGNORE_TRAPS : 0;
+      Master->CheckDeath(CONST_S("burnt to death by ") + Material->GetName(), 0, DeathFlags);
     }
   }
 }
@@ -3715,7 +3753,7 @@ truth bodypart::IsDestroyable(ccharacter*) const
 
 truth bodypart::DamageTypeCanScar(int Type)
 {
-  return !(Type == POISON || Type == DRAIN);
+  return !(Type == POISON || Type == DRAIN || Type == PSI);
 }
 
 void bodypart::GenerateScar(int Damage, int Type)
@@ -3860,6 +3898,35 @@ v2 spidertorso::GetBitmapPos(int Frame) const
   v2 BasePos = torso::GetBitmapPos(Frame);
   Frame &= 0xF;
   return v2(BasePos.X + ((Frame &~ 7) << 1), BasePos.Y);
+}
+
+v2 snaketorso::GetBitmapPos(int Frame) const
+{
+  v2 BasePos = torso::GetBitmapPos(Frame);
+
+  if(Frame<16)
+    return v2(BasePos.X + ((Frame/2)%2)*TILE_SIZE, BasePos.Y);
+  else
+  if(Frame<24)
+    return v2(BasePos.X + TILE_SIZE, BasePos.Y);
+  return BasePos;
+}
+
+v2 magpietorso::GetBitmapPos(int Frame) const
+{
+  v2 BasePos = torso::GetBitmapPos(Frame);
+  Frame &= 0xF;
+
+  /**
+   * GetClassAnimationFrames() is the total animation frames per second, so Frame is from 0 to 15 here
+   * Magpie has 8 pictures, so it will draw the same picture for each 2 frames.
+   * GetBitmapPos() method will be called only once and stored on the savegame file, therefore there is no need for speed.
+   * TODO correct?
+   */
+  float fPicTot=8.0;
+  float fDiv = GetClassAnimationFrames()/fPicTot; //each 2 frames
+  int iPic=Frame/fDiv; DBG3(Frame,fDiv,iPic);
+  return v2(BasePos.X + iPic*TILE_SIZE, BasePos.Y);
 }
 
 truth arm::HasSadistWeapon() const

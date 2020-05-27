@@ -60,8 +60,10 @@ struct materialdatabase : public databasebase
   int StepInWisdomLimit;
   int RustModifier;
   int Acidicity;
+  int Hotness;
   contentscript<item> NaturalForm;
   int HardenedMaterial;
+  int SoftenedMaterial;
   int IntelligenceRequirement;
   int Stickiness;
   truth DisablesPanicWhenConsumed;
@@ -105,10 +107,10 @@ class material
   material(int NewConfig, long InitVolume = 0, truth Load = false)
   : MotherEntity(0) { Initialize(NewConfig, InitVolume, Load); }
   material() : MotherEntity(0) { }
-  virtual ~material() = default; 
+  virtual ~material() = default;
   void AddName(festring&, truth = false, truth = true) const;
   festring GetName(truth = false, truth = true) const;
-  material* TakeDipVolumeAway();
+  material* TakeDipVolumeAway(long MaxVolume = 500);
   virtual void Save(outputfile&) const;
   virtual void Load(inputfile&);
   truth Effect(character*, int, long);
@@ -153,6 +155,7 @@ class material
   DATA_BASE_VALUE(int, AttachedGod);
   DATA_BASE_VALUE(int, RustModifier);
   DATA_BASE_VALUE(int, Acidicity);
+  DATA_BASE_VALUE(int, Hotness);
   DATA_BASE_VALUE(const contentscript<item>&, NaturalForm);
   DATA_BASE_VALUE(int, IntelligenceRequirement);
   DATA_BASE_VALUE(int, Stickiness);
@@ -163,6 +166,7 @@ class material
   static material* MakeMaterial(int, long = 0);
   virtual truth IsFlesh() const { return false; }
   virtual truth IsLiquid() const { return false; }
+  virtual truth IsGaseous() const { return false; }
   virtual cchar* GetConsumeVerb() const;
   entity* GetMotherEntity() const { return MotherEntity; }
   void SetMotherEntity(entity* What) { MotherEntity = What; }
@@ -190,7 +194,7 @@ class material
   virtual truth TryToRust(long, long = 0) { return false; }
   static const database* GetDataBase(int);
   virtual truth CanSpoil() const { return false; }
-  truth IsSolid() const { return !IsLiquid(); }
+  truth IsSolid() const { return !IsLiquid() && !IsGaseous(); }
   /* A dummy materialpredicate */
   truth True() const { return true; }
   void FinishConsuming(character*);
@@ -209,6 +213,7 @@ class material
   virtual void SetIsInfectedByLeprosy(truth) { }
   virtual truth AddRustLevelDescription(festring&, truth) const { return false; }
   int GetHardenedMaterial(citem*) const;
+  int GetSoftenedMaterial(citem*) const;
   int GetHardenModifier(citem*) const;
   virtual int GetSpoilPercentage() const { return 0; }
   virtual truth Spoils() const { return false; }

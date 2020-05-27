@@ -97,7 +97,7 @@ struct explosion
 struct beamdata
 {
   beamdata(character*, cfestring&, int, ulong);
-  beamdata(character*, cfestring&, v2, col16, int, int, int, ulong);
+  beamdata(character*, cfestring&, v2, col16, int, int, int, ulong, item*);
   character* Owner;
   festring DeathMsg;
   v2 StartPos;
@@ -106,6 +106,7 @@ struct beamdata
   int Direction;
   int Range;
   ulong SpecialParameters;
+  item* Wand;
 };
 
 inline beamdata::beamdata
@@ -130,7 +131,8 @@ inline beamdata::beamdata
   int BeamEffect,
   int Direction,
   int Range,
-  ulong SpecialParameters
+  ulong SpecialParameters,
+  item* Wand
 ) :
 Owner(Owner),
 DeathMsg(DeathMsg),
@@ -139,7 +141,8 @@ BeamColor(BeamColor),
 BeamEffect(BeamEffect),
 Direction(Direction),
 Range(Range),
-SpecialParameters(SpecialParameters)
+SpecialParameters(SpecialParameters),
+Wand(Wand)
 { }
 
 struct maze
@@ -193,6 +196,7 @@ class level : public area
   void Explosion(character*, cfestring&, v2, int, truth = true, truth = false);
   truth CollectCreatures(charactervector&, character*, truth);
   void ApplyLSquareScript(const squarescript*);
+  void DrawHitEffects(cint XMin,cint XMax,cint YMin,cint YMax) const;
   virtual void Draw(truth) const;
   v2 GetEntryPos(ccharacter*, int) const;
   void GenerateRectangularRoom(std::vector<v2>&, std::vector<v2>&, std::vector<v2>&, const roomscript*, room*, v2, v2);
@@ -244,6 +248,7 @@ class level : public area
   lsquare** GetSquareStack() const { return SquareStack; }
   col24 GetNightAmbientLuminance() const { return NightAmbientLuminance; }
   int DetectMaterial(cmaterial*);
+  int RevealDistantLightsToPlayer();
   void BlurMemory();
   void CalculateLuminances();
   int AddRadiusToSquareStack(v2, long) const;
@@ -255,6 +260,7 @@ class level : public area
   void AddSpecialCursors();
   void GasExplosion(gas*, lsquare*, character*);
  protected:
+  truth CheckExpansiveArea(olterrain*, int, int, truth = false) const;
   truth GenerateLanterns(int, int, int) const;
   truth GenerateWindows(int, int) const;
   void CreateRoomSquare(glterrain*, olterrain*, int, int, int, int) const;

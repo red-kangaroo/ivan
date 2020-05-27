@@ -21,11 +21,19 @@
 #include "graphics.h"
 #endif
 
+#ifdef BACKTRACE
+#include <execinfo.h>
+#endif
+
 #ifdef WIN32
 #include "SDL.h"
 #include <windows.h>
 #else
 #include <iostream>
+#include <csignal>
+#include <cstring>
+#include <cstdlib>
+#include <unistd.h>
 #endif
 
 #ifdef VC
@@ -36,15 +44,16 @@
 #define set_new_handler std::set_new_handler
 #endif
 
+#include "dbgmsgproj.h"
+
 #include "error.h"
 
 /* Shouldn't be initialized here! */
 
 cchar* globalerrorhandler::BugMsg
-= "\n\nPlease send bug report to ivan-support@googlegroups.com\n"
+= "\n\nPlease submit a bug report on our forum at http://attnam.com\n"
 "including a brief description of what you did, what version\n"
-"you are running and which kind of system you are using.\n"
-"Or submit on our forum at http://attnam.com";
+"you are running and which kind of system you are using.";
 
 #ifdef VC
 int (*globalerrorhandler::OldNewHandler)(size_t) = 0;
@@ -56,6 +65,16 @@ void (*globalerrorhandler::OldNewHandler)() = 0;
 void (*globalerrorhandler::OldSignal[SIGNALS])(int);
 int globalerrorhandler::Signal[SIGNALS]
 = { SIGABRT, SIGFPE, SIGILL, SIGSEGV, SIGTERM, SIGINT, SIGKILL, SIGQUIT };
+#endif
+
+#ifdef BACKTRACE
+void globalerrorhandler::DumpStackTraceToStdErr(int Signal){
+  // Prints stack trace to stderr.
+  void* CallStack[128];
+  size_t Frames = backtrace(CallStack, 128);
+  if(Signal>-1)std::cerr << strsignal(Signal) << std::endl;
+  backtrace_symbols_fd(CallStack, Frames, STDERR_FILENO);
+}
 #endif
 
 void globalerrorhandler::Install()
@@ -88,6 +107,10 @@ void globalerrorhandler::DeInstall()
 
 void globalerrorhandler::Abort(cchar* Format, ...)
 {
+#ifdef BACKTRACE
+  DumpStackTraceToStdErr();
+#endif
+
   char Buffer[512];
 
   va_list AP;
@@ -110,6 +133,7 @@ void globalerrorhandler::Abort(cchar* Format, ...)
   std::cout << Buffer << std::endl;
 #endif
 
+  DBGSTK;DBG2("ABORT:",Buffer);DBGBREAKPOINT;
   exit(4);
 }
 

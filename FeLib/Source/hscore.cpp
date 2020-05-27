@@ -23,7 +23,7 @@ cfestring& highscore::GetEntry(int I) const { return Entry[I]; }
 long highscore::GetScore(int I) const { return Score[I]; }
 long highscore::GetSize() const { return Entry.size(); }
 
-highscore::highscore(cfestring& File) : LastAdd(0xFF), Version(HIGH_SCORE_VERSION) { Load(File); }
+highscore::highscore(cfestring& File) : LastAdd(0xFF), Version(HIGH_SCORE_VERSION), DefaultFile(File) { Load(File); }
 
 truth highscore::Add(long NewScore, cfestring& NewEntry,
                      time_t NewTime, long NewRandomID)
@@ -91,6 +91,7 @@ void highscore::Draw() const
     Desc.Resize(13, ' ');
     Desc << Entry[c];
     List.AddEntry(Desc, c == uint(LastAdd) ? WHITE : LIGHT_GRAY, 13);
+    List.SetLastEntryHelp(festring() << "The brave, foolish souls who ventured into the world of IVAN.");
   }
 
   List.SetFlags(FADE);
@@ -100,7 +101,7 @@ void highscore::Draw() const
 
 void highscore::Save(cfestring& File) const
 {
-  outputfile HighScore(File);
+  outputfile HighScore(File.IsEmpty() ? DefaultFile : File);
   long CheckSum = HIGH_SCORE_VERSION + LastAdd;
   for(ushort c = 0; c < Score.size(); ++c)
   {
@@ -114,8 +115,10 @@ void highscore::Save(cfestring& File) const
 /* This function needs much more error handling */
 void highscore::Load(cfestring& File)
 {
+  cfestring Path = File.IsEmpty() ? DefaultFile : File;
+
   {
-    inputfile HighScore(File, 0, false);
+    inputfile HighScore(Path, 0, false);
 
     if(!HighScore.IsOpen())
       return;
@@ -126,7 +129,7 @@ void highscore::Load(cfestring& File)
       return;
   }
 
-  inputfile HighScore(File, 0, false);
+  inputfile HighScore(Path, 0, false);
   HighScore >> Version;
   HighScore >> Score >> Entry >> Time >> RandomID >> LastAdd;
 }

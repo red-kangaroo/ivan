@@ -16,6 +16,7 @@
    the initial selected item */
 
 int stack::Selected;
+uint stack::StandardPageLength = stack::GetDefaultPageLength();
 
 stack::stack(square* MotherSquare, entity* MotherEntity, ulong Flags)
 : Bottom(0), Top(0), MotherSquare(MotherSquare), MotherEntity(MotherEntity),
@@ -278,6 +279,19 @@ void stack::Alchemize(character* Midas)
       break;
 }
 
+void stack::SoftenMaterial(character* Jerk)
+{
+  itemvector ItemVector;
+  FillItemVector(ItemVector);
+  int p = 0;
+
+  for(uint c = 0; c < ItemVector.size(); ++c)
+    if(ItemVector[c]->Exists()
+       && ItemVector[c]->SoftenMaterial()
+       && ++p == 5)
+      break;
+}
+
 void stack::CheckForStepOnEffect(character* Stepper)
 {
   itemvector ItemVector;
@@ -486,7 +500,7 @@ int stack::DrawContents(itemvector& ReturnVector, stack* MergeStack,
                                           Flags, 3 - c, SorterFunction);
 
   game::SetStandardListAttributes(Contents);
-  Contents.SetPageLength(12);
+  Contents.SetPageLength(stack::GetStandardPageLength());
   Contents.RemoveFlags(BLIT_AFTERWARDS);
   Contents.SetEntryDrawer(game::ItemEntryDrawer);
 
@@ -586,6 +600,8 @@ void stack::AddContentsToList(felist& Contents, ccharacter* Viewer,
                             !(Flags & NO_SPECIAL_INFO));
     int ImageKey = game::AddToItemDrawVector(PileVector[p]);
     Contents.AddEntry(Entry, LIGHT_GRAY, 0, ImageKey);
+    if(!Item->GetDescriptiveInfo().IsEmpty())
+      Contents.SetLastEntryHelp(festring()<<Entry<<"\n\n"<<Item->GetDescriptiveInfo());
   }
 }
 

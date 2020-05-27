@@ -109,7 +109,7 @@ Dungeon DARK_FOREST;
       GenerateTunnel = false;
       GenerateLanterns = false;
       Type = ROOM_NORMAL;
-      GenerateFountains = TRUE;
+      GenerateFountains = true;
       AllowLockedDoors = false;
       AllowBoobyTrappedDoors = false;
       Shape = ROUND_CORNERS;

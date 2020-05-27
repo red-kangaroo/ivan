@@ -213,6 +213,7 @@ Dungeon XINROCH_TOMB;
       FloorSquare = ASH solidterrain(SNOW_TERRAIN), 0;
       GenerateDoor = false;
       DivineMaster = INFUSCOR;
+      Type = ROOM_OWNED_AREA;
       GenerateLanterns = false;
       IsInside = false;
       GenerateWindows = false;
@@ -235,9 +236,11 @@ Dungeon XINROCH_TOMB;
       GTerrainMap
       {
         Pos = 4,5;
-        Size = 33,31;
+        Size = 33,37;
         Types
         {
+          W = 0;
+          @ = 0 { IsExpansive = true; }
           # = BLACK_GRANITE solidterrain(FLOOR) { IsInside = true; }
           - = BLACK_GRANITE solidterrain(FLOOR) { IsInside = true; }
           | = OCTIRON solidterrain(FLOOR) { IsInside = true; }
@@ -276,6 +279,12 @@ Dungeon XINROCH_TOMB;
         .....##%%%%-----------%%%%##.....
         ......#%%---------------%%#......
         ......##########-##########......
+        .................................
+        .................................
+        .................................
+        .................................
+        WWWWWWWWWWWWWWW...WWWWWWWWWWWWWWW
+        ...............@@@...............
       }
 
       OTerrainMap
@@ -396,7 +405,7 @@ Dungeon XINROCH_TOMB;
           | = 0;
           % = 0;
           g = guard(TOMB_ENTRY);
-          E = guard(TOMB_ENTRY_MASTER);
+          E = guard(TOMB_ENTRY_MASTER) { Flags = IS_MASTER; }
           y = mysticfrog(DARK);
           k = kamikazedwarf(INFUSCOR);
           K = veterankamikazedwarf(INFUSCOR);
@@ -493,7 +502,7 @@ Dungeon XINROCH_TOMB;
       AttachRequired = true;
     }
 
-    Room
+    Room /* Paradise island */
     {
       Size = 14,14;
       AllowLockedDoors = true;
@@ -520,12 +529,12 @@ Dungeon XINROCH_TOMB;
       }
       Square, Pos 7,6;
       {
-        Items == METEORIC_STEEL itemcontainer(LARGE_CHEST)
+        Items == METEORIC_STEEL itemcontainer(LARGE_CHEST|OCTAGONAL_LOCK)
         {
           Parameters = LOCKED;
           ItemsInside = { 3,  Random { Chance = 75; MinPrice = 1500; Times = 4; Category = HELMET|AMULET|CLOAK|BODY_ARMOR|WEAPON|SHIELD|RING|GAUNTLET|BELT|BOOT|TOOL|VALUABLE; LifeExpectancy = 1000:4000; },
                               Random { Chance = 75; MinPrice = 750; Times = 2; Category = HELMET|AMULET|CLOAK|BODY_ARMOR|WEAPON|SHIELD|RING|GAUNTLET|BELT|BOOT|TOOL|VALUABLE; },
-                              Random { Chance = 75; MinPrice = 1500; Times = 4; Category = HELMET|AMULET|CLOAK|BODY_ARMOR|WEAPON|SHIELD|RING|GAUNTLET|BELT|BOOT|TOOL|VALUABLE; LifeExpectancy = 1000:4000; }}
+                              Random { Chance = 75; MinPrice = 1500; Times = 4; Category = HELMET|AMULET|CLOAK|BODY_ARMOR|WEAPON|SHIELD|RING|GAUNTLET|BELT|BOOT|TOOL|VALUABLE; LifeExpectancy = 1000:4000; } }
         }
       }
       Square, Pos 8, 6;
@@ -545,7 +554,7 @@ Dungeon XINROCH_TOMB;
         {
           # = 0;
           B = GRAVEL earth;
-          t = BALSA_WOOD decoration(PALM);
+          t = BALSA_WOOD decoration(BANANA_TREE);
         }
       }
       {
@@ -658,6 +667,14 @@ Dungeon XINROCH_TOMB;
     }
   }
 
+  RandomLevel 1:10;
+  {
+    Square, Random;
+    {
+      Items == PSYPHER bodyarmor(ARMOR_OF_GREAT_HEALTH) { Enchantment = 6; LifeExpectancy = 1000:10000; Chance = 5; }
+    }
+  }
+
   RandomLevel 1:2; /* Vampire room */
   {
     Room
@@ -687,7 +704,7 @@ Dungeon XINROCH_TOMB;
     }
   }
 
-  RandomLevel 2:3;
+  RandomLevel 2:3; /* Zombie room */
   {
     Room
     {
@@ -743,7 +760,7 @@ Dungeon XINROCH_TOMB;
     }
   }
 
-  RandomLevel 4:6; /* Dwarven gas chambers */
+  RandomLevel 2:4; /* Dwarven gas chambers */
   {
     Room
     {
@@ -751,6 +768,7 @@ Dungeon XINROCH_TOMB;
       /*Pos = XSize+2:XSize/2+15,4:YSize-20;*/
       AltarPossible = false;
       GenerateDoor = false;
+      GenerateTunnel = false;
       AllowLockedDoors = true;
       AllowBoobyTrappedDoors = true;
       Flags = NO_MONSTER_GENERATION;
@@ -804,13 +822,19 @@ Dungeon XINROCH_TOMB;
       Square, Random HAS_NO_OTERRAIN;
       {
         Items == mine { Team = MONSTER_TEAM; IsActive = true; Chance = 75; }
-        Times = 12;
+        Times = 8;
       }
 
       Square, Random HAS_NO_OTERRAIN;
       {
         Items == mine(BIG_MINE) { Team = MONSTER_TEAM; IsActive = true; Chance = 50; }
-        Times = 8;
+        Times = 6;
+      }
+
+      Square, Random HAS_NO_OTERRAIN;
+      {
+        Items == gastrap { Team = MONSTER_TEAM; IsActive = true; Chance = 50; }
+        Times = 6;
       }
 
       Square, Random HAS_NO_OTERRAIN;
@@ -871,6 +895,140 @@ Dungeon XINROCH_TOMB;
         ........
         ..#..#..
         ###..###
+      }
+    }
+  }
+
+  RandomLevel 1:4; /* Golem vault */
+  {
+    Room
+    {
+      Size = 9,9;
+      AltarPossible = false;
+      GenerateFountains = false;
+
+      OTerrainMap
+      {
+        Size = 3,3;
+        Pos = 3,3;
+        Types
+        {
+          # = METEORIC_STEEL wall(BRICK_OLD);
+        }
+      }
+      {
+        ###
+        #.#
+        ###
+      }
+
+      Square, Pos 4,4;
+      {
+        Items == METEORIC_STEEL itemcontainer(CHEST|OCTAGONAL_LOCK) { Parameters = LOCKED; ItemsInside == Random { MinPrice = 1250; Times = 2; } }
+        Character = golem(OMMEL_BONE);
+      }
+    }
+  }
+
+  RandomLevel 4:7; /* Cauldron vault */
+  {
+    Room
+    {
+      GenerateLanterns = false;
+      GenerateFountains = false;
+      GenerateDoor = false;
+      GenerateTunnel = false;
+      AltarPossible = false;
+      Size = 7,7;
+      UseFillSquareWalls = true;
+      Flags = NO_MONSTER_GENERATION;
+
+      OTerrainMap
+      {
+        Pos = 1,1;
+        Size = 5,5;
+        Types
+        {
+          x = IRON wall(BRICK_OLD);
+        }
+      }
+      {
+        xxxxx
+        x...x
+        x...x
+        x...x
+        xxxxx
+      }
+
+      Square, Random;
+      {
+        Items == gastrap { Team = MONSTER_TEAM; IsActive = true; Chance = 50; }
+        Times = 3;
+      }
+
+      Square, Pos 3,3;
+      {
+        Items == cauldron;
+      }
+    }
+  }
+
+  RandomLevel 2:4; /* Shop */
+  {
+    CanGenerateBone = false;
+
+    Room
+    {
+      Size = 7,7;
+      AltarPossible = false;
+      GenerateFountains = false;
+      AllowLockedDoors = false;
+      AllowBoobyTrappedDoors = false;
+      DivineMaster = MELLIS;
+      Type = ROOM_SHOP;
+      Shape = ROUND_CORNERS;
+      Flags = NO_MONSTER_GENERATION;
+
+      Square, Pos 3, 3;
+      {
+        Character = shopkeeper(XINROCH_TOMB) { Team = XINROCH_TOMB_ENTRY_TEAM; Flags = IS_MASTER; }
+      }
+
+      ItemMap
+      {
+        Pos = 2,2;
+        Size = 3,3;
+        Types
+        {
+          a == Random { MinPrice = 250; Category = HELMET|CLOAK|BODY_ARMOR|BELT|BOOT|GAUNTLET; }
+          d == Random { MinPrice = 250; Category = RING|AMULET; }
+          w == Random { MinPrice = 500; Category = WEAPON|SHIELD; }
+          e == Random { MinPrice = 10; Category = FOOD|POTION; }
+          u == Random { MinPrice = 200; Category = WAND|TOOL; }
+          v == Random { MinPrice = 500; Category = SCROLL|TOOL; }
+        }
+      }
+      {
+        uvu
+        a.w
+        eed
+      }
+
+      Square, Random;
+      {
+        Items == Random { Chance = 50; }
+        Times = 3;
+      }
+
+      Square, Random;
+      {
+        Items == locationmap(BLACK_MARKET);
+      }
+
+      Square, Random;
+      {
+        Items == bone;
+        Times = 3:9;
       }
     }
   }
@@ -1002,8 +1160,10 @@ Dungeon XINROCH_TOMB;
     }
   }
 
-  Level 3; /*ice cave*/
+  Level 3; /* Ice cave */
   {
+    Description = "ice cave";
+    ShortDescription = "Ice Cave";
     Rooms = 15:30;
     Size = 64, 36;
     LevelMessage = "It is deathly cold in here...";
@@ -1074,12 +1234,18 @@ Dungeon XINROCH_TOMB;
     Square, Random IN_ROOM;
     {
       Character = golem(ICE);
-      Times = 2:5;
+      Times = 1:4;
     }
 
     Square, Random IN_ROOM;
     {
-      Character = golem(BLUE_CRYSTAL);
+      Character = golem(SNOW);
+      Times = 1:3;
+    }
+
+    Square, Random IN_ROOM;
+    {
+      Character = golem(JOTUN_ICE);
       Times = 2;
     }
 
@@ -1121,6 +1287,11 @@ Dungeon XINROCH_TOMB;
       {
         Character = golem(BONE);
         Times = 5;
+      }
+
+      Square, Random HAS_NO_OTERRAIN;
+      {
+        Items == scrollofgolemcreation { Chance = 10; Times = 4; }
       }
     }
 
@@ -1257,7 +1428,7 @@ Dungeon XINROCH_TOMB;
         Types
         {
           # = 0;
-          B = bear(MUTANT_BEAR);
+          B = bear(MUTANT_BEAR) { Inventory = { 2, Random { Category = AMULET|RING|WAND|SCROLL; Chance = 75; }, Random { Category = VALUABLE; } } }
           S = skeleton(WARRIOR);
           b = bear(CAVE_BEAR);
           g = guard(TOMB_ENTRY) { Team = XINROCH_TOMB_NECRO_TEAM; }
@@ -1466,20 +1637,12 @@ Dungeon XINROCH_TOMB;
       Square, Pos 1,20;
       {
         OTerrain = stairs(STAIRS_UP);
-      }
-
-      Square, Pos 1,20;
-      {
         EntryIndex = STAIRS_UP;
       }
 
       Square, Pos 1,1;
       {
         OTerrain = stairs(STAIRS_DOWN);
-      }
-
-      Square, Pos 1,1;
-      {
         EntryIndex = STAIRS_DOWN;
       }
 
@@ -1596,25 +1759,24 @@ Dungeon XINROCH_TOMB;
 
   Level 9; /* Xinroch's Ghost level */
   {
-    FillSquare = SLATE solidterrain(GROUND), OCTIRON earth;
-    TunnelSquare = SLATE solidterrain(GROUND), 0;
+    Description = "unholy tomb";
+    ShortDescription = "Unholy Tomb";
+    FillSquare = COAL solidterrain(GROUND), COAL earth;
+    TunnelSquare = PETRIFIED_WOOD solidterrain(GROUND), 0;
     Rooms = 30:40;
     Size = 25, 90;
-    EnchantmentMinusChanceBase = 10;
-    EnchantmentPlusChanceBase = 0;
-    EnchantmentPlusChanceDelta = 0;
-    ItemMinPriceBase = 40;
+    IsCatacomb = true;
     CanGenerateBone = false;
     Items = 0;
 
     RoomDefault
     {
-      WallSquare = TEAK_WOOD solidterrain(PARQUET), OCTIRON wall(BRICK_OLD);
-      FloorSquare = TEAK_WOOD solidterrain(PARQUET), 0;
-      DoorSquare = TEAK_WOOD solidterrain(PARQUET), OCTIRON door;
+      WallSquare = PETRIFIED_WOOD solidterrain(PARQUET), OCTIRON wall(BRICK_OLD);
+      FloorSquare = PETRIFIED_WOOD solidterrain(PARQUET), 0;
+      DoorSquare = PETRIFIED_WOOD solidterrain(PARQUET), OCTIRON door;
       Pos = 2:XSize-5,2:YSize-5;
       Size = 3:6,3:6;
-      GenerateFountains = false;
+      AltarPossible = false;
     }
 
     Room /* Giant maze room */
@@ -1625,14 +1787,25 @@ Dungeon XINROCH_TOMB;
       AltarPossible = false;
       AllowLockedDoors = false;
       Shape = MAZE_ROOM;
-      WallSquare = SLATE solidterrain(GROUND), OCTIRON wall(BRICK_OLD);
-      FloorSquare = SLATE solidterrain(GROUND), 0;
-      DoorSquare = SLATE solidterrain(GROUND), OCTIRON door;
+      WallSquare = WRAITH_BONE solidterrain(GROUND), OCTIRON wall(BRICK_OLD);
+      FloorSquare = WRAITH_BONE solidterrain(GROUND), 0;
+      DoorSquare = PETRIFIED_WOOD solidterrain(GROUND), OCTIRON door;
 
       Square, Random;
       {
         Items == Random { MinPrice = 130; }
         Times = 20:40;
+      }
+
+      Square, Random;
+      {
+        Character = golem(OMMEL_BONE);
+        Times = 2;
+      }
+
+      Square, Random;
+      {
+        Character = golem(OMMEL_TOOTH) { Inventory == Random { MinPrice = 2500; Times = 2; Chance = 75; } }
       }
 
       Square, Pos 1, 0;
@@ -1641,18 +1814,21 @@ Dungeon XINROCH_TOMB;
         OTerrain = OCTIRON door;
         AttachRequired = true;
       }
+
       Square, Pos 19, 0;
       {
         GTerrain = SLATE solidterrain(GROUND);
         OTerrain = OCTIRON door;
         AttachRequired = true;
       }
+
       Square, Pos 1, 38;
       {
         GTerrain = SLATE solidterrain(GROUND);
         OTerrain = OCTIRON door;
         AttachRequired = true;
       }
+
       Square, Pos 19, 38;
       {
         GTerrain = SLATE solidterrain(GROUND);
@@ -1693,78 +1869,323 @@ Dungeon XINROCH_TOMB;
         Times = 5;
       }
     }
+
+    Square, Random NOT_IN_ROOM;
+    {
+      Character = kamikazedwarf(INFUSCOR);
+      Times = 1:3;
+    }
+
+    Square, Random NOT_IN_ROOM;
+    {
+      Character = veterankamikazedwarf(INFUSCOR);
+    }
   }
 
   Level 10; /* Ultimate level! */
   {
-    LevelMessage = "\"HA HA HA! I'm ALIVE! Prepare to die mortal!\"";
-    Items = 5:10;
-    EnchantmentMinusChanceBase = 15;
-    EnchantmentPlusChanceBase = 0;
-    EnchantmentPlusChanceDelta = 0;
-    ItemMinPriceBase = 50;
-    FillSquare = BONE solidterrain(GROUND), OCTIRON earth;
-    TunnelSquare = BONE solidterrain(GROUND), 0;
+    Description = "deep temple";
+    ShortDescription = "Deep Temple";
+    Size = 81, 81;
+    LevelMessage = "\"I'm alive. Ha - HA HA HA! I'm ALIVE!\"";
+    FillSquare = WRAITH_BONE solidterrain(GROUND), ONYX earth;
+    TunnelSquare = WRAITH_BONE solidterrain(GROUND), 0;
     CanGenerateBone = false;
     IgnoreDefaultSpecialSquares = true;
-    Rooms = 8:10;
+    Rooms = 5:10;
+    Items = 0;
+    DifficultyBase = 100;
+    BackGroundType = RED_FRACTAL;
 
     RoomDefault
     {
       Pos = 2:XSize-2,2:YSize-2;
-      Size = 6:9,6:9;
-      WallSquare = BONE solidterrain(PARQUET), OCTIRON wall(BRICK_FINE);
-      FloorSquare = BONE solidterrain(PARQUET), 0;
-      DoorSquare = BONE solidterrain(PARQUET), OCTIRON door;
+      Size = 6:9, 6:9;
+      WallSquare = PSYPHER solidterrain(PARQUET), OCTIRON wall(BRICK_OLD);
+      FloorSquare = PSYPHER solidterrain(PARQUET), 0;
+      DoorSquare = PSYPHER solidterrain(PARQUET), BLACK_DIAMOND door;
       AltarPossible = false;
       GenerateFountains = false;
     }
 
-    Room
+    Room /* Temple of Xinroch */
     {
-      Pos = 2:XSize-5, 2:YSize-5;
-
-      Square, Random;
-      {
-        EntryIndex = STAIRS_UP;
-      }
-    }
-
-    Room
-    {
-      Size = 9,9;
+      Pos = 20, 20;
+      Size = 41, 41;
+      FloorSquare = ASH solidterrain(SNOW_TERRAIN), 0;
       DivineMaster = INFUSCOR;
+      GenerateLanterns = false;
+      Flags = NO_MONSTER_GENERATION;
 
-      Square, Pos 4,4;
+      GTerrainMap
       {
-        OTerrain = METEORIC_STEEL altar(INFUSCOR);
+        Pos = 4,5;
+        Size = 33,31;
+        Types
+        {
+          # = OCTIRON solidterrain(FLOOR);
+          - = BLACK_DIAMOND solidterrain(FLOOR);
+          | = PETRIFIED_DARK solidterrain(FLOOR);
+          % = RUBY solidterrain(FLOOR);
+        }
+      }
+      {
+        ......##########-##########......
+        ......#%%---------------%%#......
+        .....##%%%%-----------%%%%##.....
+        .....#-%--%%---------%%--%-#.....
+        ....##-%---%%-------%%---%-##....
+        ....#--%----%%-----%%----%--#....
+        ....#--%%----%%---%%----%%--#....
+        ...##---%-----%%%%%-----%---##...
+        ...#----%-----%%|%%-----%----#...
+        ...#----%%--%%%|||%%%--%%----#...
+        ..##-----%-%%|||||||%%-%-----##..
+        ..#------%%%|||||||||%%%------#..
+        ..#-----%%%|||||||||||%%%-----#..
+        .##----%%-%|||||||||||%-%%----##.
+        .#---%%%--%%|||||||||%%--%%%---#.
+        .#-%%%-----%|||||||||%-----%%%-#.
+        ##-%-------%|||||||||%-------%-##
+        #-%%-------%%|||||||%%-------%%-#
+        #%%---------%|||||||%---------%%#
+        #%%%%%%%%%%%%%%%-%%%%%%%%%%%%%%%#
+        ###---------%%-----%%---------###
+        ..##---------%-----%---------##..
+        ...###-------%-----%-------###...
+        .....##------%%---%%------##.....
+        ......##------%---%------##......
+        .......###----%%-%%----###.......
+        .........##----%-%----##.........
+        ..........##---%%%---##..........
+        ...........###--%--###...........
+        .............###%###.............
+        ...............###...............
       }
 
-      Square, Pos 4,1;
+      OTerrainMap
       {
-        OTerrain = portal(XINROCH_TOMB_EXIT) { AttachedArea = 3; AttachedEntry = STAIRS_UP; }
+        Pos = 1,1;
+        Size = 39,39;
+        Types
+        {
+          % = RUBY wall(BRICK_FINE);
+          # = OCTIRON wall(BRICK_FINE);
+          A = BRIM_STONE altar(INFUSCOR);
+          D = SOUL_STEEL door(HEXAGONAL_LOCK);
+          L = BLACK_DIAMOND door(OCTAGONAL_LOCK) { Parameters = LOCKED; }
+          b = decoration(DEAD_TREE);
+          s = decoration(STRANGE_TREE);
+          f = fountain { SecondaryMaterial = GLOWING_BLOOD; }
+        }
+      }
+      {
+        .......................................
+        .......................................
+        .................f...f.................
+        .......................................
+        .........##########D##########.........
+        .b.......#...................#....s....
+        .....b..##...................##........
+        ........#.....................#.......b
+        .......##.....................##.......
+        .......#...........f...........#.......
+        .......#.......................#.......
+        ......##..........%%%..........##......
+        ...b..#..........%%.%%..........#......
+        ......#........%%%...%%%........#......
+        .....##.......%%.......%%.......##...b.
+        .....#.......%%.........%%.......#.....
+        .....#.......%...........%.......#.....
+        ....##.......%...........%.......##....
+        ....#........%%.........%%........#....
+        b...#.........%.........%.........#....
+        ...##.........%.........%.........##...
+        ...#..........%%.......%%..........#...
+        ...#...........%.......%...........#...
+        ...#...........%%%%L%%%%...........#...
+        ...###...........................###...
+        .....##.........................##.....
+        ......###.....................###......
+        ........##...................##......b.
+        ..s......##.................##.........
+        ..........###.............###..........
+        ............##.....A.....##............
+        ........b....##.........##.............
+        ..............###.....###.........b....
+        ...b............###.###................
+        ..................###......s...........
+        .......................................
+        .......................................
+        ............s..........................
+        .......................................
+      }
+
+      ItemMap
+      {
+        Pos = 4,5;
+        Size = 33,31;
+        Types
+        {
+          # == 0;
+          - == 0;
+          | == 0;
+          % == 0;
+          1 == lantern { SquarePosition = UP; }
+          2 == lantern { SquarePosition = DOWN; }
+          3 == lantern { SquarePosition = RIGHT; }
+          4 == lantern { SquarePosition = LEFT; }
+        }
+      }
+      {
+        ......#####1##2#-#2##1#####......
+        ......#-------------------#......
+        .....##-------------------##.....
+        .....#---------------------#.....
+        ....#3---------------------4#....
+        ....#-----------------------#....
+        ....#-----------------------#....
+        ...##----------%%%----------##...
+        ...#----------%%|%%----------#...
+        ...#--------2%1|||1%2--------#...
+        ..##-------%%|||||||%%-------##..
+        ..#-------%%|||||||||%%-------#..
+        ..#-------4|||||||||||3-------#..
+        .##-------%|||||||||||%-------##.
+        .#--------%%|||||||||%%--------#.
+        .#---------3|||||||||4---------#.
+        #3---------%|||||||||%---------4#
+        #----------%%|||||||%%----------#
+        #-----------%|||||||%-----------#
+        #-----------%%1%|%1%%-----------#
+        ###---------------------------###
+        ..##-------------------------##..
+        ...##2---------------------2##...
+        .....##-------------------##.....
+        ......##-----------------##......
+        .......###-------------###.......
+        .........##-----------##.........
+        ..........##---------##..........
+        ...........###-----###...........
+        .............##2-2##.............
+        ...............###...............
       }
 
       CharacterMap
       {
-        Pos = 1,1;
-        Size = 7,7;
-
+        Pos = 4,5;
+        Size = 33,31;
         Types
         {
-          X = darkknight(MASTER);
+          # = 0;
+          - = 0;
+          | = 0;
+          % = 0;
+          g = darkknight(TEMPLAR);
+          E = darkknight(MASTER);
+          y = mysticfrog(DARK);
+          k = kamikazedwarf(INFUSCOR);
+          K = veterankamikazedwarf(INFUSCOR);
+          d = darkknight(VETERAN);
+          D = darkknight(ELITE);
           A = angel(INFUSCOR);
-          k = darkknight(ELITE);
         }
       }
       {
-        .......
-        .......
-        ..X.A..
-        .k...k.
-        .......
-        ...k...
-        .......
+        ......##########-##########......
+        ......#K------g---g------K#......
+        .....##-------------------##.....
+        .....#---------------------#.....
+        ....##---------------------##....
+        ....#g---------------------g#....
+        ....#-----------k-----------#....
+        ...##----------%%%----------##...
+        ...#g---------%%y%%---------g#...
+        ...#--------%%%|g|%%%--------#...
+        ..##------k%%g||D||g%%k------##..
+        ..#g------%%|||||||||%%------g#..
+        ..#-------%D|||||||||D%-------#..
+        .##-------%|||||||||||%-------##.
+        .#g-------%%g|||||||g%%-------g#.
+        .#---d----k%|||||||||%k--------#.
+        ##---------%||D|||D||%---------##
+        #K---------%%|||||||%%----d----K#
+        #----------k%g|||||g%k----------#
+        #g----d-----%%%%|%%%%----------g#
+        ###-----------g---g-----------###
+        ..##------------------d------##..
+        ...###d-------------------d###...
+        .....##----d----E----A----##.....
+        ......##-----------d-----##......
+        .......###g-----------g###.......
+        .........##---g---g---##.........
+        ..........##---------##..........
+        ...........###-----###...........
+        .............###y###.............
+        ...............###...............
+      }
+
+      Square, Pos 20,18;
+      {
+        OTerrain = portal(XINROCH_TOMB_EXIT) { AttachedArea = 3; AttachedEntry = STAIRS_UP; }
+      }
+
+      Square, Random HAS_NO_OTERRAIN;
+      {
+        Character = farmer(CULTIST);
+        Times = 5;
+      }
+
+      Square, Random HAS_NO_OTERRAIN;
+      {
+        Character = housewife(CULTIST);
+        Times = 5;
+      }
+
+      Square, Random HAS_NO_OTERRAIN;
+      {
+        Character = necromancer(MASTER_NECROMANCER);
+        Times = 2;
+      }
+
+      Square, Random HAS_NO_OTERRAIN;
+      {
+        Character = darkmage(BATTLE_MAGE);
+        Times = 2;
+      }
+
+      Square, Random HAS_NO_OTERRAIN;
+      {
+        Character = darkmage(ELDER);
+        Times = 1;
+      }
+    }
+
+    Room /* Fake UT1 entrance. */
+    {
+      Size = 5, 5;
+      GenerateDoor = false;
+      GenerateTunnel = false;
+      WallSquare = solidterrain(GROUND), BALSA_WOOD wall(BRICK_OLD);
+      FloorSquare = BALSA_WOOD solidterrain(PARQUET), 0;
+      Shape = ROUND_CORNERS;
+      Flags = NO_MONSTER_GENERATION;
+
+      Square, Pos 2,2;
+      {
+        EntryIndex = STAIRS_UP;
+      }
+
+      Square, Pos 2,1;
+      {
+        Items == lantern;
+      }
+
+      Square, Pos 2,4;
+      {
+        GTerrain = BALSA_WOOD solidterrain(PARQUET);
+        OTerrain = BALSA_WOOD door;
+        AttachRequired = true;
       }
     }
 
@@ -1773,9 +2194,6 @@ Dungeon XINROCH_TOMB;
       Size = 13,13;
       AltarPossible = false;
       Shape = MAZE_ROOM;
-      FloorSquare = BONE solidterrain(PARQUET), 0;
-      WallSquare = BONE solidterrain(PARQUET), OCTIRON wall(BRICK_FINE);
-      DoorSquare = BONE solidterrain(PARQUET), OCTIRON door;
     }
 
     Room
@@ -1783,9 +2201,6 @@ Dungeon XINROCH_TOMB;
       Size = 13,13;
       AltarPossible = false;
       Shape = MAZE_ROOM;
-      FloorSquare = BONE solidterrain(PARQUET), 0;
-      WallSquare = BONE solidterrain(PARQUET), OCTIRON wall(BRICK_FINE);
-      DoorSquare = BONE solidterrain(PARQUET), OCTIRON door;
     }
 
     Square, Random NOT_IN_ROOM;
@@ -1800,34 +2215,10 @@ Dungeon XINROCH_TOMB;
       Times = 6;
     }
 
-    Square, Random HAS_NO_OTERRAIN;
-    {
-      Character = mysticfrog(DARK);
-      Times = 1;
-    }
-
-    Square, Random HAS_NO_OTERRAIN;
+    Square, Random NOT_IN_ROOM;
     {
       Character = darkmage(APPRENTICE);
       Times = 4;
-    }
-
-    Square, Random HAS_NO_OTERRAIN;
-    {
-      Character = necromancer(MASTER_NECROMANCER);
-      Times = 2;
-    }
-
-    Square, Random NOT_IN_ROOM;
-    {
-      Character = darkmage(BATTLE_MAGE);
-      Times = 2;
-    }
-
-    Square, Random HAS_NO_OTERRAIN;
-    {
-      Character = darkmage(ELDER);
-      Times = 1;
     }
   }
 }

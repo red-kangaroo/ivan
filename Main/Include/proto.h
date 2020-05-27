@@ -77,19 +77,21 @@ class protosystem
   static character* CreateMonster(int = 1, int = 999999, int = 0);
   static character* CreateMonster(cfestring&, int = 0, truth = true);
   static item* CreateItem(cfestring&, truth = true);
-  static material* CreateMaterial(cfestring&, long = 0, truth = true);
+  static item* CreateItemToCraft(cfestring& What);
+  static material* CreateMaterial(cfestring&, long = 0, truth = true, truth = false);
+  static material* CreateMaterialForDetection(cfestring& What);
   static void CreateEveryNormalEnemy(charactervector&);
 #ifdef WIZARD
   static void CreateEveryCharacter(charactervector&);
   static void CreateEveryItem(itemvectorvector&);
-  static void CreateEveryMaterial(std::vector<material*>&);
 #endif
   static void Initialize();
   static void InitCharacterDataBaseFlags();
   static void SaveCharacterDataBaseFlags(outputfile&);
   static void LoadCharacterDataBaseFlags(inputfile&);
   static void CreateEverySeenCharacter(charactervector&);
-  static void CreateEveryMaterial(std::vector<material*>&, const god*, ccharacter*);
+  static void CreateEveryGodlyMaterial(std::vector<material*>&, const god*, ccharacter*);
+  static void CreateEveryMaterial(std::vector<material*>&);
  private:
   static itemdatabase** ItemConfigData;
   static int ItemConfigDataSize;

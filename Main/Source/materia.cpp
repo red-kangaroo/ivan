@@ -50,12 +50,12 @@ festring material::GetName(truth Articled, truth Adjective) const
   return Name;
 }
 
-material* material::TakeDipVolumeAway()
+material* material::TakeDipVolumeAway(long MaxVolume)
 {
-  if(Volume > 500)
+  if(Volume > MaxVolume)
   {
-    EditVolume(-500);
-    return SpawnMore(500);
+    EditVolume(-MaxVolume);
+    return SpawnMore(MaxVolume);
   }
   else
     return MotherEntity->RemoveMaterial(this);
@@ -95,13 +95,13 @@ truth material::Effect(character* Char, int BodyPart, long Amount)
     {
       if(!Char->StateIsActivated(DISEASE_IMMUNITY))
       {
-        Char->BeginTemporaryState(LYCANTHROPY, Amount);
-        break;
+        if(!RAND_N(Char->GetAttribute(ENDURANCE)))
+          Char->GainIntrinsic(LYCANTHROPY);
+        else
+          Char->BeginTemporaryState(LYCANTHROPY, Amount);
       }
-      else
-      {
-        break;
-      }
+
+      break;
     }
    case EFFECT_SCHOOL_FOOD: Char->ReceiveSchoolFood(Amount); break;
    case EFFECT_ANTIDOTE: Char->ReceiveAntidote(Amount); break;
@@ -117,8 +117,10 @@ truth material::Effect(character* Char, int BodyPart, long Amount)
       break;
     }
    case EFFECT_TRAIN_PERCEPTION:
-    Char->EditExperience(PERCEPTION, Amount, 1 << 14);
-    break;
+    {
+      Char->EditExperience(PERCEPTION, Amount, 1 << 14);
+      break;
+    }
    case EFFECT_HOLY_BANANA: Char->ReceiveHolyBanana(Amount); break;
    case EFFECT_EVIL_WONDER_STAFF_VAPOUR:
     {
@@ -156,15 +158,49 @@ truth material::Effect(character* Char, int BodyPart, long Amount)
    case EFFECT_VAMPIRISM:
     {
       if(!Char->StateIsActivated(DISEASE_IMMUNITY))
-      {
         Char->BeginTemporaryState(VAMPIRISM, Amount);
-        break;
-      }
-      else
-      {
-        break;
-      }
+
+      break;
     }
+   case EFFECT_PANACEA:
+    {
+      Char->ReceiveHeal(Amount);
+      Char->ReceiveAntidote(Amount);
+      Char->RestoreStamina();
+      break;
+    }
+   case EFFECT_OMMEL_BLOOD: Char->ReceiveOmmelBlood(Amount); break;
+   case EFFECT_PANIC:
+    {
+      if(!Char->StateIsActivated(FEARLESS) && Char->GetPanicLevel() > 0)
+        Char->BeginTemporaryState(PANIC, Amount);
+
+      break;
+    }
+   case EFFECT_TRAIN_WISDOM:
+    {
+      Char->EditExperience(WISDOM, Amount, 1 << 14);
+      break;
+    }
+   case EFFECT_REGENERATION: Char->BeginTemporaryState(REGENERATION, Amount); break;
+   case EFFECT_TELEPORTATION:
+    {
+      Char->BeginTemporaryState(TELEPORT, Amount);
+      Char->TeleportRandomly(false);
+      break;
+    }
+   case EFFECT_LAUGH:
+    {
+      game::CallForAttention(Char->GetPos(), Amount);
+      Char->BeginTemporaryState(HICCUPS, Amount);
+      break;
+    }
+   case EFFECT_POLYJUICE: Char->PolymorphRandomly(Amount, 999999, Amount * 10); break;
+   //case EFFECT_PUKE: Char->VomitAtRandomDirection(Amount); break;
+   case EFFECT_SICKNESS: Char->ReceiveSickness(Amount); break;
+   case EFFECT_PHASE: Char->BeginTemporaryState(ETHEREAL_MOVING, Amount); break;
+   case EFFECT_ACID_GAS: Char->SpillFluid(0, liquid::Spawn(SULPHURIC_ACID, Amount)); break;
+   case EFFECT_FIRE_GAS: Char->ReceiveFlames(Amount); break;
    default: return false;
   }
 
@@ -174,7 +210,13 @@ truth material::Effect(character* Char, int BodyPart, long Amount)
 material* material::EatEffect(character* Eater, long Amount)
 {
   Amount = Volume > Amount ? Amount : Volume;
+
+  if(Eater->StateIsActivated(VAMPIRISM) && (GetCategoryFlags() & IS_BLOOD))
+  {
+    Amount *= 10; // Vampires are nourished by blood.
+  }
   Eater->ReceiveNutrition(GetNutritionValue() * Amount / 50);
+
   if(Amount && Volume)
   {
     if(DisablesPanicWhenConsumed() && Eater->TemporaryStateIsActivated(PANIC))
@@ -296,6 +338,8 @@ void material::AddConsumeEndMessage(character* Eater) const
     Eater->AddWhiteUnicornConsumeEndMessage();
     break;
    case CEM_OMMEL_BONE: Eater->AddOmmelBoneConsumeEndMessage(); break;
+   case CEM_COCA_COLA: Eater->AddCocaColaConsumeEndMessage(); break;
+   case CEM_LIQUID_HORROR: Eater->AddLiquidHorrorConsumeEndMessage(); break;
   }
 }
 
@@ -461,6 +505,12 @@ int material::GetHardenedMaterial(citem* Item) const
   }
 
   return DB->HardenedMaterial;
+}
+
+int material::GetSoftenedMaterial(citem* Item) const
+{
+  const materialdatabase* DB = DataBase;
+  return DB->SoftenedMaterial;
 }
 
 int material::GetHardenModifier(citem* Item) const

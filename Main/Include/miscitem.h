@@ -24,8 +24,7 @@ ITEM(materialcontainer, item)
   materialcontainer(const materialcontainer&);
   virtual ~materialcontainer();
   virtual material* GetSecondaryMaterial() const { return SecondaryMaterial; }
-  virtual void SetSecondaryMaterial(material*, int = 0);
-  virtual void ChangeSecondaryMaterial(material*, int = 0);
+  virtual material* SetSecondaryMaterial(material*, int = 0);
   void InitMaterials(material*, material*, truth = true);
   virtual void Save(outputfile&) const;
   virtual void Load(inputfile&);
@@ -64,6 +63,7 @@ ITEM(banana, materialcontainer)
   virtual void Load(inputfile&);
   virtual void ChargeFully(character*) { TimesUsed = 0; }
   virtual truth IsZappable(ccharacter*) const { return true; }
+  virtual truth IsZapWorthy(ccharacter*) const { return Charges > TimesUsed; }
   virtual truth IsChargeable(ccharacter*) const { return true; }
   virtual void SignalSpoil(material*);
   virtual truth IsBanana() const { return true; }
@@ -113,10 +113,11 @@ ITEM(can, materialcontainer)
   virtual void DipInto(liquid*, character*);
   virtual truth IsDippable(ccharacter*) const { return !SecondaryMaterial; }
   virtual truth IsDipDestination(ccharacter*) const;
-  virtual liquid* CreateDipLiquid();
+  virtual liquid* CreateDipLiquid(long);
   virtual truth AllowSpoil() const { return false; } // temporary
   virtual truth Spoils() const { return false; } // temporary
   virtual truth HasBetterVersion() const { return !SecondaryMaterial; }
+  virtual long DipIntoVolume() const { return GetDefaultSecondaryVolume(); }
  protected:
   virtual void AddPostFix(festring& String, int) const { AddContainerPostFix(String); }
   virtual truth AddAdjective(festring&, truth) const;
@@ -137,7 +138,7 @@ ITEM(potion, materialcontainer)
  public:
   virtual item* BetterVersion() const;
   virtual void DipInto(liquid*, character*);
-  virtual liquid* CreateDipLiquid();
+  virtual liquid* CreateDipLiquid(long);
   virtual truth IsDippable(ccharacter*) const { return !SecondaryMaterial; }
   virtual void Break(character*, int);
   virtual truth IsDipDestination(ccharacter*) const;
@@ -146,6 +147,7 @@ ITEM(potion, materialcontainer)
   virtual truth HasBetterVersion() const { return !SecondaryMaterial; }
   virtual truth EffectIsGood() const;
   virtual truth IsKamikazeWeapon(ccharacter*) const { return IsExplosive(); }
+  virtual long DipIntoVolume() const { return GetDefaultSecondaryVolume(); }
  protected:
   virtual void AddPostFix(festring& String, int) const { AddContainerPostFix(String); }
   virtual truth AddAdjective(festring&, truth) const;
@@ -261,6 +263,7 @@ ITEM(wand, item)
   virtual void ChargeFully(character*) { TimesUsed = 0; }
   virtual truth IsAppliable(ccharacter*) const { return true; }
   virtual truth IsZappable(ccharacter*) const { return true; }
+  virtual truth IsZapWorthy(ccharacter*) const { return Charges > TimesUsed; }
   virtual truth IsChargeable(ccharacter*) const { return true; }
   virtual truth ReceiveDamage(character*, int, int, int);
   virtual truth Zap(character*, v2, int);
@@ -360,6 +363,15 @@ ITEM(stone, item)
   virtual truth WeightIsIrrelevant() const { return true; }
 };
 
+//ITEM(ingot, item)
+//{
+// public:
+//  virtual long GetTruePrice() const;
+//  virtual truth IsLuxuryItem(ccharacter*) const { return GetTruePrice() > 0; }
+// protected:
+//  virtual truth WeightIsIrrelevant() const { return true; }
+//};
+
 ITEM(scrolloftaming, scroll)
 {
  public:
@@ -386,6 +398,7 @@ ITEM(key, item)
   virtual truth IsAppliable(ccharacter*) const { return true; }
   virtual truth CanOpenDoors() const { return true; }
   virtual truth CanOpenLockType(int AnotherLockType) const { return GetConfig() == AnotherLockType; }
+  virtual void Break(character*, int = YOURSELF);
 };
 
 ITEM(headofelpuri, item) // can't wear equipment, so not "head"
@@ -396,11 +409,23 @@ ITEM(headofelpuri, item) // can't wear equipment, so not "head"
   virtual void Be() { }
 };
 
-ITEM(whistle, item)
+ITEM(magicalinstrument, item)
+{
+ public:
+  magicalinstrument() : LastUsed(0) { }
+  virtual void Load(inputfile&);
+  virtual void Save(outputfile&) const;
+  virtual truth IsAppliable(ccharacter*) const { return true; }
+  virtual void FinalProcessForBone();
+  virtual int GetCooldown(int, character*);
+ protected:
+  ulong LastUsed;
+};
+
+ITEM(whistle, magicalinstrument)
 {
  public:
   virtual truth Apply(character*);
-  virtual truth IsAppliable(ccharacter*) const { return true; }
   virtual void BlowEffect(character*);
  protected:
   virtual col16 GetMaterialColorB(int) const;
@@ -409,13 +434,7 @@ ITEM(whistle, item)
 ITEM(magicalwhistle, whistle)
 {
  public:
-  magicalwhistle() : LastUsed(0) { }
   virtual void BlowEffect(character*);
-  virtual void Load(inputfile&);
-  virtual void Save(outputfile&) const;
-  virtual void FinalProcessForBone();
- protected:
-  ulong LastUsed;
 };
 
 ITEM(itemcontainer, lockableitem)
@@ -546,17 +565,10 @@ ITEM(encryptedscroll, scroll)
   virtual truth IsEncryptedScroll() const { return true; }
 };
 
-ITEM(horn, item)
+ITEM(horn, magicalinstrument)
 {
  public:
-  horn() : LastUsed(0) { }
-  virtual void Load(inputfile&);
-  virtual void Save(outputfile&) const;
   virtual truth Apply(character*);
-  virtual truth IsAppliable(ccharacter*) const { return true; }
-  virtual void FinalProcessForBone();
- protected:
-  ulong LastUsed;
 };
 
 ITEM(carrot, item)
@@ -567,18 +579,12 @@ ITEM(carrot, item)
   virtual col16 GetMaterialColorB(int) const;
 };
 
-ITEM(charmlyre, item)
+ITEM(charmlyre, magicalinstrument)
 {
  public:
-  charmlyre();
   virtual truth Apply(character*);
-  virtual truth IsAppliable(ccharacter*) const { return true; }
-  virtual void Load(inputfile&);
-  virtual void Save(outputfile&) const;
-  virtual void FinalProcessForBone();
  protected:
   virtual col16 GetMaterialColorB(int) const;
-  ulong LastUsed;
 };
 
 ITEM(scrollofdetectmaterial, scroll)
@@ -658,6 +664,14 @@ ITEM(celestialmonograph, holybook)
   virtual col16 GetMaterialColorA(int) const;
 };
 
+ITEM(materialmanual, holybook)
+{
+ public:
+  virtual void FinishReading(character*);
+ protected:
+  virtual col16 GetMaterialColorA(int) const;
+};
+
 ITEM(gorovitscopyoflenin, item)
 {
  protected:
@@ -681,6 +695,7 @@ ITEM(ullrbone, item)
   virtual truth Zap(character*, v2, int);
   virtual void ChargeFully(character*) { TimesUsed = 0; }
   virtual truth IsZappable(const character*) const { return true; }
+  virtual truth IsZapWorthy(ccharacter*) const { return Charges > TimesUsed; }
   virtual truth IsChargeable(const character*) const { return true; }
   virtual truth HitEffect(character*, character*, v2, int, int, truth);
   virtual void Be() { }
@@ -696,6 +711,17 @@ ITEM(ullrbone, item)
 
 ITEM(mango, item)
 {
+};
+
+ITEM(mangoseedling, item)
+{
+ public:
+  virtual truth IsMangoSeedling() const { return true; }
+  virtual truth AllowAlphaEverywhere() const { return true; }
+ protected:
+  virtual int GetClassAnimationFrames() const { return 32; }
+  virtual col16 GetOutlineColor(int) const;
+  virtual alpha GetOutlineAlpha(int) const;
 };
 
 ITEM(sausage, item)
@@ -721,13 +747,18 @@ ITEM(cauldron, materialcontainer)
 
 ITEM(trinket, item)
 {
+ protected:
+  virtual col16 GetMaterialColorB(int) const;
+  virtual col16 GetMaterialColorC(int) const;
+};
+
+ITEM(fish, item)
+{
  public:
   virtual material* RemoveMaterial(material* Material);
   virtual truth Necromancy(character*);
   virtual truth RaiseTheDead(character*);
- protected:
-  virtual col16 GetMaterialColorB(int) const;
-  virtual col16 GetMaterialColorC(int) const;
+  virtual truth CatWillCatchAndConsume(ccharacter*) const;
 };
 
 ITEM(gastrap, itemtrap<materialcontainer>)
@@ -741,6 +772,46 @@ ITEM(gastrap, itemtrap<materialcontainer>)
  protected:
   virtual truth AddAdjective(festring&, truth) const;
   virtual void AddPostFix(festring& String, int) const { AddContainerPostFix(String); }
+};
+
+ITEM(skeletonkey, key)
+{
+ public:
+  virtual truth CanOpenLockType(int AnotherLockType) const { return true; }
+  virtual truth AllowAlphaEverywhere() const { return true; }
+ protected:
+  virtual int GetClassAnimationFrames() const { return 32; }
+  virtual col16 GetOutlineColor(int) const;
+  virtual alpha GetOutlineAlpha(int) const;
+};
+
+ITEM(locationmap, scroll)
+{
+ public:
+  virtual void FinishReading(character*);
+};
+
+ITEM(nuke, materialcontainer)
+{
+ public:
+  virtual truth Apply(character*);
+  virtual truth IsAppliable(ccharacter*) const { return true; }
+  virtual truth IsNuke() const { return true; }
+  virtual truth IsExplosive() const;
+  virtual long GetTotalExplosivePower() const;
+};
+
+ITEM(weepobsidian, stone)
+{
+ public:
+  weepobsidian() { Enable(); }
+  virtual void Be();
+  virtual truth IsWeepObsidian() const { return true; }
+ protected:
+  virtual truth CalculateHasBe() const { return true; }
+  virtual int GetClassAnimationFrames() const { return 32; }
+  virtual col16 GetOutlineColor(int) const;
+  virtual alpha GetOutlineAlpha(int) const;
 };
 
 #endif

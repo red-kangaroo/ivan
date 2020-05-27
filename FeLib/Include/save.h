@@ -47,10 +47,16 @@ class outputfile
   void Put(char What) { File.put(What); }
   void Write(cchar* Data, long Size) { File.write(Data, Size); }
   truth IsOpen() { return File.is_open(); }
-  void Close() { File.close(); }
+  void Close();
+  ~outputfile(){Close();}
+  static void SetSafeSaving(truth b);
+  festring GetFullFilename(){return FileName;}
  private:
+  static truth bakcupBeforeSaving;
+  static truth saveOnNewFileAlways;
   std::ofstream File;
   festring FileName;
+  festring FileNameNewTmp;
 };
 
 class inputfile
@@ -76,6 +82,7 @@ class inputfile
   ulong TellLineOfPos(long);
   cfestring& GetFileName() const { return FileName; }
   void Close() { File.close(); }
+  festring GetFullFilename(){return FileName;}
  private:
   festring ReadNumberIntr (int CallLevel, long *num, truth *isString, truth allowStr, truth PreserveTerminator);
   int HandlePunct(festring&, int, int);

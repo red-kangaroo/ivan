@@ -22,7 +22,7 @@
 Dungeon ATTNAM;
 {
   Levels = 5;
-  Description = "Attnamese catacombs";
+  Description = "attnamese catacombs";
   ShortDescription = "AC";
 
   LevelDefault
@@ -35,11 +35,11 @@ Dungeon ATTNAM;
     TeamDefault = MONSTER_TEAM;
     LOSModifier = 16;
     IgnoreDefaultSpecialSquares = false;
-    CanGenerateBone = false;
+    CanGenerateBone = true;
     EnchantmentMinusChanceBase = 0;
     EnchantmentMinusChanceDelta = 0;
     EnchantmentPlusChanceBase = 0;
-    EnchantmentPlusChanceDelta = 0;
+    EnchantmentPlusChanceDelta = 5;
     BackGroundType = GRAY_FRACTAL;
     FillSquare = GRANITE solidterrain(GROUND), BLACK_GRANITE earth;
     TunnelSquare = GRANITE solidterrain(GROUND), 0;
@@ -84,8 +84,8 @@ Dungeon ATTNAM;
 
   Level 0;
   {
-    Description = Attnam;
-    ShortDescription = Attnam;
+    Description = "Attnam";
+    ShortDescription = "Attnam";
     FillSquare = solidterrain(SNOW_TERRAIN), 0;
     Size = 61, 67;
     GenerateMonsters = false;
@@ -491,7 +491,7 @@ Dungeon ATTNAM;
           k = kamikazedwarf(VALPURUS);
           K = veterankamikazedwarf(VALPURUS);
           h = imperialist(HOARD_MASTER);
-          G = golem(GOLD);
+          G = golem(GOLD) { Inventory == GOLD stone(SOL_STONE); }
           o = orc(REPRESENTATIVE);
           a = siren(AMBASSADOR_SIREN);
           A = guard(EMISSARY) { WayPoint = { 2, 26, 35, 34, 35; } }
@@ -573,10 +573,6 @@ Dungeon ATTNAM;
       Square, Pos 5, 1;
       {
         Character = shopkeeper(ATTNAM) { Flags = IS_MASTER; }
-      }
-
-      Square, Pos 5, 1;
-      {
         OTerrain = decoration(CHAIR);
       }
 
@@ -736,7 +732,7 @@ Dungeon ATTNAM;
 
       Square, Pos 3, 2;
       {
-        Character = smith { Flags = IS_MASTER; }
+        Character = smith(ATTNAM) { Flags = IS_MASTER; }
       }
 
       Square, Pos 3, 3;
@@ -810,7 +806,7 @@ Dungeon ATTNAM;
 
       Square, Pos 3, 2;
       {
-        Character = tailor { Flags = IS_MASTER; }
+        Character = tailor(ATTNAM) { Flags = IS_MASTER; }
       }
 
       Square, Pos 3, 3;
@@ -837,7 +833,7 @@ Dungeon ATTNAM;
 
       Square, Random HAS_NO_OTERRAIN;
       {
-        OTerrain = olterraincontainer(CHEST_OF_DRAWERS);
+        OTerrain = olterraincontainer(CHEST_OF_DRAWERS) { ItemsInside == materialmanual; }
       }
     }
 
@@ -878,8 +874,8 @@ Dungeon ATTNAM;
 
   Level 1;
   {
-    Description = Cellar;
-    ShortDescription = Cellar;
+    Description = "cathedral cellar";
+    ShortDescription = "Cellar";
     Size = 42, 48;
     GenerateMonsters = false;
     Rooms = 1;
@@ -911,7 +907,7 @@ Dungeon ATTNAM;
       DivineMaster = VALPURUS;
       GenerateTunnel = false;
       GenerateLanterns = false;
-      Type = ROOM_CATHEDRAL;
+      Type = ROOM_OWNED_AREA;
       GenerateFountains = false;
       AllowLockedDoors = false;
       AllowBoobyTrappedDoors = false;
@@ -939,12 +935,12 @@ Dungeon ATTNAM;
         *#..#*******#......#....#....##.###...#
         *#..#*******#......##.#####.##........#
         *####*******#...#.................#####
-        ************#######..#.###...####.....#
-        *****************....#.**#...#**#.#...#
-        ***************..*####*.*#...#**#.#...#
-        ************************#######*#.#####
-        ************************#.....#*#.....#
-        #########################.....#*#.#...#
+        ************#######...####...####.....#
+        *****************.....#**#...#**#.#...#
+        #####**********..*#...#.*#...#**#.#...#
+        #...#*************#####*#######*#.#####
+        #...#*******************#.....#*#.....#
+        ##.######################.....#*#.#...#
         #.............................#*#.#...#
         #.............................#*#.#####
         ##.#####.#####.#####.####.....#*#...#**
@@ -989,8 +985,10 @@ Dungeon ATTNAM;
           * = MORAINE earth;
           # = BLACK_GRANITE wall(BRICK_OLD);
           @ = IRON barwall;
+          & = PAPER_BOARD barwall; /* Yes, it's a cardboard prison joke. */
           $ = IRON barwall(BROKEN_BARWALL);
           % = IRON door(BARDOOR);
+          = = PAPER_BOARD door(BARDOOR) { Parameters = LOCKED; }
           ^ = MARBLE wall(BRICK_PROPAGANDA);
           > = stairs(STAIRS_DOWN);
           < = stairs(STAIRS_UP);
@@ -1038,18 +1036,18 @@ Dungeon ATTNAM;
         *####*******X.s.@..@...sX....#...s$...#
         *#..#*******#...@..@....#....#@B@@@...#
         *#..#*******#s..L..@@B@@#@@%@#b...%...#
-        *####*******X...@............S....XX###
-        ************#######..#X##X@L@#XX#.%..s#
-        *****************b...#***#...X**X.@...#
-        ***************>.*####***#.s.#**#.$...X
-        ************************##NPN##*#.#XXX#
-        ************************#.....#*#.%...X
-        #########################.....#*#.@.s.#
+        *##S#*******X...@............S....XX###
+        **#.#*******#######@%$X##X@L@#XX#.%..s#
+        **#.#************b....#**#...X**X.@...#
+        ###S#**********>.*#s..#**#.s.#**#.$...X
+        #..I#*************#XX##*##NPN##*#.#XXX#
+        #...#*******************#.....#*#.%...X
+        #@L@#####################.....#*#.@.s.#
         #.............................#*#.@...#
         #.............................#*#S#####
-        #@L@###@%@###@L@###@%@###.....#*#.WW#**
+        #@L@###&=&###@L@###@%@###.....#*#.WW#**
         #...#*#...#*#...#*#...#*#.....#*#..W#**
-        #..s#*#.s.#*#.s.#*#...#*#.....#*#.WW#**
+        #..s#*#.d.#*#.s.#*#...#*#.....#*#.WW#**
         #####*#####*#####*#####*##...##*#..W#**
         *************************#...#**#.WW#**
         #####*#####*#####*#####*##...##*#..W#**
@@ -1106,11 +1104,11 @@ Dungeon ATTNAM;
         ************#..b#...............b.#####
         ************#######..#####...####.....#
         *****************.r.b#***#...#**#.#...#
-        ***************.p*####***#...#**#.#...#
-        ************************##...##*#.#####
-        ************************#.....#*#.....#
-        ##2#####2#####2#####2###3.....#*#.#...#
-        #.............................#*#.#...#
+        #####**********.p*####***#...#**#.#...#
+        #...#*******************##...##*#.#####
+        #...#*******************#.....#*#.....#
+        ##.#####2#####2#####2###3.....#*#.#...#
+        3.............................#*#.#...#
         #.............................#*#.#####
         ##.#####.#####.#####.####.....#*#...#**
         #...#*#...#*#...#*#...#*3.....#*#...#**
@@ -1229,7 +1227,7 @@ Dungeon ATTNAM;
     }
   }
 
-  RandomLevel 2:3;
+  RandomLevel 2:3; /* Beartrap vault */
   {
     Room
     {
@@ -1261,6 +1259,42 @@ Dungeon ATTNAM;
       Square, Random;
       {
         Items == ADAMANT beartrap { Team = MONSTER_TEAM; IsActive = true; LifeExpectancy = 1000:10000; }
+      }
+    }
+  }
+
+  RandomLevel 3:4; /* Sepulcher */
+  {
+    Room
+    {
+      GenerateLanterns = false;
+      GenerateFountains = false;
+      GenerateDoor = false;
+      GenerateTunnel = false;
+      AltarPossible = false;
+      Size = 5,5;
+      UseFillSquareWalls = true;
+      Flags = NO_MONSTER_GENERATION;
+
+      OTerrainMap
+      {
+        Pos = 1,1;
+        Size = 3,3;
+        Types
+        {
+          # = BLACK_GRANITE wall(BRICK_OLD);
+        }
+      }
+      {
+        ###
+        #.#
+        ###
+      }
+
+      Square, Pos 2,2;
+      {
+        Items == EBONY_WOOD itemcontainer(CHEST|HEXAGONAL_LOCK) { Parameters = LOCKED; ItemsInside = { 2, Random { MinPrice = 500; Category = TOOL|WAND; }, Random { Chance = 75; MinPrice = 750; Times = 2; Category = HELMET|CLOAK|BODY_ARMOR|WEAPON|SHIELD|RING|GAUNTLET|BELT|BOOT; } } }
+        Character = vampire;
       }
     }
   }
@@ -1306,11 +1340,13 @@ Dungeon ATTNAM;
 
   Level 4;
   {
+    Description = "lost tomb";
+    ShortDescription = "Lost Tomb";
     LevelMessage = "You hear rhythmic chanting of some profane ritual: \"Ia! Ia! Khaz-zadm fhtagn!\"";
     DifficultyBase = 100;
     DifficultyDelta = 0;
-    EnchantmentMinusChanceBase = 0;
-    EnchantmentMinusChanceDelta = 0;
+    ItemMinPriceBase = 100;
+    ItemMinPriceDelta = 10;
 
     Square, Random NOT_IN_ROOM|ATTACHABLE;
     {
@@ -1390,7 +1426,7 @@ Dungeon ATTNAM;
           b = 0;
           s = 0;
           C = 0;
-          N = necromancer(APPRENTICE_NECROMANCER) { Inventory = { 2, lantern, wand(WAND_OF_NECROMANCY); } }
+          N = necromancer(APPRENTICE_NECROMANCER) { Inventory = { 2, lantern, wand; } }
           Z = zombie(ZOMBIE_OF_KHAZ_ZADM);
           p = dog(SKELETON_DOG);
          }
@@ -1406,6 +1442,11 @@ Dungeon ATTNAM;
         ...bbb...
         .........
       }
+    }
+
+    Square, Random IN_ROOM;
+    {
+      Items == Random { Category = SCROLL; }
     }
   }
 }
