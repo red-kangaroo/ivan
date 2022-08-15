@@ -197,12 +197,23 @@ darkforest
   NativeGTerrainTypes = { 3, LEAFY_FOREST, EVERGREEN_FOREST, JUNGLE; }
 }
 
-locationA
+irinox
 {
   BitmapPos = 0, 64;
   NameStem = "empty area";
   UsesLongArticle = true;
   AttachedDungeon = IRINOX;
+  AttachedArea = 0;
+  CanBeGenerated = false;
+  NativeGTerrainTypes = { 1, GLACIER; }
+}
+
+locationA
+{
+  BitmapPos = 0, 64;
+  NameStem = "empty area";
+  UsesLongArticle = true;
+  AttachedDungeon = EMPTY_AREA;
   AttachedArea = 0;
   CanBeGenerated = false;
   NativeGTerrainTypes = { 1, TUNDRA; }

@@ -439,21 +439,21 @@ farmer
   KnownCWeaponSkills == AXES;
   CWeaponSkillHits == 50;
   RightSWeaponSkillHits = 20;
-  HostileReplies == "\"Did you think I use this axe only to chop wood?\"";
+  HostileReplies == "@Dd growls: \"Did you think I use this axe only to chop wood?\"";
   FriendlyReplies =
   {
     11,
-    "\"Crops are so lousy around here. Perhaps because the summer lasts two weeks.\"",
+    "@Dd grumbles: \"Crops are so lousy around here. Perhaps because the summer lasts two weeks.\"",
     "@Dd seems suspicious. \"You look like one from Luppliva! Go away!\"",
     "@Dd sighs: \"Again polar bears ate my cattle...\"",
-    "\"I would like to be like Ivan. Ivan is a good worker.\"",
-    "\"Have you heard about the Justice Legion of Attnam? What? No, I have not. It's forbidden to know anything about them.\"",
-    "\"I'd better not see you flirt with my wife, or else...\"",
-    "\"You! Ain't you from Mondedr, stranger?! I'll be watching you.\"",
-    "\"Eh?\"",
-    "\"What?\"",
+    "@Dd sighs: \"I would like to be like Ivan. Ivan is a good worker.\"",
+    "@Dd whispers: \"Have you heard about the Justice Legion of Attnam? What? No, I have not. It's forbidden to know anything about them.\"",
+    "@Dd sizes you up. \"I'd better not see you flirt with my wife, or else...\"",
+    "@Dd shouts: \"You! Ain't you from Mondedr, stranger?! I'll be watching you.\"",
+    "@Dd grunts: \"Eh?\"",
+    "@Dd grunts: \"What?\"",
     "@Dd boasts about @sp collection of shovels.",
-    "\"The prices are infamous here. Ivan should smack that capitalist shopkeeper hard!\"";
+    "@Dd grumbles: \"The prices are infamous here. Ivan should smack that capitalist shopkeeper hard!\"";
   }
   AttachedGod = SEGES;
   ScienceTalkPossibility = 20;
@@ -481,11 +481,11 @@ farmer
     FriendlyReplies =
     {
       5,
-      "\"Let's just say that Petrus' wife No. 3 was beautiful and I wasn't careful.\"",
-      "\"Would you have a nut to spare?\"",
-      "\"Eh?\"",
-      "\"Huh?\"",
-      "\"Please, tell me: How does the sunshine feel on your skin? I don't remember.\"";
+      "@Dd looks aside. \"Let's just say that Petrus' wife No. 3 was beautiful and I wasn't careful.\"",
+      "@Dd chuckles humourlessly. \"Would you have a nut to spare?\"",
+      "@Dd grunts: \"Eh?\"",
+      "@Dd grunts: \"Huh?\"",
+      "@Dd says: \"Please, tell me: How does the sunshine feel on your skin? I don't remember.\"";
     }
     UndeadVersions = false;
   }
@@ -504,41 +504,41 @@ farmer
     KnownCWeaponSkills == LARGE_SWORDS;
     IsSadist = true;
     AttachedGod = CRUENTUS;
-    HostileReplies == "\"You dare desecrate the Tomb?!\"";
+    HostileReplies == "@Dd screams: \"You dare desecrate the Tomb?!\"";
     FriendlyReplies =
     {
       31,
-      "\"Praised be Cruentus!\"",
-      "\"Praised be Infuscor!\"",
-      "\"Blood for Cruentus! Souls for Infuscor!\"",
-      "\"Long, long time ago, there was a War in Heavens. Valpurus rose to usurp the throne of Mortifer, then King of Gods, and eventually triumphed. After his armies conquered all Heavens, Valpurus murdered Mortifer and banished him into the darkness beyond stars.\"",
-      "\"To prevent the destruction of the very world they were fighting for, Mortifer placed a powerful geas upon all gods that prevents them from ever entering the world. Thus, even the primordial War in Heavens was fought by the many priests and other servants the gods have acquired and empowered.\"",
-      "\"The original Order of the Dark Knights was established by Cruentus nearly three millennia ago, to battle the knights templar of Valpurus during the ancient War in Heavens.\"",
-      "\"Today, the dark knights have splintered into two distinct branches, the Unholy Order of Infuscor and the Dark Knights of Cruentus, plus a handful of fringe cults.\"",
-      "\"All dark knights are still formally united under the leadership of a grand master dark knight, though how much do masters of each group heed the orders of their grand master depends entirely upon his or her power and authority.\"",
-      "\"The name of the first grand master dark knight was lost to history, yet his deeds remain. Legends say he was more a daemon than a man. He even won the favour of Mortifer and was given the newly forged Neerc Se-ulb to wield against the swarming armies of Light.\"",
-      "\"The first grand master dark knight led his armies from victory to victory, but pride was his undoing. Believing that none could defeat him, he challenged Pervetus, the high priest of Valpurus, to a duel. At first, it seemed to quickly be turning into another easy victory... until his mace-arm was severed.\"",
-      "\"When the first grand master dark knight fell and Neerc Se-ulb was lost for a time, Mortifer vowed to never lend his mace again but to a true champion of Chaos. But Cruentus trusted in the power of his dark knights and the next grand master received the terrible halberd named Mjolak to crush all who would oppose the god of blood.\"",
-      "\"The second grand master dark knight was a son of the first one. He swore an oath of revenge, to slay the high priest of Valpurus in honor of his father's death. Yet his name was erased from all records to clean the stain of shame he brought upon his family.\"",
-      "\"The second grand master dark knight ruthlessly crushed all resistance and many an enemy fled even before battle, for his trumpeters used horns of fear to devastating effect. Where the father took nearly a decade to slowly force valpurian troops back, the son brought his army of dark knights before the gates of the Citadel of Valpurus in only a few years.\"",
-      "\"As his men razed and burned the once-mighty Citadel of Valpurus, the second grand master dark knight assailed Pervetus, the high priest of Valpurus. Now being of venerable age, Pervetus quickly fell to the power of Mjolak.\"",
-      "\"In a hubris of an easy victory, the second grand master dark knight turned his back to the dead high priest Pervetus he just slain and did not see a strange glow of a magical amulet that brought Pervetus back with renewed vigor. The high priest lifted Justifier and with a single mightly blow, cut off both of the grand master's hands. And in a single moment of weakness, the grand master shamed his family for the ages to come, for he didn't face death with dignity, but panicked and ran for his life.\"",
-      "\"Our lord Xinroch was the greatest and most powerful grand master dark knight to ever live, and the third to bear that title. His two crossed flaming swords are still found on the banner of the grand master dark knights to this day.\"",
-      "\"Some sources claim Xinroch was no one in his youth, maybe even one of the children kidnapped from forgotten villages to be trained for war. But soon, his talents became apparent. He was clever, quick to learn and utterly ruthless when he could get what he wanted.\"",
-      "\"In his many skirmishes with the forces of Light, Xinroch destroyed two archangels, Incendo and Lucis, and took their flaming swords. He wielded them with unparalleled skill, earning him the sobriquet of 'Xinroch the Flame of Chaos'.\"",
-      "\"While his predecessors were beasts on the battlefield and masters of the military arts of tactics and strategy, Xinroch was well-versed in the use of another weapon they rarely considered - diplomacy. He conquered a land - then used the fear to gain ten times more in a fraction of time.\"",
-      "\"Xinroch was highly successful in all his campaigns, and it was during his life that the Unholy Order of the Dark Knights truly flourished.\"",
-      "\"Even Ischaldirh, the champion of Infuscor since times immemorial, who always thought of warriors as nothing more than brutes and uncivilized savages, eventually befriended Xinroch and accompanied him on many a campaign. Not even demigods could stand in their way.\"",
-      "\"Just as Xinroch outlived high priest Pervetus and took all his lands, years caught up with Xinroch at last after a life full of victory. No matter how strong magic sustains the body, mortals were created to die and all that lives will wither eventually. Only that which already died and was raised to undeath or which ascended beyond this world is truly immortal.\"",
-      "\"During one of the countless battles late in his life, Xinroch lost one of the iconic ruby flaming swords he wielded most of his life. The dwarves of Khaz-zadm forged an arcanite shield for him, but it was clear to everyone his prime years have irreversibly passed.\"",
-      "\"In his declining years, Xinroch heavily funded research into the newly-invented magic school of necromancy. It was thanks to his sponsorship that this discipline could start to spread, but unfortunately the early necromancers were unable to stave off the dwindling of Xinroch's life.\"",
-      "\"Xinroch died in a glorious battle. His army crushed the invasion of frost giants while Xinroch himself, by then of venerable age, dueled and slayed their jarl. Yet his years and exhaustion took their toll and Xinroch could not fend off the treacherous dagger his most trusted lieutenant turned against him. Old grand master slain and the battle won, this second-in-command became the new grand master dark knight.\"",
-      "\"Xinroch's successor feared his former master so much he eventually resigned his title of the grand master dark knight and entered the Tomb, to remain enternally vigilant as a keeper of Xinroch's grave and prevent Xinroch's resurrection and terrible revenge.\"",
-      "\"When Xinroch brought dark knights and dark mages together in a peculiar alliance, even their two ever-rival gods set aside their differences for a time. What none of their worshippers could expect, though, was the child born from the blood of Cruentus and the dark magic of Infuscor, the first vampire.\"",
-      "\"This Tomb was erected on the battlefield where Xinroch was slain, to honor and guard his grave against all who would wish to disturb his last sleep or defile his memory. Let his majestic glory never be forgotten!\"",
-      "\"Some believe it is possible to bring our lord Xinroch back. Whether through high necromancy or some dark miracle, he might be able to lead his faithful again!\"",
-      "\"It was a great shame to the dark templars when several decades ago, an unknown necromancer managed to slip past their guards and animate the skeleton of Xinroch in a mockery of his once-living might. Whether the spell was cast with belief that it could truly bring Xinroch back, or with utmost disrespect for the dearly departed, the dark templars swore they will never allow another man or woman to enter their lord's resting place.\"",
-      "\"All hail our mighty lord Xinroch.\"";
+      "@Dd shouts: \"Praised be Cruentus!\"",
+      "@Dd shouts: \"Praised be Infuscor!\"",
+      "@Dd shouts: \"Blood for Cruentus! Souls for Infuscor!\"",
+      "@Dd says: \"Long, long time ago, there was a War in Heavens. Valpurus rose to usurp the throne of Mortifer, then King of Gods, and eventually triumphed. After his armies conquered all Heavens, Valpurus murdered Mortifer and banished him into the darkness beyond stars.\"",
+      "@Dd says: \"To prevent the destruction of the very world they were fighting for, Mortifer placed a powerful geas upon all gods that prevents them from ever entering the world. Thus, even the primordial War in Heavens was fought by the many priests and other servants the gods have acquired and empowered.\"",
+      "@Dd says: \"The original Order of the Dark Knights was established by Cruentus nearly three millennia ago, to battle the knights templar of Valpurus during the ancient War in Heavens.\"",
+      "@Dd says: \"Today, the dark knights have splintered into two distinct branches, the Unholy Order of Infuscor and the Dark Knights of Cruentus, plus a handful of fringe cults.\"",
+      "@Dd says: \"All dark knights are still formally united under the leadership of a grand master dark knight, though how much do masters of each group heed the orders of their grand master depends entirely upon his or her power and authority.\"",
+      "@Dd says: \"The name of the first grand master dark knight was lost to history, yet his deeds remain. Legends say he was more a daemon than a man. He even won the favour of Mortifer and was given the newly forged Neerc Se-ulb to wield against the swarming armies of Light.\"",
+      "@Dd says: \"The first grand master dark knight led his armies from victory to victory, but pride was his undoing. Believing that none could defeat him, he challenged Pervetus, the high priest of Valpurus, to a duel. At first, it seemed to quickly be turning into another easy victory... until his mace-arm was severed.\"",
+      "@Dd says: \"When the first grand master dark knight fell and Neerc Se-ulb was lost for a time, Mortifer vowed to never lend his mace again but to a true champion of Chaos. But Cruentus trusted in the power of his dark knights and the next grand master received the terrible halberd named Mjolak to crush all who would oppose the god of blood.\"",
+      "@Dd says: \"The second grand master dark knight was a son of the first one. He swore an oath of revenge, to slay the high priest of Valpurus in honor of his father's death. Yet his name was erased from all records to clean the stain of shame he brought upon his family.\"",
+      "@Dd says: \"The second grand master dark knight ruthlessly crushed all resistance and many an enemy fled even before battle, for his trumpeters used horns of fear to devastating effect. Where the father took nearly a decade to slowly force valpurian troops back, the son brought his army of dark knights before the gates of the Citadel of Valpurus in only a few years.\"",
+      "@Dd says: \"As his men razed and burned the once-mighty Citadel of Valpurus, the second grand master dark knight assailed Pervetus, the high priest of Valpurus. Now being of venerable age, Pervetus quickly fell to the power of Mjolak.\"",
+      "@Dd says: \"In a hubris of an easy victory, the second grand master dark knight turned his back to the dead high priest Pervetus he just slain and did not see a strange glow of a magical amulet that brought Pervetus back with renewed vigor. The high priest lifted Justifier and with a single mightly blow, cut off both of the grand master's hands. And in a single moment of weakness, the grand master shamed his family for the ages to come, for he didn't face death with dignity, but panicked and ran for his life.\"",
+      "@Dd says: \"Our lord Xinroch was the greatest and most powerful grand master dark knight to ever live, and the third to bear that title. His two crossed flaming swords are still found on the banner of the grand master dark knights to this day.\"",
+      "@Dd says: \"Some sources claim Xinroch was no one in his youth, maybe even one of the children kidnapped from forgotten villages to be trained for war. But soon, his talents became apparent. He was clever, quick to learn and utterly ruthless when he could get what he wanted.\"",
+      "@Dd says: \"In his many skirmishes with the forces of Light, Xinroch destroyed two archangels, Incendo and Lucis, and took their flaming swords. He wielded them with unparalleled skill, earning him the sobriquet of 'Xinroch the Flame of Chaos'.\"",
+      "@Dd says: \"While his predecessors were beasts on the battlefield and masters of the military arts of tactics and strategy, Xinroch was well-versed in the use of another weapon they rarely considered - diplomacy. He conquered a land - then used the fear to gain ten times more in a fraction of time.\"",
+      "@Dd says: \"Xinroch was highly successful in all his campaigns, and it was during his life that the Unholy Order of the Dark Knights truly flourished.\"",
+      "@Dd says: \"Even Ischaldirh, the champion of Infuscor since times immemorial, who always thought of warriors as nothing more than brutes and uncivilized savages, eventually befriended Xinroch and accompanied him on many a campaign. Not even demigods could stand in their way.\"",
+      "@Dd says: \"Just as Xinroch outlived high priest Pervetus and took all his lands, years caught up with Xinroch at last after a life full of victory. No matter how strong magic sustains the body, mortals were created to die and all that lives will wither eventually. Only that which already died and was raised to undeath or which ascended beyond this world is truly immortal.\"",
+      "@Dd says: \"During one of the countless battles late in his life, Xinroch lost one of the iconic ruby flaming swords he wielded most of his life. The dwarves of Khaz-zadm forged an arcanite shield for him, but it was clear to everyone his prime years have irreversibly passed.\"",
+      "@Dd says: \"In his declining years, Xinroch heavily funded research into the newly-invented magic school of necromancy. It was thanks to his sponsorship that this discipline could start to spread, but unfortunately the early necromancers were unable to stave off the dwindling of Xinroch's life.\"",
+      "@Dd says: \"Xinroch died in a glorious battle. His army crushed the invasion of frost giants while Xinroch himself, by then of venerable age, dueled and slayed their jarl. Yet his years and exhaustion took their toll and Xinroch could not fend off the treacherous dagger his most trusted lieutenant turned against him. Old grand master slain and the battle won, this second-in-command became the new grand master dark knight.\"",
+      "@Dd says: \"Xinroch's successor feared his former master so much he eventually resigned his title of the grand master dark knight and entered the Tomb, to remain enternally vigilant as a keeper of Xinroch's grave and prevent Xinroch's resurrection and terrible revenge.\"",
+      "@Dd says: \"When Xinroch brought dark knights and dark mages together in a peculiar alliance, even their two ever-rival gods set aside their differences for a time. What none of their worshippers could expect, though, was the child born from the blood of Cruentus and the dark magic of Infuscor, the first vampire.\"",
+      "@Dd says: \"This Tomb was erected on the battlefield where Xinroch was slain, to honor and guard his grave against all who would wish to disturb his last sleep or defile his memory. Let his majestic glory never be forgotten!\"",
+      "@Dd says: \"Some believe it is possible to bring our lord Xinroch back. Whether through high necromancy or some dark miracle, he might be able to lead his faithful again!\"",
+      "@Dd says: \"It was a great shame to the dark templars when several decades ago, an unknown necromancer managed to slip past their guards and animate the skeleton of Xinroch in a mockery of his once-living might. Whether the spell was cast with belief that it could truly bring Xinroch back, or with utmost disrespect for the dearly departed, the dark templars swore they will never allow another man or woman to enter their lord's resting place.\"",
+      "@Dd shouts: \"All hail our mighty lord Xinroch.\"";
     }
     ScienceTalkPossibility = 0;
     Inventory = { 2, holybook(CRUENTUS) { Chance = 10; }, wand(WAND_OF_NECROMANCY) { Chance = 10; } }
@@ -572,20 +572,20 @@ farmer
     HostileReplies =
     {
       5,
-      "\"Please, let it stop!\"",
-      "\"I couldn't save her! No one can!!!\"",
-      "\"You're one of them! Of course. Hihihi...\"",
-      "\"Let us see the crimson. Yes, yes! Hihihi...\"",
-      "\"They're under your skin! Get them out!\"";
+      "@Dd sobs: \"Please, let it stop!\"",
+      "@Dd screams: \"I couldn't save her! No one can!!!\"",
+      "@Dd laughs: \"You're one of them! Of course. Hihihi...\"",
+      "@Dd laughs: \"Let us see the crimson. Yes, yes! Hihihi...\"",
+      "@Dd screams: \"They're under your skin! Get them out!\"";
     }
     FriendlyReplies =
     {
       5,
-      "\"I would rather grow a share of crops in hell than stay alive. Hihihi...\"",
-      "\"Little mouse-babes played with cat, So she killed them and then ate.\"",
-      "\"I'm not insane, I'm not insane! Hihihi...\"",
-      "\"Let us see the crimson. Please? Hihihi...\"",
-      "\"I know what I know, I know what I know, I know what I know...\"";
+      "@Dd laughs: \"I would rather grow a share of crops in hell than stay alive. Hihihi...\"",
+      "@Dd sings: \"Little mouse-babes played with cat, So she killed them and then ate.\"",
+      "@Dd laughs: \"I'm not insane, I'm not insane! Hihihi...\"",
+      "@Dd laughs: \"Let us see the crimson. Please? Hihihi...\"",
+      "@Dd whispers: \"I know what I know, I know what I know, I know what I know...\"";
     }
     Inventory == wand(WAND_OF_RESURRECTION);
   }
@@ -9245,6 +9245,7 @@ lobhse
   AcidResistance = 1000;
   PanicLevel = 3;
   DisplacePriority = 8;
+  CriticalModifier = 10;
   HostileReplies =
   {
     3,

@@ -105,6 +105,18 @@ OWTERRAIN(xinrochtomb, owterrain)
 {
 };
 
+OWTERRAIN(mondedr, owterrain)
+{
+};
+
+OWTERRAIN(darkforest, owterrain)
+{
+};
+
+OWTERRAIN(irinox, owterrain)
+{
+};
+
 OWTERRAIN(locationA, owterrain)
 {
 };

@@ -42,7 +42,7 @@ Dungeon DARK_FOREST;
 
   LevelDefault
   {
-    Size = 60, 60;
+    Size = 42, 26;
     GenerateMonsters = true;
     Rooms = 0:5;
     Items = 25:50;
@@ -124,7 +124,7 @@ Dungeon DARK_FOREST;
   {
     LevelMessage = "You wander deep into the forest.";
 
-    Square, Pos 0, 30;
+    Square, Pos 0, 13;
     {
       EntryIndex = WAYPOINT_UP;
     }

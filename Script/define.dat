@@ -1235,8 +1235,10 @@
 #define NECRO_CHAMBER_LEVEL 6
 
 #define FUSANGA_LEVEL 3
-
 #define KING_LEVEL 5
+
+#define PALE_BLOOD 4
+#define WERE_WOLF 5
 
 #define RECTANGLE 1
 #define ROUND_CORNERS 2

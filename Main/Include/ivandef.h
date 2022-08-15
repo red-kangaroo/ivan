@@ -587,8 +587,10 @@ cv2 SILHOUETTE_SIZE(48, 64); // it is TILE_SIZE*3,TILE_SIZE*4 tho..
 #define NECRO_CHAMBER_LEVEL 6
 
 #define FUSANGA_LEVEL 3
-
 #define KING_LEVEL 5
+
+#define PALE_BLOOD 4
+#define WERE_WOLF 5
 
 /* stack::DrawContents flags */
 
