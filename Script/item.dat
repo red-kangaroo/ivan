@@ -7743,7 +7743,12 @@ locationmap /* scroll-> */
 
   Config BLACK_MARKET;
   {
-    PostFix = "of black market";
+    PostFix = "of the black market";
+  }
+
+  Config MONDEDR;
+  {
+    PostFix = "of Mondedr";
   }
 }
 

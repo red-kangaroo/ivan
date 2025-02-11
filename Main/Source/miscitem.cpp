@@ -4159,6 +4159,11 @@ void locationmap::FinishReading(character* Reader)
         game::GetWorldMap()->GetWSquare(NewPos)->ChangeOWTerrain(blackmarket::Spawn());
         break;
       }
+      case MONDEDR:
+      {
+        game::GetWorldMap()->GetWSquare(NewPos)->ChangeOWTerrain(mondedr::Spawn());
+        break;
+      }
       /* Add new locations here. */
     }
 
