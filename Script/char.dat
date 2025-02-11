@@ -1,4 +1,4 @@
-﻿/*
+/*
  *
  *  Iter Vehemens ad Necem (IVAN)
  *  Copyright (C) Timo Kiviluoto
@@ -477,7 +477,7 @@ farmer
     AttributeBonus = -10;
     RightWielded = 0;
     IsMasochist = true;
-    HostileReplies == "\"You don't have the balls to kill me!\"";
+    HostileReplies == "@Dd growls: \"You don't have the balls to kill me!\"";
     FriendlyReplies =
     {
       5,
@@ -596,15 +596,15 @@ farmer
     FriendlyReplies =
     {
       10,
-      "\"We're all talking about the old king's murder. How could Lord Regent get away with it?\"",
-      "\"I've heard some people talk about just burning the castle to the ground. Probably just talk though. Everyone's a bit on edge right now.\"",
-      "\"Is there anywhere in the camp where you can avoid rats? Disease spreading little nuisances.\"",
-      "\"I don't know what to think about the goblins escaping their owners. Things seem to go from bad to worse, don't they?\"",
-      "\"Aiding an escaping slave is theft, and a crime. That was always the law.\"", /* What, you thought they were the good guys? :) */
-      "\"Lord Regent recently announced that he won't stop until slavery is outlawed. It's our right to have slaves, by the old laws!\"",
-      "\"How does Lord Regent think we'll work the fields with no slaves? Our economy is already falling and he wants to kill it completely!\"",
-      "\"What?\"",
-      "\"These necromancer twins give me the creeps. Why do we even associate with such types?\"",
+      "@Dd says: \"We're all talking about the old king's murder. How could Lord Regent get away with it?\"",
+      "@Dd says: \"I've heard some people talk about just burning the castle to the ground. Probably just talk though. Everyone's a bit on edge right now.\"",
+      "@Dd grumbles: \"Is there anywhere in the camp where you can avoid rats? Disease spreading little nuisances.\"",
+      "@Dd grumbles: \"I don't know what to think about the goblins escaping their owners. Things seem to go from bad to worse, don't they?\"",
+      "@Dd says: \"Aiding an escaping slave is theft, and a crime. That was always the law.\"", /* What, you thought they were the good guys? :) */
+      "@Dd says: \"Lord Regent recently announced that he won't stop until slavery is outlawed. It's our right to have slaves, by the old laws!\"",
+      "@Dd complains: \"How does Lord Regent think we'll work the fields with no slaves? Our economy is already falling and he wants to kill it completely!\"",
+      "@Dd grunts: \"What?\"",
+      "@Dd whispers: \"These necromancer twins give me the creeps. Why do we even associate with such types?\"",
       "@Dd boasts about @sp farmstead back home.";
     }
     ScienceTalkPossibility = 0;
@@ -634,7 +634,7 @@ guard
   NameSingular = "guard";
   KnownCWeaponSkills = { 2, LARGE_SWORDS, SHIELDS; }
   IsAbstract = true;
-  HostileReplies == "\"A fair trial? Hah! Prepare to be executed!\"";
+  HostileReplies == "@Dd growls: \"A fair trial? Hah! Prepare to be executed!\"";
   AttachedGod = LEGIFER;
   IsSadist = true;
   IsAlcoholic = true;
@@ -654,12 +654,12 @@ guard
     {
       7,
       "@Dd says sadly: \"Back then I used to love bananas. One day the master guard slipped on a peel I'd dropped. Guess where I got transferred?\"",
-      "\"Lions killed a couple of banana growers again. Hope they're now satisfied and don't attack us.\"",
-      "\"This place's as hot as the elemental plane of fire! I want back home.\"",
-      "\"What lousy pay we're getting here!\"",
-      "\"The food's not fit for orcs!\"",
-      "\"My feet hurt, I've been on them all day!\"",
-      "\"New Attnam, damn, I'm still only in New Attnam. Every time I think I'm gonna wake up back in the dungeon.\"";
+      "@Dd grumbles: \"Lions killed a couple of banana growers again. Hope they're now satisfied and don't attack us.\"",
+      "@Dd complains: \"This place's as hot as the elemental plane of fire! I want back home.\"",
+      "@Dd laments: \"What lousy pay we're getting here!\"",
+      "@Dd spits on the ground. \"The food's not fit for orcs!\"",
+      "@Dd moans: \"My feet hurt, I've been on them all day!\"",
+      "@Dd sighs: \"New Attnam, damn, I'm still only in New Attnam. Every time I think I'm gonna wake up back in the dungeon.\"";
     }
     DeathMessage = "@Dd dies screaming: \"Please, no! I don't want to die!\"";
     AutomaticallySeen = true;
@@ -680,13 +680,13 @@ guard
     FriendlyReplies =
     {
       5,
-      "\"Why do we have to practise with these training swords? I want a real blade!\"",
-      "\"One day, I will be in the personal guard of the high priest himself!\"",
-      "\"Being a guard is a dream job. You get vodka, you get responsibility, you get merits. And sometimes, you get to fight amazons.\"",
-      "\"I hope someone will attack soon, so that I can save many people and prove myself a hero!\"",
-      "\"What is the moral difference between a civilian and a citizen? A citizen accepts personal responsibility for killing the high priest's enemies. A civilian does not. I am proud to call myself a citizen.\"";
+      "@Dd grumbles: \"Why do we have to practise with these training swords? I want a real blade!\"",
+      "@Dd says: \"One day, I will be in the personal guard of the high priest himself!\"",
+      "@Dd says: \"Being a guard is a dream job. You get vodka, you get responsibility, you get merits. And sometimes, you get to fight amazons.\"",
+      "@Dd says: \"I hope someone will attack soon, so that I can save many people and prove myself a hero!\"",
+      "@Dd recites: \"What is the moral difference between a civilian and a citizen? A citizen accepts personal responsibility for killing the high priest's enemies. A civilian does not. I am proud to call myself a citizen.\"";
     }
-    HostileReplies == "\"I'm ready! I will fight you! I will kill you!\"";
+    HostileReplies == "@Dd laughs madly: \"I'm ready! I will fight you! I will kill you!\"";
     DeathMessage = "@Dd dies screaming: \"Please, no! I don't want to die!\"";
   }
 
@@ -708,17 +708,17 @@ guard
       "@Dd says gravely: \"You don't have a life. Get it in the army.\"",
       "@Dd snorts.",
       "@Dd spits on the ground.",
-      "\"...\"",
-      "\"Hmph.\"",
-      "\"Move along, stranger.\"",
-      "\"What do you need?\"",
-      "\"Trouble? Causing or having?\"",
-      "\"Anything you say can be used against you.\"",
-      "\"Put that weapon away before you hurt someone!\"",
-      "\"Don't even think of breaking rules.\"",
-      "\"The high priest is my idol. I would want a sword as big as his!\"",
-      "\"Don't talk to the prisoners in the Cellar, or you might end up amongst them.\"",
-      "@Dd sighs. \"Fighting bears bores me. Why can't an amazon army attack us for a change?\"";
+      "@Dd looks at you with disinterest. \"...\"",
+      "@Dd grunts: \"Hmph.\"",
+      "@Dd grunts: \"Move along, stranger.\"",
+      "@Dd grunts: \"What do you need?\"",
+      "@Dd grunts: \"Trouble? Causing or having?\"",
+      "@Dd says menacingly: \"Anything you say can be used against you.\"",
+      "@Dd grunts: \"Put that weapon away before you hurt someone!\"",
+      "@Dd grunts: \"Don't even think of breaking rules.\"",
+      "@Dd says: \"The high priest is my idol. I would want a sword as big as his!\"",
+      "@Dd says menacingly: \"Don't talk to the prisoners in the Cellar, or you might end up amongst them.\"",
+      "@Dd sighs: \"Fighting bears bores me. Why can't an amazon army attack us for a change?\"";
     }
   }
 
@@ -740,8 +740,8 @@ guard
     {
       4,
       "@Dd states in a very serious tone: \"My job is vital for the safety of the nation. No one knows what Petrus would do if something happened to his most dear lovers, or one of them escaped.\"",
-      "\"Don't you dare to touch any of the ladies!\"",
-      "\"And everyone said I didn't have the balls to achieve a high status in the guard! Hah!\"",
+      "@Dd speaks up: \"Don't you dare to touch any of the ladies!\"",
+      "@Dd chuckles: \"And everyone said I didn't have the balls to achieve a high status in the guard! Hah!\"",
       "@Dd seems very proud. \"I'm not just a guard, but also the lead singer in the Cathedral's choir. My mezzo-soprano voice is famous Attnam-wide.\"";
     }
   }
@@ -766,13 +766,13 @@ guard
       "@Dd shudders in the freezing air. \"Boy this rusty plate mail is cold in winter!\"",
       "@Dd sighs: \"Why didn't I choose an office career... An inquisitor, for instance.\"",
       "@Dd seems very suspicious. \"Do you have the papers?\"",
-      "\"Decent people have nothing to hide so they don't mind me investigating their homes every now and then.\"",
-      "\"Through brightest day, through blackest night no evil shall escape my sight!\"",
+      "@Dd says with confidence: \"Decent people have nothing to hide so they don't mind me investigating their homes every now and then.\"",
+      "@Dd recites: \"Through brightest day, through blackest night no evil shall escape my sight!\"",
       "@Dd sighs: \"I need a drink...\"",
-      "\"Don't even think about littering!\"",
-      "\"Jaywalking is strictly forbidden.\"",
-      "\"The high priest sees everything, anyway, so why am I stuck patrolling here?\"",
-      "\"Again I'm all white! The master guard doesn't like me bringing snow into the barracks...\"";
+      "@Dd grunts: \"Don't even think about littering!\"",
+      "@Dd grunts: \"Jaywalking is strictly forbidden.\"",
+      "@Dd grumbles: \"The high priest sees everything, anyway, so why am I stuck patrolling here?\"",
+      "@Dd complains: \"Again I'm all white! The master guard doesn't like me bringing snow into the barracks...\"";
     }
     Inventory == lantern;
   }
@@ -796,20 +796,20 @@ guard
       10,
       "@Dd says gravely: \"You don't have a life. Get it as a shop guard.\"",
       "@Dd seems very suspicious. \"Don't even think of stealing anything.\"",
-      "\"Yes, this is a dangerous place to work, but our boss pays us well.\"",
-      "\"Go fiddling with any locks around here, we're going to have a real problem.\"",
-      "\"I find your hand in my pocket, I'm going to cut it off. Your hand, not my pocket.\"",
-      "\"I know your kind, always sneaking about. Won't fool me!\"",
-      "\"Hands to yourself, thief! Oh, sorry, you came to buy something?\"",
-      "\"Your gold is welcome here.\"",
-      "\"Attnam's guards can barely wield a sword. But we are trained by the laws of the dungeon, so don't make any rash moves here.\"",
-      "\"When I was here, I wanted to be there, when I was there all I could think of was getting back into the dungeon.\"";
+      "@Dd says happily: \"Yes, this is a dangerous place to work, but our boss pays us well.\"",
+      "@Dd grunts: \"Go fiddling with any locks around here, we're going to have a real problem.\"",
+      "@Dd says menacingly: \"I find your hand in my pocket, I'm going to cut it off. Your hand, not my pocket.\"",
+      "@Dd says threateningly: \"I know your kind, always sneaking about. Won't fool me!\"",
+      "@Dd grunts: \"Hands to yourself, thief! Oh, sorry, you came to buy something?\"",
+      "@Dd says: \"Your gold is welcome here.\"",
+      "@Dd says: \"Attnam's guards can barely wield a sword. But we are trained by the laws of the dungeon, so don't make any rash moves here.\"",
+      "@Dd thinks aloud: \"When I was here, I wanted to be there, when I was there all I could think of was getting back into the dungeon.\"";
     }
     HostileReplies =
     {
       2,
-      "\"Not very intelligent, are you?\"",
-      "\"Ah, you have a death wish.\"";
+      "@Dd smirks: \"Not very intelligent, are you?\"",
+      "@Dd chuckles: \"Ah, you have a death wish.\"";
     }
   }
 
@@ -838,12 +838,12 @@ guard
     {
       7,
       "@Dd sounds annoyed. \"Why do I have to work with these amateurs? They can't beat a rookie dark knight properly!\"",
-      "\"Don't believe Haedlac if he boasts about that enner beast. In reality he fled immediately and the monster stepped on a land mine while chasing him.\"",
+      "@Dd whispers: \"Don't believe Haedlac if he boasts about that enner beast. In reality he fled immediately and the monster stepped on a land mine while chasing him.\"",
       "@Dd shouts excitedly: \"Attnam victoor!\"",
-      "\"We are the Imperial Guard. Bow.\"",
-      "\"Hi! You look fabulous today!\"",
-      "\"Out of my way, scum!\"",
-      "\"If you even touch the shadow of our magnificent high priest, I'll squash you.\"";
+      "@Dd says: \"We are the Imperial Guard. Bow.\"",
+      "@Dd waves at you. \"Hi! You look fabulous today!\"",
+      "@Dd shouts threateningly: \"Out of my way, scum!\"",
+      "@Dd says with fervor: \"If you even touch the shadow of our magnificent high priest, I'll squash you.\"";
     }
   }
 
@@ -880,27 +880,27 @@ guard
     FriendlyReplies =
     {
       14,
-      "\"And this medal I got after killing my first enner beast using ingenious tactical maneuvers...\"",
-      "\"My great-grandfather, Sir Haedlac Galladon IV, once told me a story he heard from his great-grandfather: That when the young Petrus lead the Revolution, his beard was only one foot long. Not that I would believe such urban legends.\"",
-      "\"In addition to all my other responsibilities, I am the head of the Attnamese Bureau of Investigation. By the way, you love mangos and hate bananas.\"",
-      "\"See the amulet? Don't think badly of the Government.\"",
-      "\"No crime can be tolerated. Justice shall tower over freedom!\"",
-      "\"In my left hand, judgement - in my right, retribution!\"",
-      "\"Those Shining Knights think they are above law, delivering 'justice' as they see fit. A law is a law, even for a paladin.\"",
-      "\"I will never allow vigilantes in Attnam. Lady Decora must learn her place.\"",
-      "\"Enemy of my enemy is still my enemy, but much easier to double cross.\"",
-      "\"You can't make an omelet without ruthlessly crushing dozens of eggs beneath your steel boot and then publicly disemboweling the chickens that laid them as a warning to others.\"",
-      "\"I'm the Attnamese Cardinal of Peace. I shall bring peace to the whole world, one nation at a time.\"",
-      "\"Stop, citizen! You are guilty of a thought-crime! I thereby condemn you to re-education by the hand of the master torturer! Tee hee - just kidding. But you should have seen your face!\"",
-      "\"I'm the seventh knight of my family line in the service of Petrus. My great-great-great-great-grandfather received knighthood after he helped Petrus overthrow High Priest Priscus.\"",
-      "\"The house of Galladon has served Petrus ever since he took over.\"";
+      "@Dd tells you: \"And this medal I got after killing my first enner beast using ingenious tactical maneuvers...\"",
+      "@Dd says: \"My great-grandfather, Sir Haedlac Galladon IV, once told me a story he heard from his great-grandfather: That when the young Petrus lead the Revolution, his beard was only one foot long. Not that I would believe such urban legends.\"",
+      "@Dd says: \"In addition to all my other responsibilities, I am the head of the Attnamese Bureau of Investigation. By the way, you love mangos and hate bananas.\"",
+      "@Dd says jokingly: \"See the amulet? Don't think badly of the Government.\"",
+      "@Dd says with conviction: \"No crime can be tolerated. Justice shall tower over freedom!\"",
+      "@Dd says with great zeal: \"In my left hand, judgement - in my right, retribution!\"",
+      "@Dd grumbles: \"Those Shining Knights think they are above law, delivering 'justice' as they see fit. A law is a law, even for a paladin.\"",
+      "@Dd grumbles: \"I will never allow vigilantes in Attnam. Lady Decora must learn her place.\"",
+      "@Dd smiles: \"Enemy of my enemy is still my enemy, but much easier to double cross.\"",
+      "@Dd muses: \"You can't make an omelet without ruthlessly crushing dozens of eggs beneath your steel boot and then publicly disemboweling the chickens that laid them as a warning to others.\"",
+      "@Dd boasts: \"I'm the Attnamese Cardinal of Peace. I shall bring peace to the whole world, one nation at a time.\"",
+      "@Dd screams: \"Stop, citizen! You are guilty of a thought-crime! I thereby condemn you to re-education by the hand of the master torturer! Tee hee - just kidding. But you should have seen your face!\"",
+      "@Dd tells you: \"I'm the seventh knight of my family line in the service of Petrus. My great-great-great-great-grandfather received knighthood after he helped Petrus overthrow High Priest Priscus.\"",
+      "@Dd boasts: \"The house of Galladon has served Petrus ever since he took over.\"";
     }
     HostileReplies =
     {
       3,
-      "\"Your transgressions end here!\"",
-      "\"My mandate is absolute. I am above question, above doubt. Valpurus guides me and commands your destruction.\"",
-      "\"There is mercy for the repentant - for you, there is punishment and death!\"";
+      "@Dd screams with righteous fury: \"Your transgressions end here!\"",
+      "@Dd speaks with conviction: \"My mandate is absolute. I am above question, above doubt. Valpurus guides me and commands your destruction.\"",
+      "@Dd speaks with contempt: \"There is mercy for the repentant - for you, there is punishment and death!\"";
     }
     IsImmuneToItemTeleport = true;
     AllowUnconsciousness = false;
@@ -926,14 +926,14 @@ guard
     {
       9,
       "@Dd says helplessly: \"I know, right? Purple. It had to be Infuscor's favourite color.\"",
-      "\"Don't even think of disturbing the Tomb.\"",
-      "\"They say Xinroch's restless soul dwells below. I heard it guards a portal to another dimension. I wouldn't be caught dead going through there.\"",
-      "\"Souls for Infuscor!\"",
-      "\"Our lord Xinroch was the greatest and most powerful grand master dark knight to ever live, and the third to bear that title.\"",
-      "\"Xinroch was highly successful in all his campaigns, and it was during his life that the Unholy Order of the Dark Knights truly flourished.\"",
-      "\"This Tomb was erected on the battlefield where Xinroch was slain, replacing the old temple ravaged and desecrated during the last battle.\"",
-      "\"Today, the dark knights have splintered into two distinct branches, the Unholy Order of Infuscor and the Dark Knights of Cruentus, plus a handful of fringe cults.\"",
-      "@Dd mutters. \"Hundreds of years guarding this Tomb. I wish those necromancers would get on with it!\"";
+      "@Dd eyes you suspiciously. \"Don't even think of disturbing the Tomb.\"",
+      "@Dd says: \"They say Xinroch's restless soul dwells below. I heard it guards a portal to another dimension. I wouldn't be caught dead going through there.\"",
+      "@Dd shouts: \"Souls for Infuscor!\"",
+      "@Dd recounts: \"Our lord Xinroch was the greatest and most powerful grand master dark knight to ever live, and the third to bear that title.\"",
+      "@Dd recounts: \"Xinroch was highly successful in all his campaigns, and it was during his life that the Unholy Order of the Dark Knights truly flourished.\"",
+      "@Dd recounts: \"This Tomb was erected on the battlefield where Xinroch was slain, replacing the old temple ravaged and desecrated during the last battle.\"",
+      "@Dd recounts: \"Today, the dark knights have splintered into two distinct branches, the Unholy Order of Infuscor and the Dark Knights of Cruentus, plus a handful of fringe cults.\"",
+      "@Dd mutters: \"Hundreds of years guarding this Tomb. I wish those necromancers would get on with it!\"";
     }
   }
 
@@ -970,16 +970,16 @@ guard
     FriendlyReplies =
     {
       10,
-      "\"An old temple of the Dark Gods once stood here, during Xinroch's leadership. Here he declared himself the grand master dark knight. Here he brought the forces of Infuscor and Cruentus together for the first time. Here he died.\"",
-      "\"This Tomb was erected on the battlefield where Xinroch was slain, replacing the old temple ravaged and desecrated during the last battle.\"",
-      "\"Xinroch's successor feared his former master so much he eventually resigned his title of the grand master dark knight and entered the Tomb, to remain enternally vigilant as a keeper of Xinroch's grave and prevent Xinroch's resurrection and terrible revenge.\"",
-      "\"We await the return of our lord Xinroch to lead the forces of Darkness into battle against the High Priest of Valpurus!\"",
-      "\"Since Xinroch was the grand master dark knight, all the masters of the Unholy Order of Infuscor have come here to kneel at the altar. The next master of the Unholy Order would be chosen by Infuscor herself.\"",
-      "\"All dark knights are still formally united under the leadership of a grand master dark knight, though how much do masters of each group heed the orders of their grand master depends entirely upon his or her power and authority.\"",
-      "\"The amulet? Heh, good insurance policies are hard to come by.\"",
-      "\"Some believe it is possible to bring our lord Xinroch back. Whether through high necromancy or some dark miracle, he might be able to lead his faithful again!\"",
-      "\"It was a great shame to the dark templars when several decades ago, an unknown necromancer managed to slip past their guards and animate the skeleton of Xinroch in a mockery of his once-living might. Whether the spell was cast with belief that it could truly bring Xinroch back, or with utmost disrespect for the dearly departed, the dark templars swore they will never allow another man or woman to enter their lord's resting place.\"",
-      "\"Be careful when entering the Tomb to pay homage. If you encounter the dark templars, they do not like disturbances!\"";
+      "@Dd recounts: \"An old temple of the Dark Gods once stood here, during Xinroch's leadership. Here he declared himself the grand master dark knight. Here he brought the forces of Infuscor and Cruentus together for the first time. Here he died.\"",
+      "@Dd recounts: \"This Tomb was erected on the battlefield where Xinroch was slain, replacing the old temple ravaged and desecrated during the last battle.\"",
+      "@Dd recounts: \"Xinroch's successor feared his former master so much he eventually resigned his title of the grand master dark knight and entered the Tomb, to remain enternally vigilant as a keeper of Xinroch's grave and prevent Xinroch's resurrection and terrible revenge.\"",
+      "@Dd says: \"We await the return of our lord Xinroch to lead the forces of Darkness into battle against the High Priest of Valpurus!\"",
+      "@Dd recounts: \"Since Xinroch was the grand master dark knight, all the masters of the Unholy Order of Infuscor have come here to kneel at the altar. The next master of the Unholy Order would be chosen by Infuscor herself.\"",
+      "@Dd recounts: \"All dark knights are still formally united under the leadership of a grand master dark knight, though how much do masters of each group heed the orders of their grand master depends entirely upon his or her power and authority.\"",
+      "@Dd smiles: \"The amulet? Heh, good insurance policies are hard to come by.\"",
+      "@Dd says with hope: \"Some believe it is possible to bring our lord Xinroch back. Whether through high necromancy or some dark miracle, he might be able to lead his faithful again!\"",
+      "@Dd recounts: \"It was a great shame to the dark templars when several decades ago, an unknown necromancer managed to slip past their guards and animate the skeleton of Xinroch in a mockery of his once-living might. Whether the spell was cast with belief that it could truly bring Xinroch back, or with utmost disrespect for the dearly departed, the dark templars swore they will never allow another man or woman to enter their lord's resting place.\"",
+      "@Dd says with warning: \"Be careful when entering the Tomb to pay homage. If you encounter the dark templars, they do not like disturbances!\"";
     }
     IsImmuneToItemTeleport = true;
     AllowUnconsciousness = false;
@@ -1007,8 +1007,8 @@ guard
     {
       3,
       "@Dd looks bored.",
-      "\"This is the Tomb of the Unknown Soldier! His name was Lamusius! Oops.\"",
-      "\"Not that I think about it, I was reassigned as an honor guard after that huge screw-up. I wonder if... Nah, it's probably just a coincidence.\"";
+      "@Dd says: \"This is the Tomb of the Unknown Soldier! His name was Lamusius! Oops.\"",
+      "@Dd muses: \"Not that I think about it, I was reassigned as an honor guard after that huge screw-up. I wonder if... Nah, it's probably just a coincidence.\"";
     }
   }
 
@@ -1046,24 +1046,24 @@ guard
     FriendlyReplies =
     {
       11,
-      "\"I shouldn't be saying this so openly, but Aslona is in dire straits and *needs* any help it can get.\"",
-      "\"I've heard other emissaries were sent from Aslona even to goblin lands to negotiate assistance.\"",
-      "\"After the old king was assassinated and the Rebellion started, Aslona lost much of its former power.\"",
-      "\"I will see the Rebellion crushed and every last rebel executed for their crimes!\"",
-      "\"Lord Regent is doing his best, but his army just barely holds the rebels back. My only hope is I can return to him successful.\"",
-      "\"Bandits are roving free through the forests of Aslona; you can never be sure which town supports the king and which the Rebellion. What happened to my country?\"",
-      "\"My father was a trusted general of the old king, and the first one to meet with the rebel army on a battlefield after the regicide. Alas, he was betrayed by his slave-soldiers and murdered along with all of his loyal knights.\"",
-      "\"I see a representative of the orcish freeholds arrived. Don't trust him! Those orcish vultures would love to feast on the carcass of Aslona, but I won't let that happen.\"",
-      "\"I hope the negotiations over in goblin lands go well. As I heard, my king offers to free all goblin slaves in Aslona in exchange for military assistance against the orcish freeholds.\"",
-      "\"I don't understand why the high priest tolerates that filthy orc here! No orc can be trusted, they are all raiders and murderers with no honor.\"",
-      "\"The orcish freeholds have set their sights on aslonian wealth long ago and were a bother on the borders since then. Right now, I don't know whether we are strong enough to fend them off by ourselves.\"";
+      "@Dd looks troubled. \"I shouldn't be saying this so openly, but Aslona is in dire straits and *needs* any help it can get.\"",
+      "@Dd says: \"I've heard other emissaries were sent from Aslona even to goblin lands to negotiate assistance.\"",
+      "@Dd sighs: \"After the old king was assassinated and the Rebellion started, Aslona lost much of its former power.\"",
+      "@Dd says angrily: \"I will see the Rebellion crushed and every last rebel executed for their crimes!\"",
+      "@Dd sighs: \"Lord Regent is doing his best, but his army just barely holds the rebels back. My only hope is I can return to him successful.\"",
+      "@Dd laments: \"Bandits are roving free through the forests of Aslona; you can never be sure which town supports the king and which the Rebellion. What happened to my country?\"",
+      "@Dd says sadly: \"My father was a trusted general of the old king, and the first one to meet with the rebel army on a battlefield after the regicide. Alas, he was betrayed by his slave-soldiers and murdered along with all of his loyal knights.\"",
+      "@Dd grumbles: \"I see a representative of the orcish freeholds arrived. Don't trust him! Those orcish vultures would love to feast on the carcass of Aslona, but I won't let that happen.\"",
+      "@Dd says: \"I hope the negotiations over in goblin lands go well. As I heard, my king offers to free all goblin slaves in Aslona in exchange for military assistance against the orcish freeholds.\"",
+      "@Dd says angrily: \"I don't understand why the high priest tolerates that filthy orc here! No orc can be trusted, they are all raiders and murderers with no honor.\"",
+      "@Dd says sadly: \"The orcish freeholds have set their sights on aslonian wealth long ago and were a bother on the borders since then. Right now, I don't know whether we are strong enough to fend them off by ourselves.\"";
     }
     HostileReplies =
     {
       3,
-      "\"Die, you treacherous bastard!\"",
-      "\"What are you doing? I have a diplomatic immunity!\"",
-      "\"Low-blooded scum! You dare to attack a knight of Aslona?\"";
+      "@Dd shouts: \"Die, you treacherous bastard!\"",
+      "@Dd screams: \"What are you doing? I have a diplomatic immunity!\"",
+      "@Dd curses: \"Low-blooded scum! You dare to attack a knight of Aslona?\"";
     }
   }
 
@@ -1083,27 +1083,27 @@ guard
     {
       22,
       "@Dd says gravely: \"I think we're all in for some hard times.\"",
-      "\"...\"",
-      "\"Hmph.\"",
-      "\"Move along, stranger.\"",
-      "\"What do you need?\"",
-      "\"Trouble? Causing or having?\"",
-      "\"Things have been bad since old king Othyr died.\"",
-      "\"Poor prince Artorius. He's too young to inherit a broken country.\"",
-      "\"Seges bless Lord Regent for standing by the crown prince and this country in their hour of need.\"",
-      "\"I've heard that Harvan Black-cloak poisoned old king Othyr and tried to dispose of prince Artorius as well.\"",
-      "\"Lord Regent saved the kingdom, sure enough.\"",
-      "\"The roads near the Castle are safer now, thanks to Lord Regent. He's an example for us all.\"",
-      "\"Damn the rebel scum! We should hunt them down and hang them from the castle walls.\"",
-      "\"I've heard the orc are stirring now, too. We should have burned down the freeholds when we had a chance.\"",
-      "\"The guard duty here in the castle is usually a dull affair. Near the borders, though, things are a bit more challenging, and one can make a name for oneself.\"",
-      "\"Kings have been assassinated before, but this time... I don't know. It's different.\"",
-      "\"The king is dead, his heir too young. We needed a strong leader and Lord Regent answered the call.\"",
-      "\"Can you believe that the bastard Black-cloak managed to sneak into the very king's rooms?!\"",
-      "\"If you've got to travel, by Seges, stay on the roads! The wilderness just isn't safe. We've had sightings of bandits, goblins and even undead!\"",
-      "\"Would you believe it? Harvan Black-cloak murdered king Othyr, and yet people go flocking to the banner of his rebellion!\"",
-      "\"I understand that the treasury is empty, but begging for help in Attnam seems like a bad idea.\"",
-      "\"So many bandits have appeared in the backcountry. We just don't have the troops nor the time to comb the wilderness for them.\"";
+      "@Dd stares. \"...\"",
+      "@Dd grunts: \"Hmph.\"",
+      "@Dd grunts: \"Move along, stranger.\"",
+      "@Dd says grumpily: \"What do you need?\"",
+      "@Dd grunts: \"Trouble? Causing or having?\"",
+      "@Dd complains: \"Things have been bad since old king Othyr died.\"",
+      "@Dd says sadly: \"Poor prince Artorius. He's too young to inherit a broken country.\"",
+      "@Dd says: \"Seges bless Lord Regent for standing by the crown prince and this country in their hour of need.\"",
+      "@Dd gossips: \"I've heard that Harvan Black-cloak poisoned old king Othyr and tried to dispose of prince Artorius as well.\"",
+      "@Dd nods wisely: \"Lord Regent saved the kingdom, sure enough.\"",
+      "@Dd says: \"The roads near the Castle are safer now, thanks to Lord Regent. He's an example for us all.\"",
+      "@Dd curses: \"Damn the rebel scum! We should hunt them down and hang them from the castle walls.\"",
+      "@Dd complains: \"I've heard the orc are stirring now, too. We should have burned down the freeholds when we had a chance.\"",
+      "@Dd says: \"The guard duty here in the castle is usually a dull affair. Near the borders, though, things are a bit more challenging, and one can make a name for oneself.\"",
+      "@Dd says sadly: \"Kings have been assassinated before, but this time... I don't know. It's different.\"",
+      "@Dd says: \"The king is dead, his heir too young. We needed a strong leader and Lord Regent answered the call.\"",
+      "@Dd says angrily: \"Can you believe that the bastard Black-cloak managed to sneak into the very king's rooms?!\"",
+      "@Dd warns you: \"If you've got to travel, by Seges, stay on the roads! The wilderness just isn't safe. We've had sightings of bandits, goblins and even undead!\"",
+      "@Dd says angrily: \"Would you believe it? Harvan Black-cloak murdered king Othyr, and yet people go flocking to the banner of his rebellion!\"",
+      "@Dd grumbles: \"I understand that the treasury is empty, but begging for help in Attnam seems like a bad idea.\"",
+      "@Dd sighs: \"So many bandits have appeared in the backcountry. We just don't have the troops nor the time to comb the wilderness for them.\"";
     }
   }
 
@@ -1130,15 +1130,15 @@ guard
     {
       10,
       "@Dd says gravely: \"The king's death was a harsh lesson for all of us. We failed in our duty. It must not happen again.\"",
-      "\"Things have been bad since old king Othyr died.\"",
-      "\"Poor prince Artorius. He's too young to inherit a broken country.\"",
-      "\"Seges bless Lord Regent for standing by the crown prince and this country in their hour of need.\"",
-      "\"Lord Regent saved the kingdom, sure enough.\"",
-      "\"Kings have been assassinated before, but this time... I don't know. It's different.\"",
-      "\"The king is dead, his heir too young. We needed a strong leader and Lord Regent answered the call.\"",
-      "\"Would you believe it? Harvan Black-cloak murdered king Othyr, and yet people go flocking to the banner of his rebellion!\"",
-      "\"I understand that the treasury is empty, but begging for help in Attnam seems like a bad idea.\"",
-      "\"So many bandits have appeared in the backcountry. We just don't have the troops nor the time to comb the wilderness for them.\"";
+      "@Dd sighs: \"Things have been bad since old king Othyr died.\"",
+      "@Dd says sadly: \"Poor prince Artorius. He's too young to inherit a broken country.\"",
+      "@Dd says: \"Seges bless Lord Regent for standing by the crown prince and this country in their hour of need.\"",
+      "@Dd nods wisely: \"Lord Regent saved the kingdom, sure enough.\"",
+      "@Dd says sadly: \"Kings have been assassinated before, but this time... I don't know. It's different.\"",
+      "@Dd says: \"The king is dead, his heir too young. We needed a strong leader and Lord Regent answered the call.\"",
+      "@Dd says angrily: \"Would you believe it? Harvan Black-cloak murdered king Othyr, and yet people go flocking to the banner of his rebellion!\"",
+      "@Dd grumbles: \"I understand that the treasury is empty, but begging for help in Attnam seems like a bad idea.\"",
+      "@Dd sighs: \"So many bandits have appeared in the backcountry. We just don't have the troops nor the time to comb the wilderness for them.\"";
     }
   }
 
@@ -1158,23 +1158,23 @@ guard
     {
       18,
       "@Dd says gravely: \"I think we're all in for some hard times.\"",
-      "\"...\"",
-      "\"Hmph.\"",
-      "\"Move along, stranger.\"",
-      "\"What do you need?\"",
-      "\"Trouble? Causing or having?\"",
-      "\"Things have been bad since old king Othyr died.\"",
-      "\"Lord Regent's men think us lawless beasts. How deluded can they be?\"",
-      "\"We must free crown prince Artorius from the clutches of that wretched Lord Regent.\"",
-      "\"Lord Regent didn't think anyone would stand up to his treason, but here we are.\"",
-      "\"We won't give up to Lord Regent without a fight, don't you worry.\"",
-      "\"We're all talking about the old king's murder. How could Lord Regent get away with it?\"",
-      "\"Everyone wants to know what really happened to the old king.\"",
-      "\"I'm sure Harvan will find some way to hold the kingdom together, once the young prince is crowned and we have a king again.\"",
-      "\"Truth is, we don't know who was behind the old king's murder. But too much power has suddenly fallen into Lord Regent's lap.\"",
-      "\"Is there anywhere in the camp where you can avoid rats? Disease spreading little nuisances.\"",
-      "\"I've heard some people talk about just burning the castle to the ground. Probably just talk though. Everyone's a bit on edge right now.\"",
-      "\"You hear about the scouting squad? They were caught and now they're in jail, waiting for the gallows!\"";
+      "@Dd stares. \"...\"",
+      "@Dd grunts: \"Hmph.\"",
+      "@Dd grunts: \"Move along, stranger.\"",
+      "@Dd says grumpily: \"What do you need?\"",
+      "@Dd grunts: \"Trouble? Causing or having?\"",
+      "@Dd sighs: \"Things have been bad since old king Othyr died.\"",
+      "@Dd says grumpily: \"Lord Regent's men think us lawless beasts. How deluded can they be?\"",
+      "@Dd says angrily: \"We must free crown prince Artorius from the clutches of that wretched Lord Regent.\"",
+      "@Dd says with resolve: \"Lord Regent didn't think anyone would stand up to his treason, but here we are.\"",
+      "@Dd smiles wearily: \"We won't give up to Lord Regent without a fight, don't you worry.\"",
+      "@Dd says: \"We're all talking about the old king's murder. How could Lord Regent get away with it?\"",
+      "@Dd says: \"Everyone wants to know what really happened to the old king.\"",
+      "@Dd says with hope: \"I'm sure Harvan will find some way to hold the kingdom together, once the young prince is crowned and we have a king again.\"",
+      "@Dd says: \"Truth is, we don't know who was behind the old king's murder. But too much power has suddenly fallen into Lord Regent's lap.\"",
+      "@Dd grumbles: \"Is there anywhere in the camp where you can avoid rats? Disease spreading little nuisances.\"",
+      "@Dd says: \"I've heard some people talk about just burning the castle to the ground. Probably just talk though. Everyone's a bit on edge right now.\"",
+      "@Dd says angrily: \"You hear about the scouting squad? They were caught and now they're in jail, waiting for the gallows!\"";
     }
   }
 }
@@ -1202,7 +1202,7 @@ shopkeeper
   TotalSize = 160;
   NameSingular = "shopkeeper";
   CanRead = true;
-  HostileReplies == "\"Criminal! Mellis bless my efforts of removing you!\"";
+  HostileReplies == "@Dd shouts: \"Criminal! Mellis bless my efforts of removing you!\"";
   IsAbstract = true;
   IsUnique = true;
   CanBeWished = false;
@@ -1230,10 +1230,10 @@ shopkeeper
     FriendlyReplies =
     {
       4,
-      "\"Welcome to the cheapest banana shop in the world!\"",
+      "@Dd says merrily: \"Welcome to the cheapest banana shop in the world!\"",
       "@Dd sighs: \"It's depressing that the locals have so little purchasing power... But Mellis bless the tourists!\"",
-      "\"No, I don't sell spoiled food. Decos' alchemists have pumped so many magic potions into the soil that nothing here will go bad before you buy it.\"",
-      "\"I wish I was as brilliant an economic genius as the viceroy. Who would have thought levitating ostriches were so low-cost and efficient form of food delivery?\"";
+      "@Dd says: \"No, I don't sell spoiled food. Decos' alchemists have pumped so many magic potions into the soil that nothing here will go bad before you buy it.\"",
+      "@Dd sighs: \"I wish I was as brilliant an economic genius as the viceroy. Who would have thought levitating ostriches were so low-cost and efficient form of food delivery?\"";
     }
     AutomaticallySeen = true;
   }
@@ -1256,8 +1256,8 @@ shopkeeper
       4,
       "@Dd sighs: \"If only I hadn't chosen a city in the middle of nowhere...\"",
       "@Dd sighs: \"Mutant mushrooms ate the last caravan, and the one before it ran into an enner beast. It must be all Elpuri's doings!\"",
-      "\"You truly can't find better prices in this city! Indeed, you can't find ANY prices, since my store is a monopoly.\"",
-      "\"Don't try anything. The high priest is a friend of mine.\"";
+      "@Dd says: \"You truly can't find better prices in this city! Indeed, you can't find ANY prices, since my store is a monopoly.\"",
+      "@Dd says warily: \"Don't try anything. The high priest is a friend of mine.\"";
     }
   }
 
@@ -1279,15 +1279,15 @@ shopkeeper
     {
       8,
       "@Dd sighs: \"I wonder why I have so few customers these days...\"",
-      "\"The topmost reason why I work here is that the monsters devour tax collectors.\"",
-      "\"Elpuri, eh? Folks say he hatched as a light frog in the Cathedral of Attnam. Yet his voracious appetite quickly set him apart. He ate and grew until his swollen bulk dwarfed even the largest of the giant dark frogs.\"",
-      "\"I've heard that Elpuri once was the favorite pet of Petrus. When a prisoner outlived their usefulness, the high priest threw the poor soul to Elpuri. Yet such morbid meals only darkened Elpuri's blood and did nothing to sate his ever-growing hunger.\"",
-      "\"After being renounced by Petrus, Elpuri fled the Cathedral and found refuge here in these caves, where he bides his time to build an army of dark frogs and strike back against the high priest.\"",
-      "\"Elpuri is also known by some as the Devourer. His hunger is truly unchecked - he is said to have fathered generations of dark frogs, yet devoured them faster than they could flood and torment the world.\"",
-      "\"The monsters don't really bother me, no. Not even they are stupid enough to want to be on the bad side of the Guild.\"",
-      "\"The monsters don't attack me, because of our mutually profitable contract.\"";
+      "@Dd chuckles: \"The topmost reason why I work here is that the monsters devour tax collectors.\"",
+      "@Dd says: \"Elpuri, eh? Folks say he hatched as a light frog in the Cathedral of Attnam. Yet his voracious appetite quickly set him apart. He ate and grew until his swollen bulk dwarfed even the largest of the giant dark frogs.\"",
+      "@Dd recounts: \"I've heard that Elpuri once was the favorite pet of Petrus. When a prisoner outlived their usefulness, the high priest threw the poor soul to Elpuri. Yet such morbid meals only darkened Elpuri's blood and did nothing to sate his ever-growing hunger.\"",
+      "@Dd recounts: \"After being renounced by Petrus, Elpuri fled the Cathedral and found refuge here in these caves, where he bides his time to build an army of dark frogs and strike back against the high priest.\"",
+      "@Dd recounts: \"Elpuri is also known by some as the Devourer. His hunger is truly unchecked - he is said to have fathered generations of dark frogs, yet devoured them faster than they could flood and torment the world.\"",
+      "@Dd says: \"The monsters don't really bother me, no. Not even they are stupid enough to want to be on the bad side of the Guild.\"",
+      "@Dd smiles: \"The monsters don't attack me, because of our mutually profitable contract.\"";
     }
-    HostileReplies == "\"Fool! No one messes with the Guild and lives!\"";
+    HostileReplies == "@Dd shouts: \"Fool! No one messes with the Guild and lives!\"";
   }
 
   Config XINROCH_TOMB;
@@ -1317,22 +1317,22 @@ shopkeeper
     FriendlyReplies =
     {
       10,
-      "\"I used to be a guard in the temple above, but I got tired of the endless waiting for a miracle.\"",
-      "\"The bones on the floor? Heh, you wouldn't believe who dares to call themselves an adventurer these days.\"",
-      "\"Hey, you look reasonably sane! What are you doing in the Tomb? Are you an adventurer or something?\"",
-      "\"Best wares, best prices! Show me anyone who sells for less and I'll gut them and be the cheapest again!\"",
-      "\"Oh, I know what it is. You've come for the trinkets, haven't you? Well, whatever it is... I have it!\"",
-      "\"What wondrous treasures, have I! At a special price for you only. There you are, have a nice look at them!\"",
-      "\"I chop prices, not limbs! Usually, heh heh heh.\"",
-      "\"Fine stuff, eh? Don't forget to thank me, heh heh heh.\"",
-      "\"Have you met Petrus, that high priest? Believe me this one, the man is scum. They're all the same, those rotten priests.\"",
-      "\"Peddling is great - safer and better paid then guarding. Don't try it, though, or I'll have to remove competition.\"";
+      "@Dd says: \"I used to be a guard in the temple above, but I got tired of the endless waiting for a miracle.\"",
+      "@Dd chuckles: \"The bones on the floor? Heh, you wouldn't believe who dares to call themselves an adventurer these days.\"",
+      "@Dd says: \"Hey, you look reasonably sane! What are you doing in the Tomb? Are you an adventurer or something?\"",
+      "@Dd shouts: \"Best wares, best prices! Show me anyone who sells for less and I'll gut them and be the cheapest again!\"",
+      "@Dd smiles: \"Oh, I know what it is. You've come for the trinkets, haven't you? Well, whatever it is... I have it!\"",
+      "@Dd says: \"What wondrous treasures, have I! At a special price for you only. There you are, have a nice look at them!\"",
+      "@Dd chuckles: \"I chop prices, not limbs! Usually, heh heh heh.\"",
+      "@Dd chuckles: \"Fine stuff, eh? Don't forget to thank me, heh heh heh.\"",
+      "@Dd spits on the ground. \"Have you met Petrus, that high priest? Believe me this one, the man is scum. They're all the same, those rotten priests.\"",
+      "@Dd says: \"Peddling is great - safer and better paid then guarding. Don't try it, though, or I'll have to remove competition.\"";
     }
     HostileReplies =
     {
       2,
-      "\"I still have friends up in the temple. You won't escape!\"",
-      "\"You'll die and then I'll sell your corpse to the necromancers!\"";
+      "@Dd threatens: \"I still have friends up in the temple. You won't escape!\"",
+      "@Dd screams: \"You'll die and then I'll sell your corpse to the necromancers!\"";
     }
   }
 
@@ -1388,20 +1388,20 @@ shopkeeper
     FriendlyReplies =
     {
       6,
-      "\"My wares are not stolen, just... appropriated.\"",
-      "\"Don't mind the blood on some of my wares, I'm sure it will wash off easily.\"",
-      "\"Overpriced? What do you mean, overpriced?!\"",
-      "\"You may well need something from this shop in the future.\"",
+      "@Dd smiles: \"My wares are not stolen, just... appropriated.\"",
+      "@Dd says: \"Don't mind the blood on some of my wares, I'm sure it will wash off easily.\"",
+      "@Dd suddenly screams: \"Overpriced? What do you mean, overpriced?!\"",
+      "@Dd says: \"You may well need something from this shop in the future.\"",
       "@Dd complains about cleaning the blood after shoplifters.",
-      "\"I have only the finest goods for sale!\"";
+      "@Dd shouts: \"I have only the finest goods for sale!\"";
     }
     HostileReplies =
     {
       4,
-      "\"Fool! No one messes with the Guild and lives!\"",
-      "\"I'm really looking forward to inheriting all your possessions!\"",
+      "@Dd shouts: \"Fool! No one messes with the Guild and lives!\"",
+      "@Dd laughs: \"I'm really looking forward to inheriting all your possessions!\"",
       "@Dd mentions how much @pp dislikes non-paying customers.",
-      "\"You don't want to pay in gold? You're going to pay in blood!\"";
+      "@Dd growls: \"You don't want to pay in gold? You're going to pay in blood!\"";
     }
     Inventory = { 2, holybook(MELLIS), DIAMOND EBONY_WOOD pickaxe { Enchantment = -1; } }
   }
@@ -1433,8 +1433,8 @@ shopkeeper
       4,
       "@Dd sighs: \"Business is slow these days, with the civil war and stuff.\"",
       "@Dd smiles: \"If you need money fast, I will buy your stuff. No problem.\"",
-      "\"Harvan is a sneaky one. Kind of makes you wonder what he's up to.\"",
-      "\"Lots of rats in this camp. Lots of children, too. Of course, I prefer the taste of rats.\"";
+      "@Dd taps his nose. \"Harvan is a sneaky one. Kind of makes you wonder what he's up to.\"",
+      "@Dd says: \"Lots of rats in this camp. Lots of children, too. Of course, I prefer the taste of rats.\"";
     }
     Inventory = { 2, holybook(MELLIS), HEPATIZON EBONY_WOOD pickaxe { Enchantment = 3; } }
   }
@@ -1452,17 +1452,17 @@ priest
   FriendlyReplies =
   {
     3,
-    "\"May @Gd be with you.\"",
-    "\"Bless thee, child.\"",
+    "@Dd says gently: \"May @Gd be with you.\"",
+    "@Dd nods: \"Bless thee, child.\"",
     "@Dd smiles at you in a comforting manner.";
   }
   HostileReplies =
   {
     4,
-    "\"Die, infidel!\"",
-    "\"Divine wrath upon thee!\"",
-    "\"Thou shalt pay for thy sins!\"",
-    "\"I shall punish you in the name of @Gd.\"";
+    "@Dd screams: \"Die, infidel!\"",
+    "@Dd shouts: \"Divine wrath upon thee!\"",
+    "@Dd roars: \"Thou shalt pay for thy sins!\"",
+    "@Dd yells: \"I shall punish you in the name of @Gd.\"";
   }
 
   Config VALPURUS;
@@ -1502,27 +1502,27 @@ priest
     FriendlyReplies =
     {
       14,
-      "@Dd talks to you: \"Valpurus the Great Frog is the highest of all gods. The Wise know that the world is really a @ws which He carries on His back. This is why this Cathedral and the whole city of Attnam is dedicated to His worship.\"",
-      "\"The souls of the virtuous, the devout and the faithful bath forever in the radiant glory of Valpurus and sing praises on His greatness. The souls of sinners, heretics and unbelievers are swallowed by Mortifer and damned to relive their worst nightmares for all eternity!\"",
-      "\"The Cathedral of Valpurus has no windows, for it is written in the Holy Book of Valpurus: 'Windows is Evil.'\"",
-      "\"I am the Cardinal of Truth, therefore everything I say is truth.\"",
-      "\"Repeat after me: 1 + 1 = 3.\"",
-      "\"Repeat after me: War is Peace.\"",
-      "\"Repeat after me: Freedom is Slavery.\"",
-      "\"Repeat after me: Ignorance is Strength.\"",
-      "\"Hail mighty Petrus!\"",
-      "\"Ad maiorem Valpuri gloriam.\"",
-      "\"Thou shalt not suffer a witch to live! Mystic frogs are OK, though.\"",
-      "\"Thus spake Valpurus: 'I am the King of Gods, Valpurus. Thou shalt praise no other gods before me.\"",
+      "@Dd recounts: \"Valpurus the Great Frog is the highest of all gods. The Wise know that the world is really a @ws which He carries on His back. This is why this Cathedral and the whole city of Attnam is dedicated to His worship.\"",
+      "@Dd recounts: \"The souls of the virtuous, the devout and the faithful bath forever in the radiant glory of Valpurus and sing praises on His greatness. The souls of sinners, heretics and unbelievers are swallowed by Mortifer and damned to relive their worst nightmares for all eternity!\"",
+      "@Dd nods wisely: \"The Cathedral of Valpurus has no windows, for it is written in the Holy Book of Valpurus: 'Windows is Evil.'\"",
+      "@Dd boasts: \"I am the Cardinal of Truth, therefore everything I say is truth.\"",
+      "@Dd says: \"Repeat after me: 1 + 1 = 3.\"",
+      "@Dd says: \"Repeat after me: War is Peace.\"",
+      "@Dd says: \"Repeat after me: Freedom is Slavery.\"",
+      "@Dd says: \"Repeat after me: Ignorance is Strength.\"",
+      "@Dd exclaims: \"Hail mighty Petrus!\"",
+      "@Dd exclaims: \"Ad maiorem Valpuri gloriam.\"",
+      "@Dd says: \"Thou shalt not suffer a witch to live! Mystic frogs are OK, though.\"",
+      "@Dd says: \"Thus spake Valpurus: 'I am the King of Gods, Valpurus. Thou shalt praise no other gods before me.'\"",
       "@Dd smirks: \"I would not wish to startle you, but thanks to this amulet, I will always know if you're telling me the truth.\"",
       "@Dd frowns: \"In thy prayers thou must understand Valpurus is a busy god who knows His importance. He will not help newbies. Thou shouldst only pray to Him when He hath called thee a Champion!\"";
     }
     HostileReplies =
     {
       4,
-      "\"Cleanse! Purge! Kill!\"",
-      "\"Valpurus guides my weapon.\"",
-      "\"Prepare to meet @Gd, fool!\"",
+      "@Dd roars: \"Cleanse! Purge! Kill!\"",
+      "@Dd prays: \"Valpurus guides my weapon.\"",
+      "@Dd shouts: \"Prepare to meet @Gd, fool!\"",
       "@Dd sighs: \"Infidels to the left, heathens to the right. Tremendous.\"";
     }
     Inventory == can { Times = 2; SecondaryMaterial = LIGHT_FROG_BLOOD; }
@@ -1563,13 +1563,13 @@ priest
     FriendlyReplies =
     {
       7, /* 4 first are used before revolution */
-      "\"Silva is the goddess of nature, who protects all living things. Her earthly manifestation, located in the elven nation of Lunethia, is a giant holy tree which reaches the clouds.\"",
-      "\"In the old temple we had a marvellous altar carved from a branch of Silva Herself, but Decos made firewood out of it.\"",
-      "\"You cannot contact any god unless you know the right rituals. Alas, I'm unable to teach you any, since after the invasion the Attnamese forbade us to officially worship any god save Valpurus. I can therefore only help you as a healer.\"",
-      "\"With my holy powers, I'm capable of reattaching severed limbs and removing various diseases and poisons. For a price, of course. Should I not bring enough income to the colony, the occupiers would make me a banana grower, too.\"",
-      "\"Truly, you must have been sent by Silva herself! We can finally rebuild the old temple and our lives.\"",
-      "\"I cannot thank you enough for freeing us, but I'm afraid I must continue to charge for my services.\"",
-      "\"Do not forget us, fair hero. It is a matter of time before word reaches the High Priest and I'm afraid of what he may do in his displeasure.\"";
+      "@Dd recounts: \"Silva is the goddess of nature, who protects all living things. Her earthly manifestation, located in the elven nation of Lunethia, is a giant holy tree which reaches the clouds.\"",
+      "@Dd says sadly: \"In the old temple we had a marvellous altar carved from a branch of Silva Herself, but Decos made firewood out of it.\"",
+      "@Dd says: \"You cannot contact any god unless you know the right rituals. Alas, I'm unable to teach you any, since after the invasion the Attnamese forbade us to officially worship any god save Valpurus. I can therefore only help you as a healer.\"",
+      "@Dd says: \"With my holy powers, I'm capable of reattaching severed limbs and removing various diseases and poisons. For a price, of course. Should I not bring enough income to the colony, the occupiers would make me a banana grower, too.\"",
+      "@Dd says happily: \"Truly, you must have been sent by Silva herself! We can finally rebuild the old temple and our lives.\"",
+      "@Dd says: \"I cannot thank you enough for freeing us, but I'm afraid I must continue to charge for my services.\"",
+      "@Dd says: \"Do not forget us, fair hero. It is a matter of time before word reaches the High Priest and I'm afraid of what he may do in his displeasure.\"";
     }
     DeathMessage = "@Dd dies, whispering: \"I'm sorry! I failed you, Silva.\"";
     AutomaticallySeen = true;
@@ -1617,16 +1617,16 @@ priest
     FriendlyReplies =
     {
       10,
-      "\"Our lord Xinroch was the greatest and most powerful grand master dark knight to ever live.\"",
-      "\"Xinroch was highly successful in all his campaigns, and it was during his life that the Unholy Order of the Dark Knights truly flourished.\"",
-      "\"This Tomb was erected on the battlefield where Xinroch was slain, to honor and guard his grave against all who would wish to disturb his last sleep or defile his memory. Let his majestic glory never be forgotten!\"",
-      "\"I know it is possible to bring our lord Xinroch back. Whether it takes magic or miracle, he will lead his faithful again!\"",
-      "\"Praised be Infuscor!\"",
-      "\"Souls for Infuscor!\"",
-      "\"All hail our mighty lord Xinroch.\"";
-      "\"One of these days I'll summon our lord Xinroch back, and Chaos will reign forever!\"",
-      "\"Oh, you like my tattoos? Every priest of Infuscor gets them as a part of their ordination. A holy purple ink is used to tattoo the entirety of the holy book of Infuscor over the initiate's body, so that the wise words may guide them through the rest of their lives.\"",
-      "\"Can't you see I'm busy, infidel?\"";
+      "@Dd says: \"Our lord Xinroch was the greatest and most powerful grand master dark knight to ever live.\"",
+      "@Dd recounts: \"Xinroch was highly successful in all his campaigns, and it was during his life that the Unholy Order of the Dark Knights truly flourished.\"",
+      "@Dd recounts: \"This Tomb was erected on the battlefield where Xinroch was slain, to honor and guard his grave against all who would wish to disturb his last sleep or defile his memory. Let his majestic glory never be forgotten!\"",
+      "@Dd says with conviction: \"I know it is possible to bring our lord Xinroch back. Whether it takes magic or miracle, he will lead his faithful again!\"",
+      "@Dd shouts: \"Praised be Infuscor!\"",
+      "@Dd shouts: \"Souls for Infuscor!\"",
+      "@Dd exclaims: \"All hail our mighty lord Xinroch.\"";
+      "@Dd says: \"One of these days I'll summon our lord Xinroch back, and Chaos will reign forever!\"",
+      "@Dd smiles: \"Oh, you like my tattoos? Every priest of Infuscor gets them as a part of their ordination. A holy purple ink is used to tattoo the entirety of the holy book of Infuscor over the initiate's body, so that the wise words may guide them through the rest of their lives.\"",
+      "@Dd says grumpily: \"Can't you see I'm busy, infidel?\"";
     }
     UndeadVersions = false;
   }
@@ -1689,31 +1689,31 @@ priest
     FriendlyReplies =
     {
       15,
-      "\"Legifer is the All-Seeing Sun. He sees and remembers every your deed until you die and are judged at the Last Court of Heavens.\"",
-      "\"Judge, but do not condemn. Anybody can be redeemed.\"",
-      "\"I am one of the last Shining Knights. And now I am stuck in this place, because the High Priest won't let me leave, nor will he allow me to do anything.\"",
-      "\"The Order of the Shining Knights was founded by my forebears to fight the Dark Knights of Xinroch.\"",
-      "\"The Shining Knights once were a proud and powerful order, but after the fateful defeat at the Fortress of Prym, only a handful of wandering knights remained.\"",
-      "\"The mantle of a Shining Knight is passed down in a family. I was bequeathed knighthood by my mother, who succeeded her father, and so on since the days of Prym.\"",
-      "\"All Shining Knights bear the symbol of the All-Seeing Sun, for Legifer guides us in our wanderings.\"",
-      "\"Every Shining Knight wields an enchanted mace. A legend goes that during the battle of Prym, Legifer blessed the mace of every His knight and named them all Turox.\"",
-      "\"My mother died a hero, protecting a village from an elven onslaught. Alas, our family heritage, the blessed mace 'Turox', was lost with her death.\"",
-      "\"This hammer was forged for me by a good friend. When he was but a baby, he lost his home. Yet he managed to revive all the craft and artistry of the destroyed dwarven city of Khaz-zadm and I will hold this hammer against all evil to honor the legacy of his people.\"",
-      "\"Legifer helps us find and uproot all evil. May His holy flames scorch all sins away.\"",
-      "\"I will pray for you and good luck in your quest. May His holy flames guide your way.\"",
-      "\"I was sent to Attnam by a vision from Legifer. I didn't understand at first, but now... Now I'm starting to see.\"",
-      "\"There is no being so evil that the light of His holy flames cannot reach them and raise them up.\"",
-      "\"The four Cardinals... Foul thoughts blacken the soul, but sometimes, I can't help myself.\"";
+      "@Dd recounts: \"Legifer is the All-Seeing Sun. He sees and remembers every your deed until you die and are judged at the Last Court of Heavens.\"",
+      "@Dd says: \"Judge, but do not condemn. Anybody can be redeemed.\"",
+      "@Dd says: \"I am one of the last Shining Knights. And now I am stuck in this place, because the High Priest won't let me leave, nor will he allow me to do anything.\"",
+      "@Dd recounts: \"The Order of the Shining Knights was founded by my forebears to fight the Dark Knights of Xinroch.\"",
+      "@Dd recounts: \"The Shining Knights once were a proud and powerful order, but after the fateful defeat at the Fortress of Prym, only a handful of wandering knights remained.\"",
+      "@Dd recounts: \"The mantle of a Shining Knight is passed down in a family. I was bequeathed knighthood by my mother, who succeeded her father, and so on since the days of Prym.\"",
+      "@Dd recounts: \"All Shining Knights bear the symbol of the All-Seeing Sun, for Legifer guides us in our wanderings.\"",
+      "@Dd recounts: \"Every Shining Knight wields an enchanted mace. A legend goes that during the battle of Prym, Legifer blessed the mace of every His knight and named them all Turox.\"",
+      "@Dd recounts: \"My mother died a hero, protecting a village from an elven onslaught. Alas, our family heritage, the blessed mace 'Turox', was lost with her death.\"",
+      "@Dd smiles: \"This hammer was forged for me by a good friend. When he was but a baby, he lost his home. Yet he managed to revive all the craft and artistry of the destroyed dwarven city of Khaz-zadm and I will hold this hammer against all evil to honor the legacy of his people.\"",
+      "@Dd says: \"Legifer helps us find and uproot all evil. May His holy flames scorch all sins away.\"",
+      "@Dd says: \"I will pray for you and good luck in your quest. May His holy flames guide your way.\"",
+      "@Dd says: \"I was sent to Attnam by a vision from Legifer. I didn't understand at first, but now... Now I'm starting to see.\"",
+      "@Dd says: \"There is no being so evil that the light of His holy flames cannot reach them and raise them up.\"",
+      "@Dd says angrily: \"The four Cardinals... Foul thoughts blacken the soul, but sometimes, I can't help myself.\"";
     }
     HostileReplies =
     {
       6,
-      "\"You can still come back. If you are willing, I can help you.\"",
-      "\"Please. I beg of you, lay down your weapons.\"",
-      "\"If you refuse to seek repentance in this life, then I pray you seek it in the next.\"",
-      "\"There is still good in you! I can feel it. It's not too late to turn back.\"",
-      "\"If you strike me down, know that I will blaze a trail to the Heavens for you and pray that you will someday join me there.\"",
-      "\"I'm sorry. I'm sorry for you.\"";
+      "@Dd says: \"You can still come back. If you are willing, I can help you.\"",
+      "@Dd pleads: \"Please. I beg of you, lay down your weapons.\"",
+      "@Dd says: \"If you refuse to seek repentance in this life, then I pray you seek it in the next.\"",
+      "@Dd pleads: \"There is still good in you! I can feel it. It's not too late to turn back.\"",
+      "@Dd says: \"If you strike me down, know that I will blaze a trail to the Heavens for you and pray that you will someday join me there.\"",
+      "@Dd says: \"I'm sorry. I'm sorry for you.\"";
     }
     DeathMessage = "@Dd dies with a last few words: \"I forgive you.\"";
     ScienceTalkPossibility = 10;
@@ -1785,7 +1785,7 @@ oree
   {
     3,
     "@Dd prays to @Gd.",
-    "\"You have slain Elpuri. Now nothing will interfere with my plans! Fufufu!\"",
+    "@Dd laughs: \"You have slain Elpuri. Now nothing will interfere with my plans! Fufufu!\"",
     "@Dd laughs: \"No time for small talk. Time to drink blood!\"";
   }
   FleshMaterial = DAEMON_FLESH;
@@ -1835,19 +1835,19 @@ darkknight
   HostileReplies =
   {
     3,
-    "\"Blood for Cruentus!\"",
-    "\"You are already dead.\"",
+    "@Dd shouts: \"Blood for Cruentus!\"",
+    "@Dd growls: \"You are already dead.\"",
     "@Dd yells: \"For Mortifer I shall slay you!\"";
   }
   FriendlyReplies =
   {
     6,
-    "\"Reach the Heavens through violence, comrade.\"",
-    "\"Blood for Cruentus!\"",
-    "\"Fear is not a shame, it's a weapon. Fear shall never reign over me, but I will wield it against my enemies. Fear strikes true and through fear, I shall become stronger.\"",
-    "\"Pain is not a shame, it's a weapon. Pain shall never reign over me, but I will wield it against my enemies. Pain forges the flesh and through pain, I shall become stronger.\"",
-    "\"Anger is not a shame, it's a weapon. Anger shall never reign over me, but I will wield it against my enemies. Anger sharpens the mind and through anger, I shall become stronger.\"",
-    "\"Don't bother me unless you need help to die.\"";
+    "@Dd says: \"Reach the Heavens through violence, comrade.\"",
+    "@Dd shouts: \"Blood for Cruentus!\"",
+    "@Dd recites: \"Fear is not a shame, it's a weapon. Fear shall never reign over me, but I will wield it against my enemies. Fear strikes true and through fear, I shall become stronger.\"",
+    "@Dd recites: \"Pain is not a shame, it's a weapon. Pain shall never reign over me, but I will wield it against my enemies. Pain forges the flesh and through pain, I shall become stronger.\"",
+    "@Dd recites: \"Anger is not a shame, it's a weapon. Anger shall never reign over me, but I will wield it against my enemies. Anger sharpens the mind and through anger, I shall become stronger.\"",
+    "@Dd grunts: \"Don't bother me unless you need help to die.\"";
   }
   AttachedGod = CRUENTUS;
   IsExtraFragile = true;
@@ -1948,7 +1948,7 @@ darkknight
     GauntletColor = rgb16(50, 50, 50);
     BootColor = rgb16(128, 128, 128);
     CanBeGenerated = false;
-    HostileReplies == "@Dd yells: \"Who dares disturb the slumber of the lord Xinroch?\"";
+    HostileReplies == "@Dd yells: \"Who dares disturb the slumber of the lord Xinroch?!\"";
     AttachedGod = INFUSCOR;
     UndeadVersions = false;
   }
@@ -2078,17 +2078,17 @@ darkknight
     HostileReplies =
     {
       2,
-      "\"For the Dark Gods!\"",
-      "\"Chaaaaaaaaaaaarge!\"";
+      "@Dd yells: \"For the Dark Gods!\"",
+      "@Dd screams: \"Chaaaaaaaaaaaarge!\"";
     }
     FriendlyReplies =
     {
       5,
-      "\"Yeah, I was a guard in Attnam once. Is that all?\"",
-      "\"The blood never bothered me anyway.\"",
-      "\"Reach the Heavens through violence!\"",
-      "\"I like watching things die.\"",
-      "\"The Order of the Dark Knights is ancient and you should stop asking questions.\"";
+      "@Dd grunts: \"Yeah, I was a guard in Attnam once. Is that all?\"",
+      "@Dd smirks: \"The blood never bothered me anyway.\"",
+      "@Dd says: \"Reach the Heavens through violence!\"",
+      "@Dd eyes you: \"I like watching things die.\"",
+      "@Dd grunts: \"The Order of the Dark Knights is ancient and you should stop asking questions.\"";
     }
     DeathMessage = "@Dd kneels down, dying: \"Alas... It seems you have bested me.\"";
   }
