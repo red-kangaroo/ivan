@@ -127,10 +127,18 @@ struct felistdescription
 };
 
 felist::felist(cfestring& Topic, col16 TopicColor, uint Maximum)
-: Maximum(Maximum), Selected(0), bJustRestoreEntries(false),
+: Maximum(Maximum),
+  Selected(0),
+  bJustRestoreEntries(false),
   Pos(10, 32), //y=32 gum to let filter be nicely readable always
-  Width(780), PageLength(30), BackColor(0), Flags(SELECTABLE|FADE), FirstDrawNoFade(false),
-  UpKey(KEY_UP), DownKey(KEY_DOWN), EntryDrawer(0), v2FinalPageSize(0,0)
+  Width(780),
+  PageLength(30),  // 26+10
+  BackColor(0),
+  Flags(SELECTABLE|FADE),
+  FirstDrawNoFade(false),
+  UpKey(KEY_UP), DownKey(KEY_DOWN),
+  EntryDrawer(0), v2FinalPageSize(0,0),
+  helpYPos(0), helpHeight(0)
 {
   AddDescription(Topic, TopicColor);
 }
@@ -525,6 +533,7 @@ uint felist::DrawFiltered(bool& bJustExitTheList)
       {
         festring fs;
         felistentry* fle = RetrieveSelectableEntry(Entry,Selected);
+        // TODO
         if(fle!=NULL){
           if(!fle->Help.IsEmpty())
             fs<<fle->Help<<"\n";
@@ -839,6 +848,7 @@ bool felist::IsEntryDrawingAtValidPos(bitmap* Buffer,v2 pos){
 truth felist::DrawPage(bitmap* Buffer, v2* pv2FinalPageSize, std::vector<EntryRect>* pvEntryRect) const
 { DBGSV2(Pos);
   uint LastFillBottom = Pos.Y + 23 + Description.size() * 10;
+  const uint startY = Pos.Y + 4 + Description.size() * 10;
   DrawDescription(Buffer);
 
   uint c, i; // c == entry index, i == selectable index
@@ -849,6 +859,9 @@ truth felist::DrawPage(bitmap* Buffer, v2* pv2FinalPageSize, std::vector<EntryRe
 
   while(!Entry[c]->Selectable && Entry[c]->String.IsEmpty()) ++c;
   std::vector<festring> Chapter;
+
+  felistentry* selEntry = nullptr;
+  int selY = 0, lastRenderY = 0;
 
   if(pvEntryRect!=NULL)
     (*pvEntryRect).clear();
@@ -872,6 +885,10 @@ truth felist::DrawPage(bitmap* Buffer, v2* pv2FinalPageSize, std::vector<EntryRe
     int iHeight = -1;
 
     truth isTheSelectedOne = bIsSelectable && Selected == i;
+    if (isTheSelectedOne) {
+      selEntry = Entry[c];
+      selY = LastFillBottom;
+    }
 
     col16 colBkg = BackColor;
     if(isTheSelectedOne && colSelectedBkg!=TRANSPARENT_COLOR) //colBkg==BLACK
@@ -1012,6 +1029,48 @@ truth felist::DrawPage(bitmap* Buffer, v2* pv2FinalPageSize, std::vector<EntryRe
 
     if(Entry[c++]->Selectable)
       ++i;
+  }
+
+  helpHeight = 0;
+  if (selEntry && !selEntry->Help.IsEmpty()) {
+    std::vector<festring> text;
+    //int lines = FONT->WordWrapProp(selEntry->Help, text, Width - 20);
+    int lines = selEntry->Help.GetSize() / (Width - 20) + (selEntry->Help.GetSize() % (Width - 20) != 0);
+    uint y0;
+    int hgt = lines * 10 + 1;
+    (void)startY; (void)selY; (void)lastRenderY;
+
+    if (hgt > helpHeight) {
+      helpHeight = hgt;
+    } else {
+      hgt = helpHeight;
+    }
+
+    v2 bmpsz = Buffer->GetSize();
+
+    y0 = LastFillBottom + 16;
+    if (y0 + hgt + 16 >= (uint)bmpsz.Y) {
+      //y0 = bmpsz.Y - hgt - 16;
+      if (bmpsz.Y - hgt - 16 <= selY + 4) {
+        y0 = startY + 6;
+      } else {
+        y0 = bmpsz.Y - hgt - 16;
+      }
+      //helpYPos = y0;
+    } else {
+      if (y0 < helpYPos) y0 = helpYPos; else helpYPos = y0;
+    }
+
+    Buffer->Fill(Pos.X + 4, y0 - 3, Width - 8, hgt + 4, MakeRGB16(24, 24, 24));
+    Buffer->DrawRectangle(Pos.X + 4, y0 - 3, Pos.X + Width - 4, y0 + hgt + 1,
+                          (lines ? LIGHT_GRAY : DARK_GRAY));
+
+    y0 += 1;
+    for (int f = 0; f != lines; f += 1) {
+      //FONT->PrintStr(Buffer, v2(Pos.X + 10, y0), YELLOW, text[f]);
+      FONT->Printf(Buffer, v2(Pos.X + 10, y0), WHITE, "%s", text[f].CStr());
+      y0 += 10;
+    }
   }
 
   return c == Entry.size() - 1;

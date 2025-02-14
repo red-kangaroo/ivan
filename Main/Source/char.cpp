@@ -5625,11 +5625,12 @@ void character::PrintInfo() const
   {
     item* Equipment = GetEquipment(c);
 
-    if((EquipmentEasilyRecognized(c) || game::WizardModeIsActive()) && Equipment)
+    if(Equipment && (EquipmentEasilyRecognized(c) || game::WizardModeIsActive()))
     {
       int ImageKey = game::AddToItemDrawVector(itemvector(1, Equipment));
       Info.AddEntry(festring(GetEquipmentName(c)) + ": " + Equipment->GetName(INDEFINITE),
                     LIGHT_GRAY, 0, ImageKey, true);
+      Info.SetLastEntryHelp(Equipment->GetDescriptiveInfo());
     }
   }
 
@@ -8807,6 +8808,7 @@ truth character::SelectFromPossessions(itemvector& ReturnVector, cfestring& Topi
       AddSpecialEquipmentInfo(Entry, c);
       int ImageKey = game::AddToItemDrawVector(itemvector(1, Equipment));
       List.AddEntry(Entry, LIGHT_GRAY, 20, ImageKey, true);
+      List.SetLastEntryHelp(Equipment->GetDescriptiveInfo());
       Any = true;
     }
   }
@@ -11499,6 +11501,7 @@ truth character::EquipmentScreen(stack* MainStack, stack* SecStack)
         AddSpecialEquipmentInfo(Entry, c);
         int ImageKey = game::AddToItemDrawVector(itemvector(1, Equipment));
         List.AddEntry(Entry, LIGHT_GRAY, 20, ImageKey, true);
+        List.SetLastEntryHelp(Equipment->GetDescriptiveInfo());
       }
       else
       {

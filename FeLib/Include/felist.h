@@ -115,6 +115,8 @@ class felist
   static col16 colSelectedBkg;
   v2 v2OriginalPos;
   static v2 v2DefaultEntryImageSize;
+  mutable uint helpYPos;
+  mutable int helpHeight;
 };
 
 #endif
