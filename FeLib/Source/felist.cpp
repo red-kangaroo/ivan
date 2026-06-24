@@ -1032,10 +1032,13 @@ truth felist::DrawPage(bitmap* Buffer, v2* pv2FinalPageSize, std::vector<EntryRe
   }
 
   helpHeight = 0;
+  //felistentry* selEntry = RetrieveSelectableEntry(Entry,Selected);
   if (selEntry && !selEntry->Help.IsEmpty()) {
     std::vector<festring> text;
-    //int lines = FONT->WordWrapProp(selEntry->Help, text, Width - 20);
+    // TODO
+    //int lines = festring::SplitString(selEntry->Help, text, (Width - 20) / 8);
     int lines = selEntry->Help.GetSize() / (Width - 20) + (selEntry->Help.GetSize() % (Width - 20) != 0);
+
     uint y0;
     int hgt = lines * 10 + 1;
     (void)startY; (void)selY; (void)lastRenderY;
@@ -1066,8 +1069,7 @@ truth felist::DrawPage(bitmap* Buffer, v2* pv2FinalPageSize, std::vector<EntryRe
                           (lines ? LIGHT_GRAY : DARK_GRAY));
 
     y0 += 1;
-    for (int f = 0; f != lines; f += 1) {
-      //FONT->PrintStr(Buffer, v2(Pos.X + 10, y0), YELLOW, text[f]);
+    for (int f = 0; f < text.size(); f++) {
       FONT->Printf(Buffer, v2(Pos.X + 10, y0), WHITE, "%s", text[f].CStr());
       y0 += 10;
     }

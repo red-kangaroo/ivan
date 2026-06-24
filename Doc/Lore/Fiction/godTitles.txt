@@ -2,7 +2,6 @@ Valpurus
   the King of Gods
   the God of Kings
   the Master of Fate
-  the Lord of Light
   the First among His Lessers
   the Lord Upon the Throne of Creation
   the Great Frog Beneath the World Who Bears the Greatest of All Burdens
@@ -10,6 +9,7 @@ Valpurus
 Legifer
   the Radiant
   the All-Seeing Sun
+  the Lord of Light
   the Holy Flame of Hope
   the Last Judge in the Heavens
 
@@ -32,9 +32,11 @@ Seges
 
 Sophos
   the Loremaster
-  the Ancient One
   the Dreamer in the Sea
+  the Ancient One
+  the Water Phoenix King
   the Living Library
+  the Sea that Dreams of Long Lost Lands
 
 Silva
   the Mother Nature
@@ -42,17 +44,20 @@ Silva
   the Crystal Queen
   the Queen of Beasts
   the Lady of Life
+  the Empress of the Strata
+  the Burgeoning World-Tree
 
 Loricatus
   the God-Machine
   the Cogwheel King
+  the Broken God
 
 Mellis
   of Silver Tongue and Golden Scales
   the Marvellous Merchant
 
 Cleptia
-  the Mistress of Magpies 
+  the Mistress of Magpies
   the Thief of the Moon
 
 Nefas
@@ -74,6 +79,7 @@ Cruentus
   the Bloody Saviour
   the Tyrant of Tyrants
   the Chosen One
+  the Bear Who Tore the Sky Apart
 
 Mortifer
   the Destroyer of Worlds
@@ -84,6 +90,9 @@ Mortifer
   the Dark Sovereign
   the Deathless Demon-God
   the True King of Oblivion
+  the First and the Last
+  of Endings
+  He Who Awaits
 
 Solicitus
   the Unbeliever
